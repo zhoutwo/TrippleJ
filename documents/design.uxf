@@ -1,1 +1,279 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><umlet_diagram></umlet_diagram>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.1.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>640</x>
+      <y>380</y>
+      <w>290</w>
+      <h>240</h>
+    </coordinates>
+    <panel_attributes>Place
+--
+-location: Coordinate
+-name: String
+-link: ArrayList&lt;Place&gt; 
+-link: HashMap&lt;Place,Link&gt; 
+-interestingRating: int
+--
+Coordinate getLocation();
+String getName();
+ArrayList&lt;Place&gt; getPlaceList();
+Place getPlace();
+int compareToType(Place,comparType);
+int getInterestingness();
+
+
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>410</x>
+      <y>660</y>
+      <w>220</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>City
+--
+-population: int
+-pois: ArrayList&lt;POI&gt;
+--
+int getPopulation();
+ArrayList&lt;POI&gt; getPois();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>620</x>
+      <y>610</y>
+      <w>40</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>20.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>900</x>
+      <y>670</y>
+      <w>250</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>POI
+--
+-type: String
+-cost: double
+--
+String getType();
+double getCost();
+void setType();
+void setCost();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>850</x>
+      <y>610</y>
+      <w>70</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;50.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1180</x>
+      <y>380</y>
+      <w>180</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Coordinate
+--
+-x: int
+-y: int
+--
+int getX();
+int getY();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>110</x>
+      <y>790</y>
+      <w>150</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Link
+--
+-time: int
+-distance: int
+-type: RoadType
+--
+int getTime();
+int getDistance();
+RoadType getRoadType();
+void setTime();
+void setDistance();
+void setRoadType();
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>30</x>
+      <y>580</y>
+      <w>140</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;enumeration&gt;&gt;
+RoadType
+--
+Interstate
+Highway
+Tollway
+Road</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>270</x>
+      <y>210</y>
+      <w>320</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>Map
+--
+-alphabetPlaces: RedBlackTree&lt;Places&gt; 
+-interestingPlaces: RedBlackTree&lt;Places&gt; 
+-population: RedBlackTreeMaxHeap&lt;Places&gt;    
+--
+ArrayList&lt;Place&gt; getAlphabetPlaces();
+ArrayList&lt;Place&gt; getInterestingPlaces();
+ArrayList&lt;Place&gt; getPopulationPlaces();</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>920</x>
+      <y>430</y>
+      <w>280</w>
+      <h>30</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>260.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>320</y>
+      <w>80</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>60.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>250</x>
+      <y>520</y>
+      <w>410</w>
+      <h>320</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;300.0;70.0;80.0;390.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>100</x>
+      <y>690</y>
+      <w>90</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>580</x>
+      <y>200</y>
+      <w>390</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;60.0;370.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>950</x>
+      <y>110</y>
+      <w>220</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>GUI
+--
+uses JSwing package
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>620</x>
+      <y>20</y>
+      <w>210</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>Main
+--
+
+--
+void import(.txt);
+void export();
+void displayGUI();
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>100</y>
+      <w>150</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;110.0;130.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>820</x>
+      <y>100</y>
+      <w>150</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>130.0;80.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
