@@ -1,4 +1,4 @@
-package backend;
+package utils;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -21,7 +21,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 		size = 0;
 	}
 	/**
-	 *the enumuration Color declares two constant colors RED and BLACK
+	 *the enumeration Color declares two constant colors RED and BLACK
 	 */
 	public enum Color {RED, BLACK} 
 	

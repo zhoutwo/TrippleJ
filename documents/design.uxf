@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="14.1.1">
+<diagram program="umlet" version="14.1.0">
   <zoom_level>7</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>609</x>
-      <y>224</y>
+      <x>1001</x>
+      <y>231</y>
       <w>203</w>
       <h>168</h>
     </coordinates>
-    <panel_attributes>Place
+    <panel_attributes>/Place/
 --
 -location: Coordinate
 -name: String
--link: ArrayList&lt;Place&gt; 
+-links: ArrayList&lt;Place&gt; 
 -linkMap: HashMap&lt;Place,Link&gt; 
--interestingRating: int
+-rating: int
 --
 Coordinate getLocation();
 String getName();
 ArrayList&lt;Place&gt; getPlaceList();
 Place getPlace();
 int compareToType(Place,comparType);
-int getInterestingness();
+int getRating();
 
 
 
@@ -32,26 +32,30 @@ int getInterestingness();
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>455</x>
-      <y>455</y>
-      <w>154</w>
+      <x>847</x>
+      <y>462</y>
+      <w>196</w>
       <h>119</h>
     </coordinates>
     <panel_attributes>City
 --
 -population: int
 -pois: ArrayList&lt;POI&gt;
+-alpPOIList: FlexRedBlackTree&lt;POI&gt; 
+-ratPOIList: FlexRedBlackTree&lt;POI&gt;
 --
 int getPopulation();
 ArrayList&lt;POI&gt; getPois();
+ArrayList&lt;Place&gt; getAlpPOIList();
+ArrayList&lt;Place&gt; getRatPOIList();
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>602</x>
-      <y>385</y>
+      <x>994</x>
+      <y>392</y>
       <w>21</w>
       <h>84</h>
     </coordinates>
@@ -61,8 +65,8 @@ ArrayList&lt;POI&gt; getPois();
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>763</x>
-      <y>455</y>
+      <x>1155</x>
+      <y>462</y>
       <w>175</w>
       <h>119</h>
     </coordinates>
@@ -80,8 +84,8 @@ void setCost();</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>756</x>
-      <y>385</y>
+      <x>1148</x>
+      <y>392</y>
       <w>21</w>
       <h>84</h>
     </coordinates>
@@ -91,8 +95,8 @@ void setCost();</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>735</x>
-      <y>91</y>
+      <x>1127</x>
+      <y>98</y>
       <w>126</w>
       <h>105</h>
     </coordinates>
@@ -109,7 +113,7 @@ int getY();
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>238</x>
+      <x>630</x>
       <y>420</y>
       <w>140</w>
       <h>147</h>
@@ -119,9 +123,11 @@ int getY();
 -time: int
 -distance: int
 -type: RoadType
+-dest: Place
 --
 int getTime();
 int getDistance();
+Place getDest()
 RoadType getRoadType();
 void setTime();
 void setDistance();
@@ -133,44 +139,48 @@ void setRoadType();
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>189</x>
-      <y>294</y>
+      <x>294</x>
+      <y>210</y>
       <w>98</w>
       <h>84</h>
     </coordinates>
     <panel_attributes>&lt;&lt;enumeration&gt;&gt;
 RoadType
 --
-Interstate
-Highway
-Tollway
-Road</panel_attributes>
+INTERSTATE
+HIGHWAY
+TOLLWAY
+ROAD</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>343</x>
-      <y>119</y>
+      <x>735</x>
+      <y>126</y>
       <w>224</w>
       <h>161</h>
     </coordinates>
     <panel_attributes>Map
 --
--alphabetPlaces: RedBlackTree&lt;Places&gt; 
--interestingPlaces: RedBlackTree&lt;Places&gt; 
--population: RedBlackTreeMaxHeap&lt;Places&gt;    
+-cities: HashMap&lt;String, City&gt;
+-alpCityList: FlexRedBlackTree&lt;City&gt; 
+-ratCityList: FlexRedBlackTree&lt;City&gt; 
+-popCityList: FlexRedBlackTree&lt;City&gt;    
 --
-ArrayList&lt;Place&gt; getAlphabetPlaces();
-ArrayList&lt;Place&gt; getInterestingPlaces();
-ArrayList&lt;Place&gt; getPopulationPlaces();</panel_attributes>
+ArrayList&lt;Place&gt; getAlpCityList();
+ArrayList&lt;Place&gt; getRatCityList();
+ArrayList&lt;Place&gt; getPopCityList();
+ArrayList&lt;Link&gt; getRoute(String, String);
+boolean addEntry(Form);
+boolean editEntry(Form);</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>805</x>
-      <y>189</y>
+      <x>1197</x>
+      <y>196</y>
       <w>56</w>
       <h>91</h>
     </coordinates>
@@ -180,8 +190,8 @@ ArrayList&lt;Place&gt; getPopulationPlaces();</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>560</x>
-      <y>196</y>
+      <x>952</x>
+      <y>203</y>
       <w>63</w>
       <h>56</h>
     </coordinates>
@@ -191,30 +201,30 @@ ArrayList&lt;Place&gt; getPopulationPlaces();</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>371</x>
-      <y>322</y>
+      <x>763</x>
+      <y>329</y>
       <w>252</w>
-      <h>133</h>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;170.0;340.0;10.0</additional_attributes>
+    <additional_attributes>10.0;160.0;340.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>238</x>
-      <y>371</y>
-      <w>91</w>
-      <h>63</h>
+      <x>385</x>
+      <y>266</y>
+      <w>259</w>
+      <h>203</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
-    <additional_attributes>10.0;10.0;110.0;70.0</additional_attributes>
+    <additional_attributes>10.0;10.0;350.0;270.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>112</x>
-      <y>133</y>
+      <x>504</x>
+      <y>140</y>
       <w>147</w>
       <h>112</h>
     </coordinates>
@@ -231,12 +241,85 @@ void displayGUI();
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>252</x>
-      <y>182</y>
+      <x>644</x>
+      <y>189</y>
       <w>105</w>
       <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;.</panel_attributes>
     <additional_attributes>130.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>91</x>
+      <y>98</y>
+      <w>301</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>FlexRedBlackTree&lt;T extends Comparable&lt;? super T&gt;&gt;
+--
+-c: Comparator&lt;T&gt;
+--
+boolean insert(T)
+boolean remove(T)
+boolean contains(T)
+ArrayList&lt;T&gt; toArrayList</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>210</y>
+      <w>70</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>Form
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>105</x>
+      <y>329</y>
+      <w>287</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>AlphabetComparator implements Comparable&lt;T extends Place&gt;
+--
+--
+int compare(T, T)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>105</x>
+      <y>413</y>
+      <w>287</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>RatingComparator implements Comparable&lt;T extends Place&gt;
+--
+--
+int compare(T, T)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>105</x>
+      <y>497</y>
+      <w>287</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>PopulationComparator implements Comparable&lt;T extends Place&gt;
+--
+--
+int compare(T, T)</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
