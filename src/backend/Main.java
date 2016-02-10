@@ -4,8 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import utils.FlexRedBlackTree;
+import utils.*;
 
 /**
  * this is the main class that the program will run from
@@ -14,9 +13,10 @@ import utils.FlexRedBlackTree;
  */
 public class Main {
 	
-	private FlexRedBlackTree<City> popTree;
+	private static FlexRedBlackTree<City> popTree;
 	
 	public static void main(String[] args) {
+		popTree = new FlexRedBlackTree<City>(new PopulationComparator());
 		try {
 			importFromTxtFileToTree();
 		} catch (IOException e) {
@@ -40,11 +40,12 @@ public class Main {
 		ArrayList<Integer> cityPop = new ArrayList<Integer>();
 		// add data to an array list to prepare to be input into trees 
 		while(inScanner.hasNext()){
-			cityName.add(inScanner.next());
-			cityPop.add(inScanner.nextInt());
+			popTree.insert(new City(inScanner.next(),inScanner.nextInt()));
+//			cityName.add(inScanner.next());
+//			cityPop.add(inScanner.nextInt());
 		}
-		System.out.println(cityName.toString());
-		System.out.println(cityPop.toString());
+//		System.out.println(cityName.toString());
+		System.out.println(popTree.toString());
 		inScanner.close();
 	}
 
