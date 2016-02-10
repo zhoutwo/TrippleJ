@@ -33,7 +33,7 @@ public class Main {
 	 */
 	private static void importFromTxtFileToTree() throws IOException{
 		// import data from a file and store it in a file type
-		File inputFile = new File("src/backend/KansasCities.txt");
+		File inputFile = new File("src/data/KansasCities.txt");
 		// create a scanner to scan through the newly created file
 		Scanner inScanner = new Scanner(inputFile);
 		ArrayList<String> cityName = new ArrayList<String>();
@@ -45,6 +45,7 @@ public class Main {
 		}
 		System.out.println(cityName.toString());
 		System.out.println(cityPop.toString());
+		inScanner.close();
 	}
 
 }
