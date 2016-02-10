@@ -199,7 +199,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 		private void insert(T addition, MyBoolean b, BinaryNode p, BinaryNode gp, BinaryNode ggp){
 			if(checkBlackWithTwoRedChildrenCondition()){
 				if(p != null){
-					if(p.color.equals(Color.RED)){
+					if(p.color==Color.RED){
 							gp.whatRotation(ggp);
 					}
 			}
@@ -212,7 +212,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				if(leftChild!=null){leftChild.insert(addition, b, this,p,gp);}
 				else {
 					leftChild = new BinaryNode(addition);
-					if(this.color.equals(Color.RED)){
+					if(this.color==Color.RED){
 						if(p != null){
 							p.whatRotation(gp);
 						}
@@ -223,7 +223,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				if(rightChild!=null){rightChild.insert(addition, b, this, p, gp);}
 				else {
 					rightChild = new BinaryNode(addition);
-					if(this.color.equals(Color.RED)){
+					if(this.color==Color.RED){
 						if(p != null){
 							p.whatRotation(gp);
 						}

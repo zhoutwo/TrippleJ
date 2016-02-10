@@ -2,7 +2,7 @@ package backend;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import utils.FlexRedBlackTree;
+import utils.*;
 
 public class Map {
 	
@@ -10,6 +10,13 @@ public class Map {
 	private FlexRedBlackTree<City> alpCityList;
 	private FlexRedBlackTree<City> ratCityList;
 	private FlexRedBlackTree<City> popCityList;
+	
+	public Map() {
+		this.cities = new HashMap<String, City>();
+		this.alpCityList = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
+		this.ratCityList = new FlexRedBlackTree<City>(new RatingComparator<City>());
+		this.popCityList = new FlexRedBlackTree<City>(new PopulationComparator());
+	}
 	
 	public ArrayList<City> getAlpCityList() {
 		return this.alpCityList.toArrayList();
