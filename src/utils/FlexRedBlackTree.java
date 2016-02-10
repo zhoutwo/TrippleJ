@@ -1,24 +1,46 @@
 package utils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
-public class FlexRedBlackTree <T extends Comparable<? super T>> implements Iterable<FlexRedBlackTree.BinaryNode>{
+import backend.Place;
+
+public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlackTree.BinaryNode>{
 	public BinaryNode root; 
 	private int size; 
 	private int modCount;
 	private int rotationCount;
+	private final Comparator<T> c;
 	
 	/** this constructor instantiates an empty Red Black Tree
+	 * @throws Exception Wrong compare type
 	*/
-	public FlexRedBlackTree(){
+	public FlexRedBlackTree(CompareType ct){
 		rotationCount = 0;
 		modCount = 0;
 		root = null;
 		size = 0;
+		switch(ct) {
+		case ALPHABET: {
+			this.c = new AlphabetComparator<T>();
+			break;
+		}
+		case RATING: {
+			this.c = new RatingComparator<T>();
+			break;
+		}
+//		case POPULATION: {
+		default : {
+			//TODO Not sure how to handle this: population comparator should only be used with City, but I don't know how to implement the type check.
+			this.c = (Comparator<T>) new PopulationComparator();
+			break;
+		}
+//		default: throw new Exception("Wrong Compare Type!");
+		}
 	}
 	/**
 	 *the enumeration Color declares two constant colors RED and BLACK
@@ -198,7 +220,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 					}
 			}
 			}
-			int compareValue = addition.compareTo(element);
+			int compareValue = c.compare(addition, element);
 			if(compareValue==0){
 				b.setFalse();
 			}
@@ -227,7 +249,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 		}
 
 		private void removeStep1(T removeElement, MyBoolean b){	
-			int compareTo = removeElement.compareTo(element);
+			int compareTo = c.compare(removeElement, element);
 			BinaryNode sibling;
 			BinaryNode X;
 			if(compareTo==-1){
@@ -309,7 +331,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 			flipColor();
 			X.flipColor();
 			sibling.flipColor();
-			int compareTo = removeElement.compareTo(X.element);
+			int compareTo = c.compare(removeElement, X.element);
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
@@ -340,7 +362,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 			else{
 				p=doubleRotateLeftChild(p);
 			}
-			int compareTo = removeElement.compareTo(X.element);
+			int compareTo = c.compare(removeElement, X.element);
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
@@ -370,7 +392,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 				sibling.leftChild.flipColor();
 				singleRotateLeftChild(p);
 			}
-			int compareTo = removeElement.compareTo(X.element);
+			int compareTo = c.compare(removeElement, X.element);
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
@@ -393,7 +415,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 				b.setFalse();
 				return;
 			}
-			int compareTo = removeElement.compareTo(X.element);
+			int compareTo = c.compare(removeElement, X.element);
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
@@ -424,7 +446,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 		}
 		
 		private void removeStep2B1(T removeElement, MyBoolean b,BinaryNode X,BinaryNode sibling,BinaryNode p){
-			int compareTo = removeElement.compareTo(X.element);
+			int compareTo = c.compare(removeElement, X.element);
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
@@ -573,7 +595,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 				root = temp;
 			}
 			else {
-				if(temp.element.compareTo(p.element)==-1){
+				if(c.compare(temp.element, p.element)==-1){
 					p.leftChild = temp;
 				}
 				else {
@@ -592,7 +614,7 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 				root = temp;
 			}
 			else{
-				if(temp.element.compareTo(p.element)==-1){
+				if(c.compare(temp.element, p.element)==-1){
 					p.leftChild = temp;
 				}
 				else{
@@ -711,7 +733,6 @@ public class FlexRedBlackTree <T extends Comparable<? super T>> implements Itera
 		/** the remove() method removes elements from the iterator
 		 * 
 		 */
-		@Override
 		public void remove() {
 			if(currentNode==null){
 				throw new IllegalStateException();
