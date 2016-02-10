@@ -37,11 +37,11 @@ public class Main {
 		// create a scanner to scan through the newly created file
 		Scanner inScanner = new Scanner(inputFile);
 		ArrayList<String> cityName = new ArrayList<String>();
-		ArrayList<String> cityPop = new ArrayList<String>();
+		ArrayList<Integer> cityPop = new ArrayList<Integer>();
 		// add data to an array list to prepare to be input into trees 
 		while(inScanner.hasNext()){
 			cityName.add(inScanner.next());
-			cityPop.add(inScanner.next());
+			cityPop.add(inScanner.nextInt());
 		}
 		System.out.println(cityName.toString());
 		System.out.println(cityPop.toString());
