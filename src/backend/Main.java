@@ -14,7 +14,7 @@ import utils.FlexRedBlackTree;
  */
 public class Main {
 	
-	private FlexRedBlackTree popTree;
+	private FlexRedBlackTree<City> popTree;
 	
 	public static void main(String[] args) {
 		try {

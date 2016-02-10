@@ -19,9 +19,7 @@
 --
 Coordinate getLocation();
 String getName();
-ArrayList&lt;Place&gt; getPlaceList();
-Place getPlace();
-int compareToType(Place,comparType);
+ArrayList&lt;Place&gt; getlinks();
 int getRating();
 
 
@@ -105,6 +103,7 @@ void setCost();</panel_attributes>
 -x: int
 -y: int
 --
+Coordinate(int, int)
 int getX();
 int getY();
 </panel_attributes>
@@ -129,9 +128,9 @@ int getTime();
 int getDistance();
 Place getDest()
 RoadType getRoadType();
-void setTime();
-void setDistance();
-void setRoadType();
+void setTime(int);
+void setDistance(int);
+void setRoadType(RoadType);
 
 </panel_attributes>
     <additional_attributes/>
