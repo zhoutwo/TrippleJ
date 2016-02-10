@@ -11,13 +11,13 @@ public class Map {
 	private FlexRedBlackTree<City> ratCityList;
 	private FlexRedBlackTree<City> popCityList;
 	
-	public ArrayList<Place> getAlpCityList() {
+	public ArrayList<City> getAlpCityList() {
 		return this.alpCityList.toArrayList();
 	}
-	public ArrayList<Place> getRatCityList() {
+	public ArrayList<City> getRatCityList() {
 		return this.ratCityList.toArrayList();
 	}
-	public ArrayList<Place> getPopCityList() {
+	public ArrayList<City> getPopCityList() {
 		return this.popCityList.toArrayList();
 	}
 	public ArrayList<Link> getRoute(String from, String to) {

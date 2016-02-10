@@ -167,9 +167,9 @@ ROAD</panel_attributes>
 -ratCityList: FlexRedBlackTree&lt;City&gt; 
 -popCityList: FlexRedBlackTree&lt;City&gt;    
 --
-ArrayList&lt;Place&gt; getAlpCityList();
-ArrayList&lt;Place&gt; getRatCityList();
-ArrayList&lt;Place&gt; getPopCityList();
+ArrayList&lt;City&gt; getAlpCityList();
+ArrayList&lt;City&gt; getRatCityList();
+ArrayList&lt;City&gt; getPopCityList();
 ArrayList&lt;Link&gt; getRoute(String, String);
 boolean addEntry(Form);
 boolean editEntry(Form);</panel_attributes>
