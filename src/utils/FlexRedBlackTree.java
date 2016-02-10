@@ -19,28 +19,12 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlack
 	/** this constructor instantiates an empty Red Black Tree
 	 * @throws Exception Wrong compare type
 	*/
-	public FlexRedBlackTree(CompareType ct){
+	public FlexRedBlackTree(CompareType ct, Comparator<T> c){
 		rotationCount = 0;
 		modCount = 0;
 		root = null;
 		size = 0;
-		switch(ct) {
-		case ALPHABET: {
-			this.c = new AlphabetComparator<T>();
-			break;
-		}
-		case RATING: {
-			this.c = new RatingComparator<T>();
-			break;
-		}
-//		case POPULATION: {
-		default : {
-			//TODO Not sure how to handle this: population comparator should only be used with City, but I don't know how to implement the type check.
-			this.c = (Comparator<T>) new PopulationComparator();
-			break;
-		}
-//		default: throw new Exception("Wrong Compare Type!");
-		}
+		this.c = c;
 	}
 	/**
 	 *the enumeration Color declares two constant colors RED and BLACK
