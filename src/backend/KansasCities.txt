@@ -1,6 +1,6 @@
 Wichita 386552 
-Overland Park 181260
-Kansas City 148483
+OverlandPark 181260
+KansasCity 148483
 Opathe 131885
 Topeka 127679
 Lawrence 90811
