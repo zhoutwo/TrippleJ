@@ -262,7 +262,6 @@ void displayGUI();
 --
 boolean insert(T)
 boolean remove(T)
-boolean contains(T)
 ArrayList&lt;T&gt; toArrayList</panel_attributes>
     <additional_attributes/>
   </element>

@@ -19,7 +19,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlack
 	/** this constructor instantiates an empty Red Black Tree
 	 * @throws Exception Wrong compare type
 	*/
-	public FlexRedBlackTree(CompareType ct, Comparator<T> c){
+	public FlexRedBlackTree(Comparator<T> c){
 		rotationCount = 0;
 		modCount = 0;
 		root = null;
@@ -38,7 +38,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlack
 			return true;
 		}else{
 			return false;
-		}	
+		}
 	}
 	
 	/** the height() method returns the height of the tree 
