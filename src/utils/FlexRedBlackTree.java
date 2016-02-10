@@ -9,7 +9,7 @@ import java.util.Stack;
 
 import backend.Place;
 
-public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlackTree.BinaryNode>{
+public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 	public BinaryNode root; 
 	private int size; 
 	private int modCount;
@@ -60,10 +60,10 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlack
 	// in brackets and seperated by commas
 	*/
 	public String toString(){
-		ArrayList<FlexRedBlackTree.BinaryNode> alist = this.toArrayList();
+		ArrayList<T> alist = this.toArrayList();
 		String str = "{ ";
 		for (int i = 0;i < alist.size();i++){
-			str = str + alist.get(i).getElement()+", "+alist.get(i).getColor()+", ";
+			str = str + alist.get(i);
 		}
 		str = str + "}";
 		return str;
@@ -71,12 +71,12 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlack
 
 	/** the toArrayList() method return an array list of elements in order
 	*/
-	public ArrayList<FlexRedBlackTree.BinaryNode> toArrayList(){
-		ArrayList<FlexRedBlackTree.BinaryNode> aList = new ArrayList<FlexRedBlackTree.BinaryNode>();
+	public ArrayList<T> toArrayList(){
+		ArrayList<T> aList = new ArrayList<T>();
 		if(this.isEmpty()){
 			return aList;
 		}
-			Iterator<FlexRedBlackTree.BinaryNode> i = this.iterator();
+			Iterator<T> i = this.iterator();
 			while(i.hasNext()){
 				aList.add( i.next());
 		}
@@ -91,8 +91,8 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlack
 	
 	/** the iterator() method returns an preorder iterator
 	*/
-	public Iterator<FlexRedBlackTree.BinaryNode> iterator(){
-		return new PreOrderIterator();
+	public Iterator<T> iterator(){
+		return new InOrderIterator();
 	}
 	
 	
@@ -667,46 +667,40 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlack
 		}
 	}
 	
-	private class PreOrderIterator implements Iterator<FlexRedBlackTree.BinaryNode>{
-		/** this is the root of the tree in order to know where to start
+	private class InOrderIterator implements Iterator<T>{
 		// this is a stack used to put elements on to find the first element 
 		// of the iterator
-		*/
 		Stack<BinaryNode> s = new Stack<BinaryNode>();  
-		BinaryNode currentNode;
-		int iModCount;
-				
-		/** this constructor insansiates the PreOrderIterator class with a 
-		* binaryNode root and loads the root node on the stack
-		*/
-		PreOrderIterator(){
-			iModCount = modCount;
-			currentNode =null;
+		
+		// this constructor insansiates the InOrderIterator class with a binaryNode root
+		InOrderIterator(){
 			if(root!=null){
-			s.push(root);}
+				putLeftMostNodeOnStack(root);}
 		}
 		
-		/** the next() method returns the next T element in the iterator
-		* and throws a no such element exception if there is no next element
-		*/
-		public FlexRedBlackTree.BinaryNode next(){
+		// the next() method returns the next T element in the iterator
+		// and throws a no such element exception if there is no next element
+		public T next(){
 			if(!hasNext()){
 				throw new NoSuchElementException(); 
 			}
-			FlexRedBlackTree.BinaryNode temp = s.pop();
+			BinaryNode temp = s.pop();
 			if(temp.rightChild!=null){
-				s.push(temp.rightChild);
+				putLeftMostNodeOnStack(temp.rightChild);
 			}
-			if(temp.leftChild!=null){
-				s.push(temp.leftChild);
-			}
-			currentNode = temp;
-			return temp;
+			return temp.element; 
 		}
 		
-		/** the hasNext() method returns true if there is a next Node and false otherwise
-		*
-		*/
+		// the putLeftMostNodeOnstack() method goes through the tree and puts all 
+		// elements on the stack until it puts the far left node of the tree on stack
+		private void putLeftMostNodeOnStack(BinaryNode n){
+			s.push(n);
+			if(n.leftChild!=null){
+				putLeftMostNodeOnStack(n.leftChild);
+			}
+		}
+		
+		// the hasNext() method returns true if there is a next Node and false otherwise
 		public boolean hasNext(){
 			if(root==null){
 				return false;
@@ -714,19 +708,11 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<FlexRedBlack
 			return !(s.empty());
 		}
 
-		/** the remove() method removes elements from the iterator
-		 * 
-		 */
+		// the remove() method removes elements from the iterator 
+		@Override
 		public void remove() {
-			if(currentNode==null){
-				throw new IllegalStateException();
-			}
-			if(modCount!=iModCount){
-				throw new ConcurrentModificationException();
-			}
-			iModCount++;
-			FlexRedBlackTree.this.remove(currentNode.element);
-			currentNode=null;
+			// TODO Auto-generated method stub
+			
 		}
 	}
 	
