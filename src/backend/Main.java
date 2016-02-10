@@ -19,8 +19,8 @@ public class Main {
 		popTree = new FlexRedBlackTree<City>(new PopulationComparator());
 		Map map=new Map();
 		FlexRedBlackTree<City> populationTree= map.getPopTree();
-		FlexRedBlackTree<Place> alphabetTree=map.getAlphabetTree();
-		FlexRedBlackTree<Place> ratingTree=map.getRatingTree();
+		FlexRedBlackTree<City> alphabetTree=map.getAlphabetTree();
+		FlexRedBlackTree<City> ratingTree=map.getRatingTree();
 		try {
 			importFromTxtFileToTree(popTree);
 //			importFromTxtFileToTree(populationTree);

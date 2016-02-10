@@ -1,32 +1,27 @@
 package backend;
 import java.util.ArrayList;import java.util.Comparator;
 import java.util.HashMap;
-
-import utils.AlphabetComparator;
-import utils.CompareType;
-import utils.FlexRedBlackTree;
-import utils.PopulationComparator;
-import utils.RatingComparator;
+import utils.*;
 
 public class Map {
 	
 	private HashMap<String, City> cities;
-	private FlexRedBlackTree<Place> alphabetCityTree;
-	private FlexRedBlackTree<Place> ratingCityTree;
+	private FlexRedBlackTree<City> alpCityTree;
+	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
 	
-	public Map(){
-		this.alphabetCityTree=new FlexRedBlackTree<Place>(new AlphabetComparator<>());
-		this.ratingCityTree=new FlexRedBlackTree<Place>(new RatingComparator<>());
-		this.popCityTree=new FlexRedBlackTree<City>(new PopulationComparator());
-		
-		
+	public Map() {
+		this.cities = new HashMap<String, City>();
+		this.alpCityTree = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
+		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
+		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
 	}
-	public ArrayList<Place> getAlpCityList() {
-		return this.alphabetCityTree.toArrayList();
+	
+	public ArrayList<City> getAlpCityList() {
+		return this.alpCityTree.toArrayList();
 	}
-	public ArrayList<Place> getRatCityList() {
-		return this.ratingCityTree.toArrayList();
+	public ArrayList<City> getRatCityList() {
+		return this.ratCityTree.toArrayList();
 	}
 	public ArrayList<City> getPopCityList() {
 		return this.popCityTree.toArrayList();
@@ -43,10 +38,10 @@ public class Map {
 	public FlexRedBlackTree<City> getPopTree(){
 		return this.popCityTree;
 	}
-	public FlexRedBlackTree<Place> getAlphabetTree(){
-		return this.alphabetCityTree;
+	public FlexRedBlackTree<City> getAlphabetTree(){
+		return this.alpCityTree;
 	}
-	public FlexRedBlackTree<Place> getRatingTree(){
-		return this.ratingCityTree;
+	public FlexRedBlackTree<City> getRatingTree(){
+		return this.ratCityTree;
 	}
 }

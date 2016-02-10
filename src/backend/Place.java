@@ -10,8 +10,10 @@ public abstract class Place {
 	protected HashMap<Place, Link> linkMap;
 	protected int rating;
 	
-	public Place() {
-		
+	public Place(String name, Coordinate location, int rating) {
+		this.name = name;
+		this.location = location;
+		this.rating = rating;
 	}
 	
 	public Coordinate getLocation() {
