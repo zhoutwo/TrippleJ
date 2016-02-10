@@ -17,8 +17,15 @@ public class Main {
 	
 	public static void main(String[] args) {
 		popTree = new FlexRedBlackTree<City>(new PopulationComparator());
+		Map map=new Map();
+		FlexRedBlackTree<City> populationTree= map.getPopTree();
+		FlexRedBlackTree<Place> alphabetTree=map.getAlphabetTree();
+		FlexRedBlackTree<Place> ratingTree=map.getRatingTree();
 		try {
-			importFromTxtFileToTree();
+			importFromTxtFileToTree(popTree);
+//			importFromTxtFileToTree(populationTree);
+//			importFromTxtFileToTree(alphabetTree);
+//			importFromTxtFileToTree(ratingTree);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -31,21 +38,27 @@ public class Main {
 	 * data storage 
 	 * @throws IOException
 	 */
-	private static void importFromTxtFileToTree() throws IOException{
+	private static void importFromTxtFileToTree(FlexRedBlackTree tree) throws IOException{
 		// import data from a file and store it in a file type
 		File inputFile = new File("src/data/KansasCities.txt");
 		// create a scanner to scan through the newly created file
 		Scanner inScanner = new Scanner(inputFile);
 		ArrayList<String> cityName = new ArrayList<String>();
 		ArrayList<Integer> cityPop = new ArrayList<Integer>();
+		ArrayList<Double> Latitude = new ArrayList<Double>();
+		ArrayList<Double> Longitude = new ArrayList<Double>();
 		// add data to an array list to prepare to be input into trees 
 		while(inScanner.hasNext()){
-			popTree.insert(new City(inScanner.next(),inScanner.nextInt()));
-//			cityName.add(inScanner.next());
-//			cityPop.add(inScanner.nextInt());
+//			tree.insert(new City(inScanner.next(),inScanner.nextInt()));
+			cityName.add(inScanner.next());
+			cityPop.add(inScanner.nextInt());
+			Latitude.add(inScanner.nextDouble());
+			Longitude.add(inScanner.nextDouble());
 		}
-//		System.out.println(cityName.toString());
-		System.out.println(popTree.toString());
+		System.out.println(cityName.toString());
+		System.out.println(cityPop.toString());
+		System.out.println(Latitude.toString());
+		System.out.println(Longitude.toString());
 		inScanner.close();
 	}
 

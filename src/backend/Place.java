@@ -29,4 +29,5 @@ public abstract class Place {
 	public int getRating() {
 		return this.rating;
 	}
+
 }

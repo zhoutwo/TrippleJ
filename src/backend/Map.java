@@ -1,24 +1,35 @@
 package backend;
-
-import java.util.ArrayList;
+import java.util.ArrayList;import java.util.Comparator;
 import java.util.HashMap;
+
+import utils.AlphabetComparator;
+import utils.CompareType;
 import utils.FlexRedBlackTree;
+import utils.PopulationComparator;
+import utils.RatingComparator;
 
 public class Map {
 	
 	private HashMap<String, City> cities;
-	private FlexRedBlackTree<City> alpCityList;
-	private FlexRedBlackTree<City> ratCityList;
-	private FlexRedBlackTree<City> popCityList;
+	private FlexRedBlackTree<Place> alphabetCityTree;
+	private FlexRedBlackTree<Place> ratingCityTree;
+	private FlexRedBlackTree<City> popCityTree;
 	
-	public ArrayList<City> getAlpCityList() {
-		return this.alpCityList.toArrayList();
+	public Map(){
+		this.alphabetCityTree=new FlexRedBlackTree<Place>(new AlphabetComparator<>());
+		this.ratingCityTree=new FlexRedBlackTree<Place>(new RatingComparator<>());
+		this.popCityTree=new FlexRedBlackTree<City>(new PopulationComparator());
+		
+		
 	}
-	public ArrayList<City> getRatCityList() {
-		return this.ratCityList.toArrayList();
+	public ArrayList<Place> getAlpCityList() {
+		return this.alphabetCityTree.toArrayList();
+	}
+	public ArrayList<Place> getRatCityList() {
+		return this.ratingCityTree.toArrayList();
 	}
 	public ArrayList<City> getPopCityList() {
-		return this.popCityList.toArrayList();
+		return this.popCityTree.toArrayList();
 	}
 	public ArrayList<Link> getRoute(String from, String to) {
 		return null;
@@ -28,5 +39,14 @@ public class Map {
 	}
 	public boolean editEntry(Form f) {
 		return false;
+	}
+	public FlexRedBlackTree<City> getPopTree(){
+		return this.popCityTree;
+	}
+	public FlexRedBlackTree<Place> getAlphabetTree(){
+		return this.alphabetCityTree;
+	}
+	public FlexRedBlackTree<Place> getRatingTree(){
+		return this.ratingCityTree;
 	}
 }
