@@ -75,8 +75,8 @@ ArrayList&lt;Place&gt; getRatPOIList();
 --
 String getType();
 double getCost();
-void setType();
-void setCost();</panel_attributes>
+void setType(string);
+void setCost(double);</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
