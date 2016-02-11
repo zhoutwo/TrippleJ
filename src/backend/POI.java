@@ -5,7 +5,7 @@ public class POI extends Place {
 	private String type;
 	private double cost;
 
-	public POI(String name, Coordinate location, String type, int rating, double cost) {
+	public POI(String name, Coordinate location, String type, double rating, double cost) {
 		super(name, location, rating);
 		this.type = type;
 		this.cost = cost;

@@ -13,6 +13,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 	public BinaryNode root; 
 	private int size; 
 	private int modCount;
+	private int listCreatedModCount;
 	private int rotationCount;
 	private final Comparator<T> c;
 	
@@ -22,6 +23,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 	public FlexRedBlackTree(Comparator<T> c){
 		rotationCount = 0;
 		modCount = 0;
+		listCreatedModCount = -1;
 		root = null;
 		size = 0;
 		this.c = c;
@@ -73,6 +75,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 	*/
 	public ArrayList<T> toArrayList(){
 		ArrayList<T> aList = new ArrayList<T>();
+		listCreatedModCount = modCount;
 		if(this.isEmpty()){
 			return aList;
 		}
@@ -138,10 +141,14 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 	
 	/**
 	 * the getRotationCount() method will return the number of rotations 
-	 * that occured during an insert or remove in order to rebalance the tree 
+	 * that occurred during an insert or remove in order to rebalance the tree 
 	 */
 	public int getRotationCount(){
 		return rotationCount;
+	}
+	
+	public boolean listNeedsUpdated() {
+		return listCreatedModCount != modCount;
 	}
 	
 	public class BinaryNode{
@@ -670,9 +677,10 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 	private class InOrderIterator implements Iterator<T>{
 		// this is a stack used to put elements on to find the first element 
 		// of the iterator
-		Stack<BinaryNode> s = new Stack<BinaryNode>();  
+		Stack<BinaryNode> s = new Stack<BinaryNode>();
+		T lastNode = null;
 		
-		// this constructor insansiates the InOrderIterator class with a binaryNode root
+		// this constructor instantiates the InOrderIterator class with a binaryNode root
 		InOrderIterator(){
 			if(root!=null){
 				putLeftMostNodeOnStack(root);}
@@ -688,7 +696,8 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(temp.rightChild!=null){
 				putLeftMostNodeOnStack(temp.rightChild);
 			}
-			return temp.element; 
+			lastNode = temp.element;
+			return lastNode; 
 		}
 		
 		// the putLeftMostNodeOnstack() method goes through the tree and puts all 
@@ -709,10 +718,8 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 		}
 
 		// the remove() method removes elements from the iterator 
-		@Override
 		public void remove() {
-			// TODO Auto-generated method stub
-			
+			FlexRedBlackTree.this.remove(lastNode);
 		}
 	}
 	

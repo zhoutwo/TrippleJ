@@ -8,9 +8,9 @@ public abstract class Place {
 	protected String name;
 	protected ArrayList<Place> links;
 	protected HashMap<Place, Link> linkMap;
-	protected int rating;
+	protected double rating;
 	
-	public Place(String name, Coordinate location, int rating) {
+	public Place(String name, Coordinate location, double rating) {
 		this.name = name;
 		this.location = location;
 		this.rating = rating;
@@ -28,7 +28,7 @@ public abstract class Place {
 		return this.links;
 	}
 	
-	public int getRating() {
+	public double getRating() {
 		return this.rating;
 	}
 

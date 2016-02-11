@@ -11,7 +11,7 @@ public class City extends Place {
 	private FlexRedBlackTree<POI> alpPOIList;
 	private FlexRedBlackTree<POI> ratPOIList;
 	
-	public City(String name, Coordinate location, int rating, int population) {
+	public City(String name, Coordinate location, double rating, int population) {
 		super(name, location, rating);
 		this.population = population;
 	}
