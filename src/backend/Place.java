@@ -6,7 +6,7 @@ import java.util.HashMap;
 public abstract class Place {
 	protected Coordinate location;
 	protected String name;
-	protected ArrayList<Place> links;
+	protected ArrayList<Place> neighbors;
 	protected HashMap<Place, Link> linkMap;
 	protected double rating;
 	
@@ -14,6 +14,8 @@ public abstract class Place {
 		this.name = name;
 		this.location = location;
 		this.rating = rating;
+		this.neighbors = new ArrayList<Place>();
+		this.linkMap = new HashMap<Place, Link>();
 	}
 	
 	public Coordinate getLocation() {
@@ -24,8 +26,8 @@ public abstract class Place {
 		return this.name;
 	}
 	
-	public ArrayList<Place> getLinks() {
-		return this.links;
+	public ArrayList<Place> getNeighbors() {
+		return this.neighbors;
 	}
 	
 	public double getRating() {

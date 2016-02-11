@@ -13,13 +13,13 @@
 --
 -location: Coordinate
 -name: String
--links: ArrayList&lt;Place&gt; 
+-neighbors: ArrayList&lt;Place&gt; 
 -linkMap: HashMap&lt;Place,Link&gt; 
 -rating: double
 --
 Coordinate getLocation();
 String getName();
-ArrayList&lt;Place&gt; getlinks();
+ArrayList&lt;Place&gt; getNeighbors();
 int getRating();
 
 
