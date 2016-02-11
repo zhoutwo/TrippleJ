@@ -49,17 +49,25 @@ public class Map {
 	}
 	public ArrayList<Place> navigateTo(Place current, Place destin){
 		ArrayList<Place> route=new ArrayList<Place>();
-		PriorityQueue<Place> list= new PriorityQueue<Place>();
-		PlaceWithDistance pwd=new PlaceWithDistance(current, destin);
-		Place first=current.neighbors.get(0);
-		for(int i=1;i<current.neighbors.size();i++){
-			if(distanceToDestination(first, destin)<distanceToDestination(current.neighbors.get(i), destin)){
-				list.add(first); // it does not like it becuase links is an arraylist of places, not cities.
-				first=current.neighbors.get(i);
-			}else{
-				list.add(current.neighbors.get(i));
+		boolean onTheWay=true;
+		PriorityQueue<PlaceWithDistance> list= new PriorityQueue<PlaceWithDistance>();
+		while(onTheWay){
+			for(int i=0;i<current.neighbors.size();i++){
+				
 			}
+			
+			
 		}
+		
+		
+//		for(int i=1;i<current.neighbors.size();i++){
+//			if(distanceToDestination(first, destin)<distanceToDestination(current.neighbors.get(i), destin)){
+//				list.add(first);
+//				first=current.neighbors.get(i);
+//			}else{
+//				list.add(current.neighbors.get(i));
+//			}
+//		}
 		
 		
 		
@@ -84,7 +92,7 @@ public class Map {
 	public boolean editEntry(FormData fd) {
 		return false;
 	}
-	private class PlaceWithDistance{
+	public class PlaceWithDistance{
 		private Place place;
 		private double distanceTraveled;
 		private double distanceToDestin;
@@ -92,7 +100,21 @@ public class Map {
 			place=p;
 			distanceTraveled=0;
 			distanceToDestin=distanceToDestination(p,destin);
+			
 		}
+		public double getDistanceTraveled(){
+			return distanceTraveled;
+		}
+		protected double getDistanceToDestin(){
+			return distanceToDestin;
+		}
+		protected Place getPlace(){
+			return place;
+		}
+		public double getCost(){
+			return distanceToDestin+distanceTraveled;
+		}
+		
 		
 	}
 	
