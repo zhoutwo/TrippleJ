@@ -50,10 +50,11 @@ public class Map {
 	public ArrayList<Place> navigateTo(Place current, Place destin){
 		ArrayList<Place> route=new ArrayList<Place>();
 		boolean onTheWay=true;
-		PriorityQueue<PlaceWithDistance> list= new PriorityQueue<PlaceWithDistance>();
+		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
 		while(onTheWay){
 			for(int i=0;i<current.neighbors.size();i++){
-				
+				PlaceWithDistance pwd = new PlaceWithDistance(current.getNeighbors().get(i), destin);
+				list.add(pwd);
 			}
 			
 			
@@ -72,7 +73,7 @@ public class Map {
 		
 		
 		
-		return null;
+		return route;
 		
 	}
 	
