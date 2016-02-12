@@ -77,13 +77,16 @@ public class Map {
 		
 	}
 	
-	
-	public double distanceToDestination(Place current,Place destin){
-		double x= current.getLocation().getX()-destin.getLocation().getX();
-		double y= current.getLocation().getY()-destin.getLocation().getY();
-		x=x*x;
-		y=y*y;
-		return Math.sqrt(x+y);
+	/**
+	 * Calculates the distance (straight line connecting one place to another, not the route between.
+	 * @param current
+	 * @param destin
+	 * @return
+	 */
+	public static double distanceToDestination(Place from, Place to){
+		double dx= from.getLocation().getX()-to.getLocation().getX();
+		double dy= from.getLocation().getY()-to.getLocation().getY();
+		return Math.sqrt(dx*dx + dy*dy);
 	}
 	
 	public boolean addEntry(FormData fd) {
