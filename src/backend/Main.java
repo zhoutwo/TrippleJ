@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.swing.JFrame;
+
+import gui.*;
 import utils.*;
 
 /**
@@ -30,6 +34,12 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		// load gui and set visible 
+		MapFrame mapFrame = new MapFrame();
+		mapFrame.add(new MapComponent());
+		mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mapFrame.setVisible(true);
 	}
 	
 	/**
