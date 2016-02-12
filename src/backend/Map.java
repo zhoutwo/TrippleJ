@@ -48,45 +48,53 @@ public class Map {
 		return this.ratCityTree;
 	}
 	public ArrayList<Place> navigateTo(Place current, Place destin){
-		ArrayList<Place> route=new ArrayList<Place>();
+		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin);
 		boolean onTheWay=true;
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
 		while(onTheWay){
-			for(int i=0;i<current.neighbors.size();i++){
-				PlaceWithDistance pwd = new PlaceWithDistance(current.getNeighbors().get(i), destin);
+			
+			///Need to update distance traveled as I open new place.
+			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
+				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin);
+				pwd.getRoute().add(currentPwd.getPlace());
 				list.add(pwd);
 			}
+			
+			//if not arrived keep the loop going
+			if(currentPwd.getPlace()!=destin){
+				currentPwd=list.poll();
+			}
+			//if Arrived make sure it is the lowest cost.
+			else {
+				if(currentPwd.isArrived){
+					return currentPwd.getRoute();
+				}
+				currentPwd.setTrue();
+				currentPwd.updateDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
+				
+			}
+			
+			
 			
 			
 		}
 		
 		
-//		for(int i=1;i<current.neighbors.size();i++){
-//			if(distanceToDestination(first, destin)<distanceToDestination(current.neighbors.get(i), destin)){
-//				list.add(first);
-//				first=current.neighbors.get(i);
-//			}else{
-//				list.add(current.neighbors.get(i));
-//			}
-//		}
 		
 		
 		
 		
-		return route;
+		return null;//just for now
 		
 	}
 	
-	/**
-	 * Calculates the distance (straight line connecting one place to another, not the route between.
-	 * @param current
-	 * @param destin
-	 * @return
-	 */
-	public static double distanceToDestination(Place from, Place to){
-		double dx= from.getLocation().getX()-to.getLocation().getX();
-		double dy= from.getLocation().getY()-to.getLocation().getY();
-		return Math.sqrt(dx*dx + dy*dy);
+	
+	public double distanceToDestin(Place current,Place destin){
+		double x= current.getLocation().getX()-destin.getLocation().getX();
+		double y= current.getLocation().getY()-destin.getLocation().getY();
+		x=x*x;
+		y=y*y;
+		return Math.sqrt(x+y);
 	}
 	
 	public boolean addEntry(FormData fd) {
@@ -96,18 +104,25 @@ public class Map {
 	public boolean editEntry(FormData fd) {
 		return false;
 	}
-	public class PlaceWithDistance{
+	protected class PlaceWithDistance{
 		private Place place;
 		private double distanceTraveled;
+		private ArrayList<Place> route;
 		private double distanceToDestin;
+		private boolean isArrived;
 		public PlaceWithDistance(Place p,Place destin) {
 			place=p;
 			distanceTraveled=0;
-			distanceToDestin=distanceToDestination(p,destin);
+			distanceToDestin=distanceToDestin(p,destin);
+			route=new ArrayList<Place>();
+			isArrived=false;
 			
 		}
-		public double getDistanceTraveled(){
+		protected double getDistanceTraveled(){
 			return distanceTraveled;
+		}
+		protected void updateDistanceTraveled(double distanceToAdd){
+			distanceToDestin+=distanceToAdd;
 		}
 		protected double getDistanceToDestin(){
 			return distanceToDestin;
@@ -115,8 +130,17 @@ public class Map {
 		protected Place getPlace(){
 			return place;
 		}
-		public double getCost(){
+		protected double getCost(){
 			return distanceToDestin+distanceTraveled;
+		}
+		protected ArrayList<Place> getRoute(){
+			return route;
+		}
+		protected boolean getIsArrived(){
+			return isArrived;
+		}
+		protected void setTrue(){
+			isArrived=true;
 		}
 		
 		
