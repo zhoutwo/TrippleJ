@@ -30,12 +30,23 @@ public class MapFrame extends JFrame{
 		frame.setSize(frameWidth, frameHeight);
 		frame.setTitle(frameTitle);
 //		JPanel panel= new JPanel();
-		EditPanel r = new EditPanel();
+		
+		EditPanel r = new EditPanel(frame);
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		MapComponent component = new MapComponent();
+//		MapComponent component = new MapComponent();
+		
 		frame.add(r);
+		
 		frame.pack();
 		frame.setVisible(true);
+		
+		// Test for closing only the specified window.
+		JFrame f1 = new JFrame();
+		f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f1.pack();
+//		f1.add(r);
+		f1.setVisible(true);
 
 	}
 	
