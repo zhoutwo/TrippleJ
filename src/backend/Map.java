@@ -11,12 +11,18 @@ public class Map {
 	private FlexRedBlackTree<City> alpCityTree;
 	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
+	protected boolean isActive;
 	
 	public Map() {
 		this.cities = new HashMap<String, City>();
 		this.alpCityTree = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
+		isActive = true;
+	}
+	
+	public void setIsAciveFalse(){
+		isActive = false;
 	}
 	
 	public ArrayList<City> getAlpCityList() {

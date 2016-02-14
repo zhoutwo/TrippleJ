@@ -1,6 +1,13 @@
 package backend;
 
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,20 +26,24 @@ public class Main {
 	
 	private static FlexRedBlackTree<City> popTree;
 	
-	public static void main(String[] args) {
-		popTree = new FlexRedBlackTree<City>(new PopulationComparator());
+	public static void main(String[] args) throws Exception {
+		FlexRedBlackTree<City> popTree = new FlexRedBlackTree<City>(new PopulationComparator());
 		Map map=new Map();
 		FlexRedBlackTree<City> populationTree= map.getPopTree();
 		FlexRedBlackTree<City> alphabetTree=map.getAlphabetTree();
 		FlexRedBlackTree<City> ratingTree=map.getRatingTree();
-		try {
-			importFromTxtFileToTree(popTree);
-//			importFromTxtFileToTree(populationTree);
-//			importFromTxtFileToTree(alphabetTree);
-//			importFromTxtFileToTree(ratingTree);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		ArrayList<FlexRedBlackTree> treeList = new ArrayList<FlexRedBlackTree>();
+		boolean newMap = true;
+		if(newMap){
+			try {
+				importFromTxtFileToTree(popTree); 
+			} catch (IOException e) {
+				// TODO Auto-generated catch block 
+				e.printStackTrace();
+			}
+		}
+		else{
+			treeList = read("currentState.xml");
 		}
 		
 		// load gui and set visible 
@@ -40,6 +51,14 @@ public class Main {
 		mapFrame.add(new MapComponent());
 		mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mapFrame.setVisible(true);
+		while(map.isActive){
+			map.setIsAciveFalse();
+		}
+		treeList.clear();
+		treeList.add(populationTree);
+		treeList.add(alphabetTree);
+		treeList.add(ratingTree);
+		write(treeList,"currentState.xml");
 	}
 	
 	/**
@@ -72,4 +91,22 @@ public class Main {
 		inScanner.close();
 	}
 
+	private static void write(ArrayList<FlexRedBlackTree> o, String filename) throws Exception{
+		 XMLEncoder encoder =
+		           new XMLEncoder(
+		              new BufferedOutputStream(
+		                new FileOutputStream(filename)));
+		       	encoder.writeObject(o);
+		        encoder.close();
+	}
+	
+	public static ArrayList<FlexRedBlackTree> read(String filename) throws Exception {
+        XMLDecoder decoder = 
+        	new XMLDecoder(
+        			new BufferedInputStream(
+        					new FileInputStream(filename)));
+        ArrayList<FlexRedBlackTree> l = (ArrayList<FlexRedBlackTree>) decoder.readObject();
+        decoder.close();
+        return l;
+    }
 }
