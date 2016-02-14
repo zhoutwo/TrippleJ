@@ -95,12 +95,10 @@ public class Map {
 	}
 	
 	
-	public double distanceToDestin(Place current,Place destin){
+	public static double distanceToDestin(Place current, Place destin){
 		double x= current.getLocation().getX()-destin.getLocation().getX();
 		double y= current.getLocation().getY()-destin.getLocation().getY();
-		x=x*x;
-		y=y*y;
-		return Math.sqrt(x+y);
+		return Math.sqrt(x*x+y*y);
 	}
 	
 	public boolean addEntry(FormData fd) {
