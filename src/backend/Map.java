@@ -56,12 +56,13 @@ public class Map {
 			///Need to update distance traveled as I open new place.
 			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
 				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin);
-				pwd.getRoute().add(currentPwd.getPlace());
+				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
+				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i) ));
 				list.add(pwd);
 			}
 			
 			//if not arrived keep the loop going
-			if(currentPwd.getPlace()!=destin){
+			if(!list.peek().getPlace().equals(destin)){
 				currentPwd=list.poll();
 			}
 			//if Arrived make sure it is the lowest cost.
@@ -70,7 +71,7 @@ public class Map {
 					return currentPwd.getRoute();
 				}
 				currentPwd.setTrue();
-				currentPwd.updateDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
+				currentPwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
 				
 			}
 			
@@ -84,7 +85,7 @@ public class Map {
 		
 		
 		
-		return null;//just for now
+		return currentPwd.getRoute();//just for now
 		
 	}
 	
@@ -121,7 +122,7 @@ public class Map {
 		protected double getDistanceTraveled(){
 			return distanceTraveled;
 		}
-		protected void updateDistanceTraveled(double distanceToAdd){
+		protected void addDistanceTraveled(double distanceToAdd){
 			distanceToDestin+=distanceToAdd;
 		}
 		protected double getDistanceToDestin(){
