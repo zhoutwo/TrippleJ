@@ -29,11 +29,12 @@ public class MapFrame extends JFrame{
 
 		frame.setSize(frameWidth, frameHeight);
 		frame.setTitle(frameTitle);
-		JPanel panel= new JPanel();
-		
+//		JPanel panel= new JPanel();
+		EditPanel r = new EditPanel();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		MapComponent component = new MapComponent();
-		frame.add(component);
+		frame.add(r);
+		frame.pack();
 		frame.setVisible(true);
 
 	}

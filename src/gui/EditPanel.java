@@ -1,20 +1,13 @@
 package gui;
 
-import javax.swing.SpringLayout;
 import javax.swing.text.MaskFormatter;
 
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 import backend.City;
 import backend.POI;
@@ -27,57 +20,41 @@ public class EditPanel extends JPanel {
 	private final ArrayList<City> cityList;
 	private final ArrayList<POI> poiList;
 	
-	// Form elements
-	private final BoxLayout generalLayout = new BoxLayout(this, BoxLayout.Y_AXIS);
 	// 1st row
-	private final JPanel radioPanel = new JPanel();
-	private final ButtonGroup radioGroup = new ButtonGroup();
-	private final JRadioButton create = new JRadioButton("Create");
-	private final JRadioButton edit = new JRadioButton("Edit");
+	private final ModePanel modeRow = new ModePanel();
 	// 2nd row
-	private final JPanel namePanel = new JPanel();
-	private final SpringLayout nameRow = new SpringLayout();
-	private final JLabel nameLabel = new JLabel("Name: ");
-	private final JTextField nameField = new JTextField();
-	private final JComboBox nameCombo = new JComboBox();
+	private final TextFieldRow nameRow = new TextFieldRow("Name: ");
+	private final ComboBoxRow nameComboRow = new ComboBoxRow("Name: ", new String[0]);
 	// 3rd row
-	private final JPanel xPanel = new JPanel();
-	private final SpringLayout xRow = new SpringLayout();
-	private final JLabel xLabel = new JLabel("X: ");
-	private final JTextField xField = new JTextField();
+	private final TextFieldRow xRow = new TextFieldRow("X: ");
 	// 4th row
-	private final JPanel yPanel = new JPanel();
-	private final SpringLayout yRow = new SpringLayout();
-	private final JLabel yLabel = new JLabel("Y: ");
-	private final JTextField yField = new JTextField();
+	private final TextFieldRow yRow = new TextFieldRow("Y: ");
 	// 5th row
-	private final JPanel ratingPanel = new JPanel();
-	private final SpringLayout ratingRow = new SpringLayout();
-	private final JLabel ratingLabel = new JLabel("Rating: ");
-	private final JFormattedTextField ratingField = new JFormattedTextField("#.#"); // To be instantiated in the constructor.
+	private final FormattedTextFieldRow ratingRow = new FormattedTextFieldRow("Rating: ", true);
 	// 6th row
-	private final JPanel typePanel = new JPanel();
-	private final SpringLayout typeRow = new SpringLayout();
-	private final JLabel typeLabel = new JLabel("Type: ");
-	private final JComboBox<String> typeCombo = new JComboBox((new ArrayList<String>()).toArray()); //TODO: Put the actual array
+	private final ComboBoxRow typeRow = new ComboBoxRow("Type: ", new String[0]);
 	// 7th row
-	private final JPanel populationPanel = new JPanel();
-	private final SpringLayout populationRow = new SpringLayout();
-	private final JLabel populationLabel = new JLabel("Population: ");
-	private final JFormattedTextField populationField; // To be instantiated in the constructor.
+	private final FormattedTextFieldRow populationRow = new FormattedTextFieldRow("Population: ", false);
 	// last row
-	private final JPanel lastPanel = new JPanel();
-	private final SpringLayout lastRow = new SpringLayout();
-	private final JButton submit = new JButton("Submit");
-	private final JButton cancel = new JButton("Cancel");
-
-	public EditPanel(ArrayList<City> cityList) {
+	private final SubmitPanel submitRow = new SubmitPanel();
+	
+//	ArrayList<City> cityList
+	public EditPanel() {
 		super();
-		this.cityList = cityList;
+		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.cityList = null; //cityList;
 		this.currentCity = null;
 		this.currentPOI = null;
 		this.poiList = null;
-		this.populationField = new JFormattedTextField(this.getMaskForPopulationField());
+		
+		this.add(modeRow);
+		this.add(nameRow);
+		this.add(xRow);
+		this.add(yRow);
+		this.add(ratingRow);
+		this.add(typeRow);
+		this.add(populationRow);
+		this.add(submitRow);
 	}
 	
 	private MaskFormatter getMaskForPopulationField() {
