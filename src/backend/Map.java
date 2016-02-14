@@ -54,12 +54,11 @@ public class Map {
 	}
 	public ArrayList<Place> navigateTo(Place current, Place destin){
 		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin);
-		boolean onTheWay=true;
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
-		while(onTheWay){
+		while(true){
 			
 			if(currentPwd.getPlace().neighbors.size()==0){
-				return null;
+				return null;//null will represent not available route found.
 			}
 			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
 				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin);
@@ -69,8 +68,9 @@ public class Map {
 			}
 			
 			//if not arrived keep the loop going
+			if(list.size()==0) return null; //When there is no "OPEN" place that you can visit through, null will represent not available route found.
 			if(!list.peek().getPlace().equals(destin)){
-				currentPwd=list.poll();
+				currentPwd=list.poll();//If you poll, that place will be removed from the list, and will be considered as closed(but its neighbors will still be open)
 			}
 			//if Arrived make sure it is the lowest cost.
 			else {
@@ -80,21 +80,8 @@ public class Map {
 //				}
 //				currentPwd.setTrue();
 //				currentPwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
-				
 			}
-			
-			
-			
-			
 		}
-		
-		
-		
-		
-		
-		
-		return currentPwd.getRoute();//just for now
-		
 	}
 	
 	
