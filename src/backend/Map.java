@@ -54,6 +54,10 @@ public class Map {
 		while(onTheWay){
 			
 			///Need to update distance traveled as I open new place.
+			if(currentPwd.getPlace().neighbors.size()==0){
+				list.remove(currentPwd);
+				currentPwd=list.poll();
+			}
 			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
 				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin);
 				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
@@ -67,11 +71,12 @@ public class Map {
 			}
 			//if Arrived make sure it is the lowest cost.
 			else {
-				if(currentPwd.isArrived){
-					return currentPwd.getRoute();
-				}
-				currentPwd.setTrue();
-				currentPwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
+				return list.peek().getRoute();
+//				if(currentPwd.isArrived){
+//					return currentPwd.getRoute();
+//				}
+//				currentPwd.setTrue();
+//				currentPwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
 				
 			}
 			
