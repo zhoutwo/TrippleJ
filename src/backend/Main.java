@@ -58,7 +58,7 @@ public class Main {
 		treeList.add(populationTree);
 		treeList.add(alphabetTree);
 		treeList.add(ratingTree);
-		write(treeList,"currentState.xml");
+		write(treeList,"src/data/currentState.xml");
 	}
 	
 	/**
