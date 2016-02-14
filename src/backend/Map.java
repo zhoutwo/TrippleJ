@@ -58,10 +58,8 @@ public class Map {
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
 		while(onTheWay){
 			
-			///Need to update distance traveled as I open new place.
 			if(currentPwd.getPlace().neighbors.size()==0){
-				list.remove(currentPwd);
-				currentPwd=list.poll();
+				return null;
 			}
 			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
 				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin);
