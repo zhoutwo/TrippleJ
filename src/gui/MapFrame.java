@@ -15,20 +15,24 @@ import javax.swing.text.JTextComponent;
 
 public class MapFrame extends JFrame{
 	// constants
-	private static final int frameWidth = 1200;
-	private static final int frameHeight = 1000;
-	private static final String frameTitle = "Kansas";
+	private static final int FRAME_WIDTH = 1200;
+	private static final int FRAME_HEIGHT = 950;
+	private static final String FRAME_TITLE = "Kansas";
 	//fields
 	private Console cs = new Console();
 	
 	public MapFrame(){
-		
+		super();
+		Dimension d = new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
+		this.setMinimumSize(d);
+		this.setPreferredSize(d);
 	}
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 
-		frame.setSize(frameWidth, frameHeight);
-		frame.setTitle(frameTitle);
+		frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
+//		frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		frame.setTitle(FRAME_TITLE);
 //		JPanel panel= new JPanel();
 		
 		EditPanel r = new EditPanel(frame);
