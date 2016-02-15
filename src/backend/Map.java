@@ -11,6 +11,11 @@ public class Map {
 	private FlexRedBlackTree<City> alpCityTree;
 	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
+	
+	private ArrayList<City> alpCityList;
+	private ArrayList<City> ratCityList;
+	private ArrayList<City> popCityList;
+	
 	protected boolean isActive;
 	
 	public Map() {
@@ -26,32 +31,42 @@ public class Map {
 	}
 	
 	public ArrayList<City> getAlpCityList() {
-		return this.alpCityTree.toArrayList();
+		if (this.alpCityTree.listNeedsUpdate()) {
+			this.alpCityList = this.alpCityTree.toArrayList();
+		}
+		return this.alpCityList;
 	}
 	
 	public ArrayList<City> getRatCityList() {
-		return this.ratCityTree.toArrayList();
+		if (this.ratCityTree.listNeedsUpdate()) {
+			this.ratCityList = this.ratCityTree.toArrayList();
+		}
+		return this.ratCityList;
 	}
 	
 	public ArrayList<City> getPopCityList() {
-		return this.popCityTree.toArrayList();
+		if (this.popCityTree.listNeedsUpdate()) {
+			this.popCityList = this.popCityTree.toArrayList();
+		}
+		return this.popCityList;
 	}
 	
-	public ArrayList<Link> getRoute(String from, String to) {
+	public ArrayList<Place> getRoute(String from, String to) {
 		return null;
 	}
 	
-	public FlexRedBlackTree<City> getPopTree(){
-		return this.popCityTree;
-	}
+//	public FlexRedBlackTree<City> getPopTree(){
+//		return this.popCityTree;
+//	}
+//	
+//	public FlexRedBlackTree<City> getAlphabetTree(){
+//		return this.alpCityTree;
+//	}
+//	
+//	public FlexRedBlackTree<City> getRatingTree(){
+//		return this.ratCityTree;
+//	}
 	
-	public FlexRedBlackTree<City> getAlphabetTree(){
-		return this.alpCityTree;
-	}
-	
-	public FlexRedBlackTree<City> getRatingTree(){
-		return this.ratCityTree;
-	}
 	public ArrayList<Place> navigateTo(Place current, Place destin){
 		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin);
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
@@ -105,7 +120,7 @@ public class Map {
 		} else {
 			boolean success = true;
 			City parent = fd.getParentCity();
-			
+			// TODO
 		}
 		return false;
 	}

@@ -29,9 +29,9 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		FlexRedBlackTree<City> popTree = new FlexRedBlackTree<City>(new PopulationComparator());
 		Map map=new Map();
-		FlexRedBlackTree<City> populationTree= map.getPopTree();
-		FlexRedBlackTree<City> alphabetTree=map.getAlphabetTree();
-		FlexRedBlackTree<City> ratingTree=map.getRatingTree();
+//		FlexRedBlackTree<City> populationTree= map.getPopTree();
+//		FlexRedBlackTree<City> alphabetTree=map.getAlphabetTree();
+//		FlexRedBlackTree<City> ratingTree=map.getRatingTree();
 		ArrayList<FlexRedBlackTree> treeList = new ArrayList<FlexRedBlackTree>();
 		boolean newMap = true;
 		if(newMap){
@@ -55,9 +55,9 @@ public class Main {
 			map.setIsAciveFalse();
 		}
 		treeList.clear();
-		treeList.add(populationTree);
-		treeList.add(alphabetTree);
-		treeList.add(ratingTree);
+//		treeList.add(populationTree);
+//		treeList.add(alphabetTree);
+//		treeList.add(ratingTree);
 		write(treeList,"src/data/currentState.xml");
 	}
 	

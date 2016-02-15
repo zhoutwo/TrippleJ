@@ -147,7 +147,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 		return rotationCount;
 	}
 	
-	public boolean listNeedsUpdated() {
+	public boolean listNeedsUpdate() {
 		return listCreatedModCount != modCount;
 	}
 	
