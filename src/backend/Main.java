@@ -48,7 +48,7 @@ public class Main {
 		
 		// load gui and set visible 
 		MapFrame mapFrame = new MapFrame();
-		mapFrame.add(new MapComponent());
+//		mapFrame.add(new MapComponent());
 		mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mapFrame.setVisible(true);
 		while(map.isActive){

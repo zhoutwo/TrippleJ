@@ -15,8 +15,8 @@ import javax.swing.text.JTextComponent;
 
 public class MapFrame extends JFrame{
 	// constants
-	private static final int FRAME_WIDTH = 1200;
-	private static final int FRAME_HEIGHT = 950;
+	private static final int FRAME_WIDTH = 1050;
+	private static final int FRAME_HEIGHT = 900;
 	private static final String FRAME_TITLE = "Kansas";
 	//fields
 	private Console cs = new Console();
@@ -26,6 +26,7 @@ public class MapFrame extends JFrame{
 		Dimension d = new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setMinimumSize(d);
 		this.setPreferredSize(d);
+		this.add(new MapPanel());
 	}
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();

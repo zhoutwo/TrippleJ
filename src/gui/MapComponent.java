@@ -20,7 +20,7 @@ public class MapComponent extends JComponent {
 	public MapComponent(){
 		
 	}
-	@Override
+
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		//boxes
