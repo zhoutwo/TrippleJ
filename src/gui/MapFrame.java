@@ -36,9 +36,13 @@ public class MapFrame extends JFrame{
 		this.setTitle(FRAME_TITLE);
 		this.setMinimumSize(d);
 		this.setPreferredSize(d);
+		this.setMaximumSize(d);
+		this.setResizable(false);
 		mp = new MapPanel();
 		this.add(mp);
-
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLocationRelativeTo(null); // Centers it
+		this.setVisible(true);
 	}
 //	public static void main(String[] args) {
 //		JFrame frame = new JFrame();
@@ -183,10 +187,11 @@ public class MapFrame extends JFrame{
 				edit.addActionListener(new ActionListener() {
 
 					public void actionPerformed(ActionEvent arg0) {
-						
+						new EditFrame();
 					}
 					
 				});
+				this.add(edit);
 			}
 			
 		}

@@ -30,13 +30,22 @@ public class EditFrame extends JFrame {
 	
 	public EditFrame() {
 		super();
+		Dimension d = new Dimension(300, 300);
+		this.setMinimumSize(d);
+		this.setPreferredSize(d);
+		this.setMaximumSize(d);
+		this.setResizable(false);
+		this.add(new EditPanel());
+		this.pack();
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null); // Centers it.
+		this.setVisible(true);
 	}
 	
 	public class EditPanel extends JPanel {
 		private boolean isCreateMode;
 		private boolean isCity;
 		private final int state;
-		private final JFrame frame;
 		private final City currentCity;
 		private final POI currentPOI;
 		private final ArrayList<City> cityList;
@@ -63,11 +72,10 @@ public class EditFrame extends JFrame {
 		// last row
 		private final SubmitPanel submitRow = new SubmitPanel();
 		
-		public EditPanel(JFrame frame) {
+		public EditPanel() {
 			super();
 			initializeWindowConfiguration();
 			
-			this.frame = frame;
 			this.cityList = null;
 			this.currentCity = null;
 			this.currentPOI = null;
@@ -86,14 +94,12 @@ public class EditFrame extends JFrame {
 		/**
 		 * 
 		 * @param cityList
-		 * @param frame
 		 * @param map
 		 */
-		public EditPanel(ArrayList<City> cityList, JFrame frame, Map map) {
+		public EditPanel(ArrayList<City> cityList, Map map) {
 			super();
 			initializeWindowConfiguration();
-		
-			this.frame = frame;
+			
 			this.cityList = cityList;
 			this.currentCity = null;
 			this.currentPOI = null;
@@ -113,14 +119,12 @@ public class EditFrame extends JFrame {
 		 * 
 		 * @param selected
 		 * @param cityList
-		 * @param frame
 		 * @param map
 		 */
-		public EditPanel(City selected, ArrayList<City> cityList, JFrame frame, Map map) {
+		public EditPanel(City selected, ArrayList<City> cityList, Map map) {
 			super();
 			initializeWindowConfiguration();
-		
-			this.frame = frame;
+			
 			this.cityList = cityList;
 			this.currentCity = selected;
 			this.currentPOI = null;
@@ -141,14 +145,12 @@ public class EditFrame extends JFrame {
 		 * @param selected
 		 * @param parent
 		 * @param poiList
-		 * @param frame
 		 * @param map
 		 */
-		public EditPanel(POI selected, City parent, ArrayList<POI> poiList, JFrame frame, Map map) {
+		public EditPanel(POI selected, City parent, ArrayList<POI> poiList, Map map) {
 			super();
 			initializeWindowConfiguration();
-		
-			this.frame = frame;
+			
 			this.cityList = null;
 			this.currentCity = parent;
 			this.currentPOI = selected;
@@ -166,10 +168,10 @@ public class EditFrame extends JFrame {
 		
 		private void initializeWindowConfiguration() {
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			Dimension windowDimension = new Dimension(300, 300);
-			this.setMinimumSize(windowDimension);
-			this.setPreferredSize(windowDimension);
-			this.setMaximumSize(windowDimension);
+//			Dimension windowDimension = new Dimension(300, 300);
+//			this.setMinimumSize(windowDimension);
+//			this.setPreferredSize(windowDimension);
+//			this.setMaximumSize(windowDimension);
 		}
 
 		private void populateFormBasic() {
@@ -189,8 +191,8 @@ public class EditFrame extends JFrame {
 			this.add(Box.createVerticalGlue());
 			this.add(submitRow);
 			this.add(Box.createVerticalGlue());
-			frame.pack();
-			frame.repaint();
+			EditFrame.this.pack();
+			EditFrame.this.repaint();
 		}
 		
 		private void populateFormWithInfo() {
@@ -242,9 +244,8 @@ public class EditFrame extends JFrame {
 		}
 		
 		private void closeWindow() {
-//			this.frame.dispatchEvent(new WindowEvent(this.frame, WindowEvent.WINDOW_CLOSING)); // If this closes all windows, then why pass in the frame?
-			this.frame.setVisible(false);
-			this.frame.dispose();
+			EditFrame.this.setVisible(false);
+			EditFrame.this.dispose();
 		}
 		
 		private boolean submitForm() {
@@ -264,8 +265,8 @@ public class EditFrame extends JFrame {
 			this.add(isCreateMode ? nameRow : nameComboRow, 3);
 			typeRow.setEnabled(!isCity);
 			populationRow.setEnabled(isCity);
-			frame.pack();
-			frame.repaint();
+			EditFrame.this.pack();
+			EditFrame.this.repaint();
 		}
 		
 		public class ModePanel extends JPanel {
