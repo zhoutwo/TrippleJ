@@ -3,6 +3,8 @@ package gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -18,21 +21,29 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.NumberFormatter;
 
 import backend.City;
 import backend.FormData;
+import backend.Map;
 import backend.POI;
 
 public class EditPanel extends JPanel {
 	private boolean isCreateMode;
 	private boolean isCity;
+	private final int state;
 	private final JFrame frame;
 	private final City currentCity;
 	private final POI currentPOI;
 	private final ArrayList<City> cityList;
 	private final ArrayList<POI> poiList;
+	private final Map map;
 	
+	// 0th row
+	
+	private final Box.Filler placeHolder;
 	// 1st row
 	private final ModePanel modeRow = new ModePanel();
 	// 2nd row
@@ -54,31 +65,159 @@ public class EditPanel extends JPanel {
 //	ArrayList<City> cityList
 	public EditPanel(JFrame frame) {
 		super();
+		initializeWindowConfiguration();
+		
 		this.frame = frame;
+		this.cityList = null;
+		this.currentCity = null;
+		this.currentPOI = null;
+		this.poiList = null;
+		this.map = null;
+		this.state = 0;
+		this.isCreateMode = true;
+		this.isCity = true;
+		
+		Dimension placeHolderDimension = new Dimension(300, 5);
+		this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
+		
+		populateFormBasic();
+	}
+	
+	public EditPanel(ArrayList<City> cityList, JFrame frame, Map map) {
+		super();
+		initializeWindowConfiguration();
+	
+		this.frame = frame;
+		this.cityList = cityList;
+		this.currentCity = null;
+		this.currentPOI = null;
+		this.poiList = null;
+		this.map = map;
+		this.state = 1;
+		this.isCreateMode = true;
+		this.isCity = true;
+		
+		Dimension placeHolderDimension = new Dimension(300, 5);
+		this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
+		
+		populateFormBasic();
+	}
+	
+	public EditPanel(City selected, ArrayList<City> cityList, JFrame frame, Map map) {
+		super();
+		initializeWindowConfiguration();
+	
+		this.frame = frame;
+		this.cityList = cityList;
+		this.currentCity = selected;
+		this.currentPOI = null;
+		this.poiList = null;
+		this.map = map;
+		this.state = 2;
+		this.isCreateMode = false;
+		this.isCity = true;
+		
+		Dimension placeHolderDimension = new Dimension(300, 5);
+		this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
+		
+		populateFormWithInfo();
+	}
+	
+	public EditPanel(POI selected, City parent, ArrayList<POI> poiList, JFrame frame, Map map) {
+		super();
+		initializeWindowConfiguration();
+	
+		this.frame = frame;
+		this.cityList = null;
+		this.currentCity = parent;
+		this.currentPOI = selected;
+		this.poiList = poiList;
+		this.map = map;
+		this.state = 3;
+		this.isCreateMode = false;
+		this.isCity = false;
+		
+		Dimension placeHolderDimension = new Dimension(300, 5);
+		this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
+		
+		populateFormWithInfo();
+	}
+	
+	private void initializeWindowConfiguration() {
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		Dimension windowDimension = new Dimension(300, 300);
 		this.setMinimumSize(windowDimension);
 		this.setPreferredSize(windowDimension);
 		this.setMaximumSize(windowDimension);
-		this.cityList = null; //cityList;
-		this.currentCity = null;
-		this.currentPOI = null;
-		this.poiList = null;
-		
-		Dimension placeHolderDimension = new Dimension(300, 5);
-		this.add(new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension));
-		
+	}
+
+	private void populateFormBasic() {
+		this.removeAll();
+		this.add(placeHolder);
+		modeRow.setCreateModeSelected(isCreateMode);
 		this.add(modeRow);
 		this.add(Box.createVerticalGlue());
-		this.add(nameRow);
+		this.add(isCreateMode ? nameRow : nameComboRow);
 		this.add(xRow);
 		this.add(yRow);
 		this.add(ratingRow);
+		typeRow.setEnabled(!isCity);
 		this.add(typeRow);
+		populationRow.setEnabled(isCity);
 		this.add(populationRow);
 		this.add(Box.createVerticalGlue());
 		this.add(submitRow);
 		this.add(Box.createVerticalGlue());
+		frame.pack();
+		frame.repaint();
+	}
+	
+	private void populateFormWithInfo() {
+		switch (state) {
+		case 1:
+			if (!isCreateMode) {
+				populateFormFromCity();
+			}
+			break;
+		case 2:
+			if (isCreateMode) {
+				populateFormFromCity();
+			}
+			break;
+		case 3:
+			if (!isCreateMode) {
+				populateFormFromPOI();
+			}
+			break;
+		default:
+			//Do nothing
+			break;
+		}
+		populateFormBasic();
+	}
+	
+	private void populateFormFromCity() {
+		if (isCreateMode) {
+			nameComboRow.setValue(currentCity.getName());
+		} else {
+			nameRow.setValue(currentCity.getName());
+		}
+		xRow.setValue(currentCity.getLocation().getX() + "");
+		yRow.setValue(currentCity.getLocation().getY() + "");
+		ratingRow.setValue(currentCity.getRating() + "");
+		populationRow.setValue(currentCity.getPopulation() + "");
+	}
+	
+	private void populateFormFromPOI() {
+		if (isCreateMode) {
+			nameComboRow.setValue(currentPOI.getName());
+		} else {
+			nameRow.setValue(currentPOI.getName());
+		}
+		xRow.setValue(currentPOI.getLocation().getX() + "");
+		yRow.setValue(currentPOI.getLocation().getY() + "");
+		ratingRow.setValue(currentPOI.getRating() + "");
+		typeRow.setValue(currentPOI.getType());
 	}
 	
 	private void closeWindow() {
@@ -88,28 +227,24 @@ public class EditPanel extends JPanel {
 	}
 	
 	private boolean submitForm() {
-		return false;
-	}
-
-	private void populateFormEdit() {
-		this.populateFormBase();
-	}
-	
-	private void populateFormNew() {
-		this.populateFormBase();
-	}
-	
-	private void populateFormBase() {
-		
+		FormData data;
+		if (isCity) {
+			data = new FormData(isCreateMode, currentCity, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue()));
+		} else {
+			data = new FormData(isCreateMode, currentPOI, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), currentCity, typeRow.getValue(), Double.parseDouble(ratingRow.getValue()), Double.parseDouble(null)); 
+		}
+		return map.upsert(data);
 	}
 	
 	private void switchMode() {
-		if (this.isCreateMode == true && this.currentCity == null) {
-			// Pop up say don't know what to edit.
-		} else {
-			this.isCreateMode = !this.isCreateMode;
-			
-		}
+		isCreateMode = !isCreateMode;
+		this.remove(nameRow);
+		this.remove(nameComboRow);
+		this.add(isCreateMode ? nameRow : nameComboRow, 3);
+		typeRow.setEnabled(!isCity);
+		populationRow.setEnabled(isCity);
+		frame.pack();
+		frame.repaint();
 	}
 	
 	public class ModePanel extends JPanel {
@@ -117,6 +252,9 @@ public class EditPanel extends JPanel {
 		private final JRadioButton c;
 		private final JRadioButton e;
 		
+		/**
+		 * 
+		 */
 		public ModePanel() {
 			super();
 			this.setPreferredSize(new Dimension(250, 30));
@@ -130,11 +268,25 @@ public class EditPanel extends JPanel {
 			this.add(c);
 			this.add(e);
 			this.add(Box.createHorizontalGlue());
+			c.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent arg0) {
+					if (isCreateMode != c.isSelected()) switchMode();
+				}
+			});
+		}
+		
+		public boolean isCreateModeSelected() {
+			return c.isSelected();
+		}
+		
+		private void setCreateModeSelected(boolean b) {
+			c.setSelected(b);
+			e.setSelected(!b);
 		}
 	}
 	
 	public class TextFieldRow extends JPanel {
-		private final JLabel l;
+		protected final JLabel l;
 		protected final JTextField t;
 		
 		public TextFieldRow(String lt) {
@@ -193,11 +345,16 @@ public class EditPanel extends JPanel {
 		}
 		
 		public void setValue(String s) {
-			throw new UnsupportedOperationException();
+			ft.setValue(s);
 		}
 		
 		public String getValue() {
 			return ft.getText();
+		}
+		
+		public void setEnabled(boolean b) {
+			l.setEnabled(b);
+			ft.setEditable(b);
 		}
 	}
 	
@@ -212,7 +369,6 @@ public class EditPanel extends JPanel {
 			this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			this.setMaximumSize(new Dimension(250, 30));
 			itemList = s;
-			
 			l = new JLabel(lt);
 			Dimension ld = new Dimension(80, 30);
 			l.setMinimumSize(ld);
@@ -228,8 +384,17 @@ public class EditPanel extends JPanel {
 			this.add(cb);
 		}
 		
+		public void setValue(String s) {
+			cb.setSelectedItem(s); //TODO This might not work
+		}
+		
 		public String getValue() {
 			return itemList[cb.getSelectedIndex()];
+		}
+		
+		public void setEnable(boolean b) {
+			l.setEnabled(b);
+			cb.setEnabled(b);
 		}
 	}
 	

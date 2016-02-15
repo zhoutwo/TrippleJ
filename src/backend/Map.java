@@ -7,7 +7,7 @@ import utils.*;
 public class Map {
 	
 	private HashMap<String, City> cities;
-	private HashMap<String, Place> plcaes;
+	private HashMap<String, Place> places;
 	private FlexRedBlackTree<City> alpCityTree;
 	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
@@ -91,11 +91,22 @@ public class Map {
 		return Math.sqrt(x*x+y*y);
 	}
 	
-	public boolean addEntry(FormData fd) {
-		return false;
-	}
-	
-	public boolean editEntry(FormData fd) {
+	public boolean upsert(FormData fd) {
+		if (!fd.isNew()) {
+			
+		}
+		if (fd.isCity()) {
+			boolean success = true;
+			if (!alpCityTree.insert(fd.getNewCity())) success = false;
+			if (!ratCityTree.insert(fd.getNewCity())) success = false;
+			if (!popCityTree.insert(fd.getNewCity())) success = false;
+			cities.put(fd.getNewCity().getName(), fd.getNewCity());
+			return success;
+		} else {
+			boolean success = true;
+			City parent = fd.getParentCity();
+			
+		}
 		return false;
 	}
 	protected class PlaceWithDistance{

@@ -41,4 +41,13 @@ public class City extends Place {
 	public ArrayList<POI> getRatPOIList() {
 		return this.ratPOIList.toArrayList();
 	}
+	
+	public boolean addPOI(POI poi) {
+		if (alpPOIList.insert(poi) && ratPOIList.insert(poi)) {
+			pois.add(poi);
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

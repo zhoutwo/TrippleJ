@@ -33,7 +33,7 @@ public class MapFrame extends JFrame{
 		
 		EditPanel r = new EditPanel(frame);
 		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 //		MapComponent component = new MapComponent();
 		
 		frame.add(r);
@@ -41,7 +41,7 @@ public class MapFrame extends JFrame{
 		frame.pack();
 		frame.setVisible(true);
 		
-		// Test for closing only the specified window.
+		// This will close all windows.
 		JFrame f1 = new JFrame();
 		f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f1.pack();
