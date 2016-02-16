@@ -139,7 +139,7 @@ public class MapFrame extends JFrame{
 			
 			public MapDisplayPanel() {
 				super();
-				this.setBackground(Color.RED);
+				this.setBackground(Color.GREEN);
 				Dimension d = new Dimension(650, 650);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);

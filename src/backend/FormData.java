@@ -16,7 +16,7 @@ public class FormData {
 		this.isNew = isCreate;
 		this.isCity = true;
 		this.parentCity = null;
-		this.newCity = new City(newName, new Coordinate(x, y), rating, population);
+		this.newCity = new City(newName, population, new Coordinate(x, y), rating);
 		this.newPOI = null;
 	}
 	

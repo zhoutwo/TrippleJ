@@ -1,6 +1,14 @@
 package backend;
+import java.beans.XMLDecoder;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Scanner;
+import java.util.Spliterator;
 
 import utils.*;
 
@@ -24,6 +32,55 @@ public class Map {
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
 		isActive = true;
+		// try catch block surrounds the import process of raw data into system
+		try {
+			importFromTxtFileToPopCityTree(); 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace();
+		}
+		// call fillTrees() to fill other trees with data
+		fillTrees();
+				
+//		ArrayList<City> al = alpCityTree.toArrayList();
+//		for(int i=0;i<al.size();i++){
+//			System.out.println(al.get(i).toString());
+//		}
+		
+		
+	}
+	
+	/**
+	 * fillTrees() method imports all the city data from population tree to the other 
+	 * remaining trees for easily accesable data 
+	 */
+	private void fillTrees(){
+		Iterator<City> i = popCityTree.iterator();
+		City temp;
+		while(i.hasNext()){
+			temp = i.next();
+			alpCityTree.insert(temp);
+			ratCityTree.insert(temp);
+		}
+	}
+	
+	/**
+	 * the importFromTxtFileToTree() method will load raw data from a text file
+	 * and then import all of the data into a TopDownRedBlackTree for sorted 
+	 * data storage 
+	 * @throws IOException
+	 */
+	private void importFromTxtFileToPopCityTree() throws IOException{
+		// import data from a file and store it in a file type
+		File inputFile = new File("src/data/KansasCities.txt");
+		// create a scanner to scan through the newly created file
+		Scanner inScanner = new Scanner(inputFile);
+		// iterate through scanner and load all data into a tree until scanner is empty 
+		while(inScanner.hasNext()){
+			popCityTree.insert(new City(inScanner.next(),inScanner.nextInt(),new Coordinate(inScanner.nextDouble(),inScanner.nextDouble()),0));
+		}
+		// close scanner
+		inScanner.close();
 	}
 	
 	public void setIsAciveFalse(){
@@ -54,18 +111,6 @@ public class Map {
 	public ArrayList<Place> getRoute(String from, String to) {
 		return null;
 	}
-	
-//	public FlexRedBlackTree<City> getPopTree(){
-//		return this.popCityTree;
-//	}
-//	
-//	public FlexRedBlackTree<City> getAlphabetTree(){
-//		return this.alpCityTree;
-//	}
-//	
-//	public FlexRedBlackTree<City> getRatingTree(){
-//		return this.ratCityTree;
-//	}
 	
 	public ArrayList<Place> navigateTo(Place current, Place destin){
 		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin);
@@ -124,6 +169,24 @@ public class Map {
 		}
 		return false;
 	}
+	
+	/**
+	 * this method will load the last state of the map for continuing usage
+	 * 
+	 * @param filename this is the name of the file to be loaded
+	 * @return this method return a map of the last state the program was left in
+	 * @throws Exception
+	 */
+	public static Map read(String filename) throws Exception {
+        XMLDecoder decoder = 
+        	new XMLDecoder(
+        			new BufferedInputStream(
+        					new FileInputStream(filename)));
+        Map l = (Map) decoder.readObject();
+        decoder.close();
+        return l;
+    }
+	
 	protected class PlaceWithDistance{
 		private Place place;
 		private double distanceTraveled;
