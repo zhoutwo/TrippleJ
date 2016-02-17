@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
@@ -230,12 +231,16 @@ public class MapFrame extends JFrame{
 			private void addCityToMap(){
 				cls = new ArrayList<CircleLabel>();
 				Iterator<City> i = currentMap.getPopTree().iterator();
-				int x = 100;
-				int y = 100;
+				int x;
+				int y;
+				City temp;
+				Point location;
 				for (City c : currentMap.getPopTree()) {
-					cls.add(new CircleLabel(i.next().getName(),x,y,25));
-					x += 50;
-					y += 50;
+					temp = i.next();
+					location = temp.getMapLoc();
+					x = (int)location.getX();
+					y = (int)location.getY();
+					cls.add(new CircleLabel(temp.getName(),x,y,5));
 				}
 //				this.repaint();
 			}
