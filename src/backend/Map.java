@@ -140,9 +140,9 @@ public class Map {
 				return null;//null will represent not available route found.
 			}
 			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
-				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin,true);
+				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i).getPlace(), destin,true);
 				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
-				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i) ));
+				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
 				list.add(pwd);
 			}
 			
@@ -172,9 +172,9 @@ public class Map {
 				return null;//null will represent not available route found.
 			}
 			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
-				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin,false);
+				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i).getPlace(), destin,false);
 				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
-				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i) ));
+				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
 				list.add(pwd);
 			}
 			
