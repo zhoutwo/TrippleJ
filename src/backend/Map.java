@@ -87,6 +87,10 @@ public class Map {
 		isActive = false;
 	}
 	
+	public FlexRedBlackTree<City> getPopTree(){
+		return popCityTree;
+	}
+	
 	public ArrayList<City> getAlpCityList() {
 		if (this.alpCityTree.listNeedsUpdate()) {
 			this.alpCityList = this.alpCityTree.toArrayList();

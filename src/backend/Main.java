@@ -16,7 +16,7 @@ public class Main {
 		//get current map 
 		Map map=new Map();
 		// load gui and set visible 
-		new MapFrame();
+		new MapFrame(map);
 		// while loop while the program is in use. once the user is done and 
 		// exits the program map.setIsActiveFalse() should be called and data stored 
 		// before exiting out to save current state
