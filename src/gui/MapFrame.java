@@ -305,26 +305,6 @@ public class MapFrame extends JFrame{
 			
 			private void drawCityInfoButtons() {
 				Dimension d = new Dimension(250, 50);
-				for (int i = 1; i < size; i++) {
-					JButton l = new JButton();
-					l.setText("City " + i);
-					l.setMinimumSize(d);
-					l.setPreferredSize(d);
-					l.setMaximumSize(d);
-					cityListButtons.add(l);
-					l.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent arg0) {
-							removeAll1();
-							drawCityInfoButtons();
-							repaint();
-						}
-
-					});
-				}
-				this.setPreferredSize(new Dimension(250, 650));
-				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-				this.setMaximumSize(new Dimension(250, 650));
 				Dimension dimText = new Dimension(250, 300);
 				JTextArea txt = new JTextArea("Some information");// put a
 																	// string of
@@ -356,27 +336,28 @@ public class MapFrame extends JFrame{
 				for (int i = 0; i < cityInfoButtons.size(); i++) {
 					this.add(cityInfoButtons.get(i));
 				}
+				updateUI();
 				
 			}
 			private void initCitListButtons(){
 				Dimension d = new Dimension(250, 50);
-				for(int i=1;i<size;i++){
+				ArrayList<City> arr= currentMap.getAlpCityList();
+				for (int i = 0; i < arr.size(); i++) {
 					JButton l = new JButton();
-					l.setText("City "+i);
+					l.setText(arr.get(i).getName());
 					l.setMinimumSize(d);
 					l.setPreferredSize(d);
 					l.setMaximumSize(d);
 					cityListButtons.add(l);
 					l.addActionListener(new ActionListener() {
-					
-										public void actionPerformed(ActionEvent arg0) {
-											removeAll1();
-											drawCityInfoButtons();
-											repaint();
-										}
-					
-										
-									});
+
+						public void actionPerformed(ActionEvent arg0) {
+							removeAll1();
+							drawCityInfoButtons();
+							repaint();
+						}
+
+					});
 				}
 			}
 			private void drawCityListButtons() {
