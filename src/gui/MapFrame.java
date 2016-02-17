@@ -238,49 +238,56 @@ public class MapFrame extends JFrame{
 			private ArrayList<Rectangle> arr;
 			private ArrayList<JButton> cityListButtons;
 			private ArrayList<JButton> cityInfoButtons;
+			private JTextArea txt;
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
 				size=10;
 				cityListButtons=new ArrayList<>();
 				cityInfoButtons=new ArrayList<>();
+				this.setMinimumSize(new Dimension(250, 650));
 				this.setPreferredSize(new Dimension(250, 650));
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 				this.setMaximumSize(new Dimension(250, 650));
 //				this.drawCityInfoButtons();
+				this.initInfoButtons();
 				this.initCitListButtons();
 				this.drawCityListButtons();
-			}
-			private void initInfoButtons() {
-				
 			}
 			private void removeAll1() {
 				this.removeAll();
 				this.validate();
 				this.repaint();
 			}
-			
-			
-			
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
 				
 			}
-			
-			private void drawCityInfoButtons() {
-				Dimension d = new Dimension(250, 50);
+			private void initInfoButtons() {
 				Dimension dimText = new Dimension(250, 300);
-				JTextArea txt = new JTextArea("Some information");// put a
-																	// string of
-																	// inforamtion
-																	// here
+				txt = new JTextArea("Information about a city");//InfoOfCity
 				Font font = new Font("", Font.PLAIN, 15);
 				txt.setFont(font);
 				txt.setMinimumSize(dimText);
 				txt.setPreferredSize(dimText);
 				txt.setMaximumSize(dimText);
 				txt.setEditable(false);
-				this.add(txt);
+				Dimension d = new Dimension(250, 50);
+				
+				JButton goBack = new JButton("BACK");
+				goBack.setMinimumSize(d);
+				goBack.setPreferredSize(d);
+				goBack.setMaximumSize(d);
+				goBack.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						removeAll1();
+						drawCityListButtons();
+						
+					}
+				});
+				
 				for (int i = 1; i < 5; i++) {
 					JButton POIButton = new JButton();
 					POIButton.setText("POI " + i);
@@ -289,17 +296,23 @@ public class MapFrame extends JFrame{
 					POIButton.setMaximumSize(d);
 					cityInfoButtons.add(POIButton);
 					POIButton.addActionListener(new ActionListener() {
-
+						
 						public void actionPerformed(ActionEvent arg0) {
-							removeAll1();
-							drawCityListButtons();
+							txt.setText("POI Clicked");
 						}
-
 					});
 				}
+				cityInfoButtons.add(goBack);
+			}
+			
+			private void drawCityInfoButtons() {
+
+				
+				this.add(txt);
 				for (int i = 0; i < cityInfoButtons.size(); i++) {
 					this.add(cityInfoButtons.get(i));
 				}
+				
 				updateUI();
 				
 			}
