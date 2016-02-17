@@ -193,7 +193,7 @@ public class MapFrame extends JFrame{
 					public void mouseClicked(MouseEvent e) {
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
-								System.out.println("City!");
+								System.out.println("you clicked on the city "+cl.getLabel());
 								return;
 							}
 						}
@@ -240,7 +240,7 @@ public class MapFrame extends JFrame{
 					location = temp.getMapLoc();
 					x = (int)location.getX();
 					y = (int)location.getY();
-					cls.add(new CircleLabel(temp.getName(),x,y,5));
+					cls.add(new CircleLabel(temp.getName(),x,y,25));
 				}
 //				this.repaint();
 			}
