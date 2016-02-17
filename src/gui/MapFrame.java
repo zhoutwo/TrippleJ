@@ -38,6 +38,7 @@ import javax.swing.border.TitledBorder;
 import backend.City;
 import backend.Map;
 import utils.FlexRedBlackTree;
+import utils.RoundButton;
 
 
 public class MapFrame extends JFrame{
@@ -67,16 +68,22 @@ public class MapFrame extends JFrame{
 		this.add(mp);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null); // Centers it
+		
+//		ArrayList<RoundButton> ab = 
+		mp.mdp.addCityToMap();
+//		for(int i=0;i<ab.size();i++){
+//			mp.mdp.add(ab.get(i));
+//		}
 		this.setVisible(true);
-		mp.mdp.add(new JComponent(){
-			@Override
-		    public void paintComponent(Graphics g) {
-				System.out.println("i wam");
-		        super.paintComponent(g);
-		        g.setColor(Color.BLACK);
-		        g.fillOval(200, 200, 70, 70);
-		    }
-		});
+//		mp.mdp.add(new JComponent(){
+//			@Override
+//		    public void paintComponent(Graphics g) {
+//				System.out.println("i wam");
+//		        super.paintComponent(g);
+//		        g.setColor(Color.BLACK);
+//		        g.fillOval(200, 200, 70, 70);
+//		    }
+//		});
 //		Graphics2D gg = (Graphics2D) mp.mdp.getGraphics();
 //		gg.setColor(Color.BLACK);
 //		mp.mdp.addCityToMap(gg);
@@ -185,28 +192,34 @@ public class MapFrame extends JFrame{
 				
 			}
 			
-//			private void addCityToMap(Graphics2D g2){
-//				Iterator<City> i = currentMap.getPopTree().iterator();
-//				City temp;
-//				double x;
-//				double y;
-//				while(i.hasNext()){
-//					temp = i.next();
-//					x = 500.0;
-//					y = 500.0;
-//					String n = temp.getName();
-//					CityShape c = new CityShape(n,x,y);
+			private void addCityToMap(){
+				Iterator<City> i = currentMap.getPopTree().iterator();
+				City temp;
+				int x;
+				int y;
+//				ArrayList<RoundButton> ab = new ArrayList<RoundButton>();
+				RoundButton c;
+				while(i.hasNext()){
+					temp = i.next();
+					x = 100;
+					y = 100;
+					String n = temp.getName();
+					c = new RoundButton(n,x,y,25);
+//					ab.add(c);
 //					if (g2 != null) {
 //						g2.setPaint(Color.BLACK);
 //						g2.fill(c);
-//						System.out.println(c.getCenterX());
+////						System.out.println(c.getCenterX());
 ////						System.out.println(c.getBounds());
 //						this.repaint();
 //					}
-//					
-//				}
+					x = x+50;
+					y = y+50;
+					add(c);
+				}
 //				this.repaint();
-//			}
+//				return ab;
+			}
 			
 		}
 		
