@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
@@ -192,7 +193,17 @@ public class MapFrame extends JFrame{
 					public void mouseClicked(MouseEvent e) {
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
-								System.out.println("City!");
+								// set the to and from fields 
+								if(mp.sfp.lockFrom.isSelected()){
+									mp.sfp.to.setText(cl.getLabel());
+								}
+								else if(mp.sfp.lockTo.isSelected()){
+									mp.sfp.from.setText(cl.getLabel());
+								}
+								else{
+									// both to and from are locked in 
+									// do something or do nothing
+								}
 								return;
 							}
 						}
@@ -230,12 +241,16 @@ public class MapFrame extends JFrame{
 			private void addCityToMap(){
 				cls = new ArrayList<CircleLabel>();
 				Iterator<City> i = currentMap.getPopTree().iterator();
-				int x = 100;
-				int y = 100;
+				int x;
+				int y;
+				City temp;
+				Point location;
 				for (City c : currentMap.getPopTree()) {
-					cls.add(new CircleLabel(i.next().getName(),x,y,25));
-					x += 50;
-					y += 50;
+					temp = i.next();
+					location = temp.getMapLoc();
+					x = (int)location.getX();
+					y = (int)location.getY();
+					cls.add(new CircleLabel(temp.getName(),x,y,25));
 				}
 //				this.repaint();
 			}
@@ -290,26 +305,6 @@ public class MapFrame extends JFrame{
 			
 			private void drawCityInfoButtons() {
 				Dimension d = new Dimension(250, 50);
-				for (int i = 1; i < size; i++) {
-					JButton l = new JButton();
-					l.setText("City " + i);
-					l.setMinimumSize(d);
-					l.setPreferredSize(d);
-					l.setMaximumSize(d);
-					cityListButtons.add(l);
-					l.addActionListener(new ActionListener() {
-
-						public void actionPerformed(ActionEvent arg0) {
-							removeAll1();
-							drawCityInfoButtons();
-							repaint();
-						}
-
-					});
-				}
-				this.setPreferredSize(new Dimension(250, 650));
-				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-				this.setMaximumSize(new Dimension(250, 650));
 				Dimension dimText = new Dimension(250, 300);
 				JTextArea txt = new JTextArea("Some information");// put a
 																	// string of
@@ -341,27 +336,28 @@ public class MapFrame extends JFrame{
 				for (int i = 0; i < cityInfoButtons.size(); i++) {
 					this.add(cityInfoButtons.get(i));
 				}
+				updateUI();
 				
 			}
 			private void initCitListButtons(){
 				Dimension d = new Dimension(250, 50);
-				for(int i=1;i<size;i++){
+				ArrayList<City> arr= currentMap.getAlpCityList();
+				for (int i = 0; i < arr.size(); i++) {
 					JButton l = new JButton();
-					l.setText("City "+i);
+					l.setText(arr.get(i).getName());
 					l.setMinimumSize(d);
 					l.setPreferredSize(d);
 					l.setMaximumSize(d);
 					cityListButtons.add(l);
 					l.addActionListener(new ActionListener() {
-					
-										public void actionPerformed(ActionEvent arg0) {
-											removeAll1();
-											drawCityInfoButtons();
-											repaint();
-										}
-					
-										
-									});
+
+						public void actionPerformed(ActionEvent arg0) {
+							removeAll1();
+							drawCityInfoButtons();
+							repaint();
+						}
+
+					});
 				}
 			}
 			private void drawCityListButtons() {

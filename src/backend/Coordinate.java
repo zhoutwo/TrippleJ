@@ -5,7 +5,7 @@ public class Coordinate {
 	private double x;
 	private double y;
 	
-	public Coordinate(double x, double y) {
+	public Coordinate(double y, double x) {
 		this.x = x;
 		this.y = y;
 	}

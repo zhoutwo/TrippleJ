@@ -1,8 +1,14 @@
 package backend;
 
+import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
+import javax.swing.JOptionPane;
+
 import gui.*;
 
 /**
@@ -13,8 +19,20 @@ import gui.*;
 public class Main {
 	
 	public static void main(String[] args) throws Exception {
-		//get current map 
-		Map map=new Map();
+		Map map;
+		//prompt the user to see if new user
+		String newUser = JOptionPane.showInputDialog("Are you a new user?");;
+		while(!(newUser.equals("y")||newUser.equals("yes")||newUser.equals("n")||newUser.equals("no"))){
+			newUser = JOptionPane.showInputDialog("Please use: yes / y / no / n \nAre you a new user?");
+		}
+		if(newUser.equals("y")||newUser.equals("yes")){
+			// get new map
+			map=new Map();
+		}
+		else {
+			// get last map used
+			map = read("src/data/currentState.xml");
+		}
 		// load gui and set visible 
 		new MapFrame(map);
 		// while loop while the program is in use. once the user is done and 
@@ -34,5 +52,22 @@ public class Main {
 		       	encoder.writeObject(o);
 		        encoder.close();
 	}
+	
+	/**
+	 * this method will load the last state of the map for continuing usage
+	 * 
+	 * @param filename this is the name of the file to be loaded
+	 * @return this method return a map of the last state the program was left in
+	 * @throws Exception
+	 */
+	public static Map read(String filename) throws Exception {
+        XMLDecoder decoder = 
+        	new XMLDecoder(
+        			new BufferedInputStream(
+        					new FileInputStream(filename)));
+        Map l = (Map) decoder.readObject();
+        decoder.close();
+        return l;
+    }
 	
 }
