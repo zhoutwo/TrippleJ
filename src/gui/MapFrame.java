@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.TitledBorder;
 
 import backend.City;
+import backend.Map;
 
 
 public class MapFrame extends JFrame{
@@ -29,7 +30,7 @@ public class MapFrame extends JFrame{
 	private City selectedCity;
 	
 	
-	public MapFrame(){
+	public MapFrame(Map map){
 		super();
 		cs = new Console();
 		Dimension d = new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
