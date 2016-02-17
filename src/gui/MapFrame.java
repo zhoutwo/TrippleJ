@@ -28,6 +28,7 @@ public class MapFrame extends JFrame{
 	private MapPanel mp;
 	private int state;
 	private City selectedCity;
+	private Map currentMap;
 	
 	
 	public MapFrame(Map map){
@@ -44,6 +45,7 @@ public class MapFrame extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null); // Centers it
 		this.setVisible(true);
+		currentMap = map;
 	}
 //	public static void main(String[] args) {
 //		JFrame frame = new JFrame();
