@@ -6,6 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -187,15 +188,61 @@ public class MapFrame extends JFrame{
 			
 		}
 		
-		public class ListDisplayPanel extends JPanel {
-			
+		public class ListDisplayPanel extends JPanel implements MouseListener{
+			private int size;
+			private ArrayList<Rectangle> arr;
 			public ListDisplayPanel() {
 				super();
+				size=13;
 				this.setBackground(Color.WHITE);
 				Dimension d = new Dimension(200, 650);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
+				this.addMouseListener(this);
+			}
+			public void paintComponent(Graphics g){
+				super.paintComponent(g);
+				drawBoxes(g);
+			}
+			public void drawBoxes(Graphics g){
+				Graphics2D g1=(Graphics2D) g;
+				Rectangle r= new Rectangle(0, 0, 248, 50); 
+				g1.setPaint(Color.yellow);
+				for(int i=0;i<size;i++){
+					r.setLocation(0, i*55);
+					g1.draw(r);
+					g1.fill(r);
+				}
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				//mouse.contains(e.getX(),e.getY())
+				if(e.getButton()==1){
+//					if()
+					System.out.println("first box clicked");
+				}
+				
+				
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
 			}
 			
 		}
