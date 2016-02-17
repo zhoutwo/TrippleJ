@@ -60,10 +60,19 @@ public class MapFrame extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null); // Centers it
 		this.setVisible(true);
-		Graphics2D gg = (Graphics2D) mp.mdp.getGraphics();
-		gg.setColor(Color.BLACK);
-		mp.mdp.addCityToMap(gg);
-		this.repaint();
+		mp.mdp.add(new JComponent(){
+			@Override
+		    public void paintComponent(Graphics g) {
+				System.out.println("i wam");
+		        super.paintComponent(g);
+		        g.setColor(Color.BLACK);
+		        g.fillOval(200, 200, 70, 70);
+		    }
+		});
+//		Graphics2D gg = (Graphics2D) mp.mdp.getGraphics();
+//		gg.setColor(Color.BLACK);
+//		mp.mdp.addCityToMap(gg);
+//		this.repaint();
 	}
 //	public static void main(String[] args) {
 //		JFrame frame = new JFrame();
@@ -168,22 +177,28 @@ public class MapFrame extends JFrame{
 				
 			}
 			
-			private void addCityToMap(Graphics2D g2){
-				Iterator<City> i = currentMap.getPopTree().iterator();
-				City temp;
-				double x;
-				double y;
-				while(i.hasNext()){
-					temp = i.next();
-					x = 500.0;
-					y = 500.0;
-					String n = temp.getName();
-					CityShape c = new CityShape(n,x,y);
-					
-					g2.draw(c);
-				}
-				this.repaint();
-			}
+//			private void addCityToMap(Graphics2D g2){
+//				Iterator<City> i = currentMap.getPopTree().iterator();
+//				City temp;
+//				double x;
+//				double y;
+//				while(i.hasNext()){
+//					temp = i.next();
+//					x = 500.0;
+//					y = 500.0;
+//					String n = temp.getName();
+//					CityShape c = new CityShape(n,x,y);
+//					if (g2 != null) {
+//						g2.setPaint(Color.BLACK);
+//						g2.fill(c);
+//						System.out.println(c.getCenterX());
+////						System.out.println(c.getBounds());
+//						this.repaint();
+//					}
+//					
+//				}
+//				this.repaint();
+//			}
 			
 		}
 		
@@ -234,45 +249,45 @@ public class MapFrame extends JFrame{
 		}
 	}
 	
-	public class CityShape extends Ellipse2D.Double implements Shape, MouseListener{
-		
-		private final static double SIZE = 200.0;
-		private String cityName;
-		
-		public CityShape(String name,double x,double y){
-			super(x,y,SIZE,SIZE);
-			cityName = name;
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			System.out.println(cityName+"was clicked");
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	}
+//	public class CityShape extends Ellipse2D.Double implements Shape, MouseListener{
+//		
+//		private final static double SIZE = 200.0;
+//		private String cityName;
+//		
+//		public CityShape(String name,double x,double y){
+//			super(x,y,SIZE,SIZE);
+//			cityName = name;
+//		}
+//
+//		@Override
+//		public void mouseClicked(MouseEvent e) {
+//			// TODO Auto-generated method stub
+//			System.out.println(cityName+"was clicked");
+//		}
+//
+//		@Override
+//		public void mousePressed(MouseEvent e) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public void mouseReleased(MouseEvent e) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public void mouseEntered(MouseEvent e) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public void mouseExited(MouseEvent e) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//		
+//	}
 }

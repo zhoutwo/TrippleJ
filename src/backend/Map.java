@@ -41,7 +41,6 @@ public class Map {
 		}
 		// call fillTrees() to fill other trees with data
 		fillTrees();
-				
 //		ArrayList<City> al = alpCityTree.toArrayList();
 //		for(int i=0;i<al.size();i++){
 //			System.out.println(al.get(i).toString());
