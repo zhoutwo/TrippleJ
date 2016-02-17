@@ -193,7 +193,17 @@ public class MapFrame extends JFrame{
 					public void mouseClicked(MouseEvent e) {
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
-								System.out.println("you clicked on the city "+cl.getLabel());
+								// set the to and from fields 
+								if(mp.sfp.lockFrom.isSelected()){
+									mp.sfp.to.setText(cl.getLabel());
+								}
+								else if(mp.sfp.lockTo.isSelected()){
+									mp.sfp.from.setText(cl.getLabel());
+								}
+								else{
+									// both to and from are locked in 
+									// do something or do nothing
+								}
 								return;
 							}
 						}
