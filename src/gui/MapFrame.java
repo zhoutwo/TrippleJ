@@ -21,11 +21,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
 import backend.City;
@@ -36,7 +43,7 @@ import utils.FlexRedBlackTree;
 public class MapFrame extends JFrame{
 	// constants
 	private static final int FRAME_WIDTH = 1050;
-	private static final int FRAME_HEIGHT = 900;
+	private static final int FRAME_HEIGHT = 930;
 	private static final String FRAME_TITLE = "Kansas";
 	// fields
 	private Console cs;
@@ -249,13 +256,106 @@ public class MapFrame extends JFrame{
 		
 		public class SearchFormPanel extends JPanel {
 			
+			private JTextField from;
+			private JTextField to;
+			private JCheckBox lockFrom;
+			private JCheckBox lockTo;
+			private ButtonGroup options;
+			private JRadioButton time;
+			private JRadioButton noToll;
+			private JRadioButton rating;
+			private JRadioButton distance;
+			
 			public SearchFormPanel() {
 				super();
-				this.setBackground(Color.BLACK);
-				Dimension d = new Dimension(650, 50);
+				GroupLayout sl = new GroupLayout(this);
+				
+				// Some configuration of the GroupLayout
+				this.setLayout(sl);
+				sl.setAutoCreateGaps(true);
+				sl.setAutoCreateContainerGaps(true);
+				
+//				this.setBackground(Color.BLACK);
+				Dimension d = new Dimension(650, 80);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
+				
+				// Start initializing screen elements
+				JLabel fromLabel = new JLabel("From: ");
+				JLabel toLabel = new JLabel("To: ");
+				from = new JTextField();
+				to = new JTextField();
+				lockFrom = new JCheckBox("lockf");
+				lockTo = new JCheckBox("lockt");
+				
+				// Radio buttons belong to a ButtonGroup
+				options = new ButtonGroup();
+				time = new JRadioButton("time");
+				noToll = new JRadioButton("no toll");
+				rating = new JRadioButton("rating");
+				distance = new JRadioButton("distance");
+				options.add(time);
+				options.add(noToll);
+				options.add(rating);
+				options.add(distance);
+				
+				JButton findRoute = new JButton("Find Route");
+				JButton reset = new JButton("Reset");
+				
+				// Start adding elements
+				sl.setHorizontalGroup(
+						sl.createSequentialGroup()
+							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING)
+									.addComponent(fromLabel)
+									.addComponent(toLabel)
+									)
+							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING)
+									.addComponent(from)
+									.addComponent(to)
+									)
+							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING)
+									.addComponent(lockFrom)
+									.addComponent(lockTo)
+									)
+							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING)
+									.addComponent(time)
+									.addComponent(noToll)
+									.addComponent(rating)
+									.addComponent(distance)
+									)
+							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING, false)
+									.addComponent(findRoute, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(reset, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									)
+						);
+				
+				sl.setVerticalGroup(
+						sl.createSequentialGroup()
+							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.CENTER)
+									.addComponent(fromLabel)
+									.addComponent(from)
+									.addComponent(lockFrom)
+									.addGroup(sl.createSequentialGroup()
+											.addComponent(time)
+											.addComponent(noToll)
+											)
+									.addComponent(findRoute)
+									)
+							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.CENTER)
+									.addComponent(toLabel)
+									.addComponent(to)
+									.addComponent(lockTo)
+									.addGroup(sl.createSequentialGroup()
+											.addComponent(rating)
+											.addComponent(distance)
+											)
+									.addComponent(reset)
+									)
+							
+							
+						);
+				System.out.println(this.getPreferredSize());
 			}
 			
 		}
@@ -265,7 +365,7 @@ public class MapFrame extends JFrame{
 			public EditButtonPanel() {
 				super();
 				this.setBackground(Color.BLUE);
-				Dimension d = new Dimension(200, 50);
+				Dimension d = new Dimension(200, 80);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
