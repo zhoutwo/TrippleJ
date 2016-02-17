@@ -44,7 +44,12 @@ public class Map {
 //		for(int i=0;i<al.size();i++){
 //			System.out.println(al.get(i).toString());
 //		}
-		
+		try {
+			importFromTxtFileToalpPOIList(); 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -62,6 +67,10 @@ public class Map {
 			alpCityTree.insert(temp);
 			ratCityTree.insert(temp);
 		}
+	}
+	
+	private void importFromTxtFileToalpPOIList() throws IOException{
+		
 	}
 	
 	/**

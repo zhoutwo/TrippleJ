@@ -9,8 +9,8 @@ public class City extends Place {
 	
 	private int population;
 	private ArrayList<POI> pois;
-	private FlexRedBlackTree<POI> alpPOIList;
-	private FlexRedBlackTree<POI> ratPOIList;
+	private FlexRedBlackTree<POI> alpPOITree;
+	private FlexRedBlackTree<POI> ratPOITree;
 	private Point mapLoc;
 	
 	public City(String name,int population, Coordinate location, double rating) {
@@ -48,16 +48,16 @@ public class City extends Place {
 		return this.pois;
 	}
 	
-	public ArrayList<POI> getAlpPOIList() {
-		return this.alpPOIList.toArrayList();
+	public ArrayList<POI> getAlpPOITree() {
+		return this.alpPOITree.toArrayList();
 	}
 	
-	public ArrayList<POI> getRatPOIList() {
-		return this.ratPOIList.toArrayList();
+	public ArrayList<POI> getRatPOITree() {
+		return this.ratPOITree.toArrayList();
 	}
 	
 	public boolean addPOI(POI poi) {
-		if (alpPOIList.insert(poi) && ratPOIList.insert(poi)) {
+		if (alpPOITree.insert(poi) && ratPOITree.insert(poi)) {
 			pois.add(poi);
 			return true;
 		} else {
