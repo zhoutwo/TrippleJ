@@ -12,6 +12,8 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
@@ -35,6 +37,7 @@ import javax.swing.text.StyledEditorKit.BoldAction;
 
 import backend.City;
 import backend.Map;
+import backend.Place;
 
 
 public class MapFrame extends JFrame{
@@ -46,7 +49,8 @@ public class MapFrame extends JFrame{
 	private Console cs;
 	private MapPanel mp;
 	private int state;
-	private City selectedCity;
+	private Place selectedFromPlace;
+	private Place selectedToPlace;
 	private Map currentMap;
 	
 	
@@ -65,52 +69,10 @@ public class MapFrame extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null); // Centers it
 		
-//		ArrayList<RoundButton> ab = 
 		mp.mdp.addCityToMap();
-//		for(int i=0;i<ab.size();i++){
-//			mp.mdp.add(ab.get(i));
-//		}
+
 		this.setVisible(true);
-//		mp.mdp.add(new JComponent(){
-//			@Override
-//		    public void paintComponent(Graphics g) {
-//				System.out.println("i wam");
-//		        super.paintComponent(g);
-//		        g.setColor(Color.BLACK);
-//		        g.fillOval(200, 200, 70, 70);
-//		    }
-//		});
-//		Graphics2D gg = (Graphics2D) mp.mdp.getGraphics();
-//		gg.setColor(Color.BLACK);
-//		mp.mdp.addCityToMap(gg);
-//		this.repaint();
 	}
-//	public static void main(String[] args) {
-//		JFrame frame = new JFrame();
-//
-//		frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-////		frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-//		frame.setTitle(FRAME_TITLE);
-////		JPanel panel= new JPanel();
-//		
-//		EditPanel r = new EditPanel(frame);
-//		
-//		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-////		MapComponent component = new MapComponent();
-//		
-//		frame.add(r);
-//		
-//		frame.pack();
-//		frame.setVisible(true);
-//		
-//		// This will close all windows.
-//		JFrame f1 = new JFrame();
-//		f1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		f1.pack();
-////		f1.add(r);
-//		f1.setVisible(true);
-//
-//	}
 
 	class Console extends JTextArea {
 		public Console() {
@@ -193,7 +155,7 @@ public class MapFrame extends JFrame{
 					public void mouseClicked(MouseEvent e) {
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
-								// set the to and from fields 
+								// Set the to and from fields 
 								if (mp.sfp.lockFrom.isSelected()) {
 									if (!mp.sfp.lockTo.isSelected()) {
 										mp.sfp.to.setText(cl.getLabel());
@@ -247,21 +209,26 @@ public class MapFrame extends JFrame{
 					location = temp.getMapLoc();
 					x = (int)location.getX();
 					y = (int)location.getY();
-					cls.add(new CircleLabel(temp.getName(),x,y,25));
+					cls.add(new CircleLabel(temp.getName(), x, y, 25, c));
 				}
-//				this.repaint();
 			}
 			
 			public class CircleLabel extends Ellipse2D.Double {
 				private final String t;
+				private final City c;
 				
-				public CircleLabel (String t, int x, int y, int s) {
+				public CircleLabel (String t, int x, int y, int s, City c) {
 					super(x, y, s, s);
 					this.t = t;
+					this.c = c;
 				}
 				
 				public String getLabel() {
 					return t;
+				}
+				
+				public City getCity() {
+					return c;
 				}
 			}
 		}
@@ -388,8 +355,8 @@ public class MapFrame extends JFrame{
 			private JCheckBox lockTo;
 			private ButtonGroup options;
 			private JRadioButton time;
-			private JRadioButton noToll;
-			private JRadioButton rating;
+//			private JRadioButton noToll;
+//			private JRadioButton rating;
 			private JRadioButton distance;
 			
 			public SearchFormPanel() {
@@ -410,20 +377,73 @@ public class MapFrame extends JFrame{
 				// Start initializing screen elements
 				JLabel fromLabel = new JLabel("From: ");
 				JLabel toLabel = new JLabel("To: ");
-				from = new JTextField();
-				to = new JTextField();
+				from = new JTextField() {
+					// Override this method because if it is not enabled we don't want to change text;
+					public void setText(String t) {
+						if (this.isEnabled()) {
+							super.setText(t);
+						}
+					}
+				};
+				
+				// To is disabled until from is locked.
+				to = new JTextField() {
+					// Override this method because if it is not enabled we don't want to change text;
+					public void setText(String t) {
+						if (this.isEnabled()) {
+							super.setText(t);
+						}
+					}
+				};
+				to.setEnabled(false);
+				
 				lockFrom = new JCheckBox("lockf");
+				lockFrom.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if (e.getStateChange() == ItemEvent.SELECTED) {
+							// Lock From field
+							from.setEnabled(false);
+							
+							// Enable changing of To field
+							to.setEnabled(true);
+							lockTo.setEnabled(true);
+						} else {
+							// Unlock From field
+							from.setEnabled(true);
+							
+							// Disable To field
+							to.setEnabled(false);
+							lockTo.setEnabled(false);
+						}
+					}
+				});
+				
+				// To is disabled until from is locked.
 				lockTo = new JCheckBox("lockt");
+				lockTo.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent e) {
+						if (e.getStateChange() == ItemEvent.SELECTED) {
+							// Lock To field
+							to.setEnabled(false);
+						} else {
+							// Unlock To field
+							to.setEnabled(true);
+						}
+					}
+				});
+				lockTo.setEnabled(false);
 				
 				// Radio buttons belong to a ButtonGroup
 				options = new ButtonGroup();
 				time = new JRadioButton("time");
-				noToll = new JRadioButton("no toll");
-				rating = new JRadioButton("rating");
+//				noToll = new JRadioButton("no toll");
+//				noToll.setEnabled(false);
+//				rating = new JRadioButton("rating");
+//				rating.setEnabled(false);
 				distance = new JRadioButton("distance");
 				options.add(time);
-				options.add(noToll);
-				options.add(rating);
+//				options.add(noToll);
+//				options.add(rating);
 				options.add(distance);
 				
 				JButton findRoute = new JButton("Find Route");
@@ -446,8 +466,8 @@ public class MapFrame extends JFrame{
 									)
 							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING)
 									.addComponent(time)
-									.addComponent(noToll)
-									.addComponent(rating)
+//									.addComponent(noToll)
+//									.addComponent(rating)
 									.addComponent(distance)
 									)
 							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING, false)
@@ -464,7 +484,7 @@ public class MapFrame extends JFrame{
 									.addComponent(lockFrom)
 									.addGroup(sl.createSequentialGroup()
 											.addComponent(time)
-											.addComponent(noToll)
+//											.addComponent(noToll)
 											)
 									.addComponent(findRoute)
 									)
@@ -473,7 +493,7 @@ public class MapFrame extends JFrame{
 									.addComponent(to)
 									.addComponent(lockTo)
 									.addGroup(sl.createSequentialGroup()
-											.addComponent(rating)
+//											.addComponent(rating)
 											.addComponent(distance)
 											)
 									.addComponent(reset)
