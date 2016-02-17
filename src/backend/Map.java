@@ -14,7 +14,6 @@ import utils.*;
 
 public class Map {
 	
-	private HashMap<String, City> cities;
 	private HashMap<String, Place> places;
 	private FlexRedBlackTree<City> alpCityTree;
 	private FlexRedBlackTree<City> ratCityTree;
@@ -27,7 +26,7 @@ public class Map {
 	protected boolean isActive;
 	
 	public Map() {
-		this.cities = new HashMap<String, City>();
+		this.places = new HashMap<String, Place>();
 		this.alpCityTree = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
@@ -163,7 +162,7 @@ public class Map {
 			if (!alpCityTree.insert(fd.getNewCity())) success = false;
 			if (!ratCityTree.insert(fd.getNewCity())) success = false;
 			if (!popCityTree.insert(fd.getNewCity())) success = false;
-			cities.put(fd.getNewCity().getName(), fd.getNewCity());
+			places.put(fd.getNewCity().getName(), fd.getNewCity());
 			return success;
 		} else {
 			boolean success = true;

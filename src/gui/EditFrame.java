@@ -74,6 +74,7 @@ public class EditFrame extends JFrame {
 		
 		public EditPanel() {
 			super();
+			// BoxLayout.Y_AXIS tells the layout manager that we want to add things vertically.
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
 			this.cityList = null;
@@ -85,6 +86,7 @@ public class EditFrame extends JFrame {
 			this.isCreateMode = true;
 			this.isCity = true;
 			
+			// Making a padding at the top.
 			Dimension placeHolderDimension = new Dimension(300, 5);
 			this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
 			
@@ -169,7 +171,7 @@ public class EditFrame extends JFrame {
 		private void populateFormBasic() {
 			this.removeAll();
 			this.add(placeHolder);
-			modeRow.setCreateModeSelected(isCreateMode);
+//			modeRow.setCreateModeSelected(isCreateMode);
 			this.add(modeRow);
 			this.add(Box.createVerticalGlue());
 			this.add(isCreateMode ? nameRow : nameComboRow);
@@ -262,41 +264,41 @@ public class EditFrame extends JFrame {
 		}
 		
 		public class ModePanel extends JPanel {
-			private final ButtonGroup g;
-			private final JRadioButton c;
-			private final JRadioButton e;
+//			private final ButtonGroup g;
+//			private final JRadioButton c;
+//			private final JRadioButton e;
 			
 			/**
 			 * 
 			 */
 			public ModePanel() {
 				super();
-				this.setPreferredSize(new Dimension(250, 30));
-				this.setMaximumSize(new Dimension(250, 30));
-				this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-				g = new ButtonGroup();
-				c = new JRadioButton("Create");
-				e = new JRadioButton("Edit");
-				g.add(c);
-				g.add(e);
-				this.add(c);
-				this.add(e);
-				this.add(Box.createHorizontalGlue());
-				c.addItemListener(new ItemListener() {
-					public void itemStateChanged(ItemEvent arg0) {
-						if (isCreateMode != c.isSelected()) switchMode();
-					}
-				});
+//				this.setPreferredSize(new Dimension(250, 30));
+//				this.setMaximumSize(new Dimension(250, 30));
+//				this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+//				g = new ButtonGroup();
+//				c = new JRadioButton("Create");
+//				e = new JRadioButton("Edit");
+//				g.add(c);
+//				g.add(e);
+//				this.add(c);
+//				this.add(e);
+//				this.add(Box.createHorizontalGlue());
+//				c.addItemListener(new ItemListener() {
+//					public void itemStateChanged(ItemEvent arg0) {
+//						if (isCreateMode != c.isSelected()) switchMode();
+//					}
+//				});
 			}
-			
-			public boolean isCreateModeSelected() {
-				return c.isSelected();
-			}
-			
-			private void setCreateModeSelected(boolean b) {
-				c.setSelected(b);
-				e.setSelected(!b);
-			}
+//			
+//			public boolean isCreateModeSelected() {
+//				return c.isSelected();
+//			}
+//			
+//			private void setCreateModeSelected(boolean b) {
+//				c.setSelected(b);
+//				e.setSelected(!b);
+//			}
 		}
 		
 		public class TextFieldRow extends JPanel {
