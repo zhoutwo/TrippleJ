@@ -10,10 +10,6 @@ import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
@@ -26,20 +22,16 @@ import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SpringLayout;
 import javax.swing.border.TitledBorder;
 
 import backend.City;
 import backend.Map;
-import utils.FlexRedBlackTree;
-import utils.RoundButton;
 
 
 public class MapFrame extends JFrame{
@@ -183,6 +175,8 @@ public class MapFrame extends JFrame{
 		
 		public class MapDisplayPanel extends JPanel {
 			
+			private ArrayList<CircleLabel> cls;
+			
 			public MapDisplayPanel() {
 				super();
 				this.setBackground(Color.GREEN);
@@ -191,37 +185,71 @@ public class MapFrame extends JFrame{
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
 				
+				this.addMouseListener(new MouseListener() {
+
+					public void mouseClicked(MouseEvent e) {
+						for (CircleLabel cl : cls) {
+							if (cl.contains(e.getX(), e.getY())) {
+								System.out.println("City!");
+								return;
+							}
+						}
+						System.out.println("Mouse click detected on map!");
+					}
+
+					public void mouseEntered(MouseEvent e) {
+					}
+
+					public void mouseExited(MouseEvent e) {
+					}
+
+					public void mousePressed(MouseEvent e) {
+					}
+
+					public void mouseReleased(MouseEvent e) {					
+					}
+					
+				});
+			}
+			
+			public void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2 = (Graphics2D) g;
+				for (CircleLabel cl : cls) {
+					g2.setPaint(Color.RED);
+					g2.draw(cl);
+					g2.setPaint(Color.YELLOW);
+					g2.fill(cl);
+					g2.setPaint(Color.BLACK);
+					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
+				}
 			}
 			
 			private void addCityToMap(){
+				cls = new ArrayList<CircleLabel>();
 				Iterator<City> i = currentMap.getPopTree().iterator();
-				City temp;
-				int x;
-				int y;
-//				ArrayList<RoundButton> ab = new ArrayList<RoundButton>();
-				RoundButton c;
-				while(i.hasNext()){
-					temp = i.next();
-					x = 100;
-					y = 100;
-					String n = temp.getName();
-					c = new RoundButton(n,x,y,25);
-//					ab.add(c);
-//					if (g2 != null) {
-//						g2.setPaint(Color.BLACK);
-//						g2.fill(c);
-////						System.out.println(c.getCenterX());
-////						System.out.println(c.getBounds());
-//						this.repaint();
-//					}
-					x = x+50;
-					y = y+50;
-					add(c);
+				int x = 100;
+				int y = 100;
+				for (City c : currentMap.getPopTree()) {
+					cls.add(new CircleLabel(i.next().getName(),x,y,25));
+					x += 50;
+					y += 50;
 				}
 //				this.repaint();
-//				return ab;
 			}
 			
+			public class CircleLabel extends Ellipse2D.Double {
+				private final String t;
+				
+				public CircleLabel (String t, int x, int y, int s) {
+					super(x, y, s, s);
+					this.t = t;
+				}
+				
+				public String getLabel() {
+					return t;
+				}
+			}
 		}
 		
 		public class ListDisplayPanel extends JPanel implements MouseListener{
@@ -338,32 +366,22 @@ public class MapFrame extends JFrame{
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				//mouse.contains(e.getX(),e.getY())
 				System.out.println("first box clicked");
 				if(e.getButton()==1){
 //					if()
 				}
-				
-				
 			}
-			@Override
+
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
 			}
-			@Override
+
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-			@Override
+
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
-			@Override
+
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 			
 		}
@@ -494,46 +512,4 @@ public class MapFrame extends JFrame{
 			}
 		}
 	}
-	
-//	public class CityShape extends Ellipse2D.Double implements Shape, MouseListener{
-//		
-//		private final static double SIZE = 200.0;
-//		private String cityName;
-//		
-//		public CityShape(String name,double x,double y){
-//			super(x,y,SIZE,SIZE);
-//			cityName = name;
-//		}
-//
-//		@Override
-//		public void mouseClicked(MouseEvent e) {
-//			// TODO Auto-generated method stub
-//			System.out.println(cityName+"was clicked");
-//		}
-//
-//		@Override
-//		public void mousePressed(MouseEvent e) {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//
-//		@Override
-//		public void mouseReleased(MouseEvent e) {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//
-//		@Override
-//		public void mouseEntered(MouseEvent e) {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//
-//		@Override
-//		public void mouseExited(MouseEvent e) {
-//			// TODO Auto-generated method stub
-//			
-//		}
-//		
-//	}
 }
