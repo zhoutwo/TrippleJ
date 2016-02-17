@@ -74,7 +74,7 @@ public class EditFrame extends JFrame {
 		
 		public EditPanel() {
 			super();
-			initializeWindowConfiguration();
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
 			this.cityList = null;
 			this.currentCity = null;
@@ -98,7 +98,7 @@ public class EditFrame extends JFrame {
 		 */
 		public EditPanel(ArrayList<City> cityList, Map map) {
 			super();
-			initializeWindowConfiguration();
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
 			this.cityList = cityList;
 			this.currentCity = null;
@@ -123,7 +123,7 @@ public class EditFrame extends JFrame {
 		 */
 		public EditPanel(City selected, ArrayList<City> cityList, Map map) {
 			super();
-			initializeWindowConfiguration();
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
 			this.cityList = cityList;
 			this.currentCity = selected;
@@ -149,7 +149,7 @@ public class EditFrame extends JFrame {
 		 */
 		public EditPanel(POI selected, City parent, ArrayList<POI> poiList, Map map) {
 			super();
-			initializeWindowConfiguration();
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
 			this.cityList = null;
 			this.currentCity = parent;
@@ -164,14 +164,6 @@ public class EditFrame extends JFrame {
 			this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
 			
 			populateFormWithInfo();
-		}
-		
-		private void initializeWindowConfiguration() {
-			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//			Dimension windowDimension = new Dimension(300, 300);
-//			this.setMinimumSize(windowDimension);
-//			this.setPreferredSize(windowDimension);
-//			this.setMaximumSize(windowDimension);
 		}
 
 		private void populateFormBasic() {
