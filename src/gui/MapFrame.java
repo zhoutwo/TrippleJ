@@ -201,16 +201,6 @@ public class MapFrame extends JFrame{
 								} else {
 									mp.sfp.from.setText(cl.getLabel());
 								}
-//								if(mp.sfp.lockFrom.isSelected()){
-//									mp.sfp.to.setText(cl.getLabel());
-//								}
-//								else if(mp.sfp.lockTo.isSelected()){
-//									mp.sfp.from.setText(cl.getLabel());
-//								}
-//								else{
-//									// both to and from are locked in 
-//									// do something or do nothing
-//								}
 								return;
 							}
 						}
