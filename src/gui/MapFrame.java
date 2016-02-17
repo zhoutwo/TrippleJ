@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -29,6 +30,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.StyledEditorKit.BoldAction;
 
 import backend.City;
 import backend.Map;
@@ -255,121 +257,120 @@ public class MapFrame extends JFrame{
 		public class ListDisplayPanel extends JPanel implements MouseListener{
 			private int size;
 			private ArrayList<Rectangle> arr;
-			private ArrayList<JButton> buttons;
+			private ArrayList<JButton> cityListButtons;
+			private ArrayList<JButton> cityInfoButtons;
 			
-			public ListDisplayPanel() {
+			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
 				size=10;
-				buttons=new ArrayList<>();
+				cityListButtons=new ArrayList<>();
+				cityInfoButtons=new ArrayList<>();
 				this.setPreferredSize(new Dimension(250, 650));
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 				this.setMaximumSize(new Dimension(250, 650));
-				Dimension ld = new Dimension(250, 50);
-				for(int i=1;i<size;i++){
-					JButton l = new JButton();
-					l.setText("City "+i);
-					l.setMinimumSize(ld);
-					l.setPreferredSize(ld);
-					l.setMaximumSize(ld);
-					buttons.add(l);
-				}
-				for(int i=0;i<buttons.size();i++){
-					this.add(buttons.get(i));
-				}
-//				JButton cb = new JButton("City 1");
-//				Dimension cd = new Dimension(250, 30);
-//				cb.setMinimumSize(cd);
-//				cb.setPreferredSize(cd);
-//				cb.setMaximumSize(cd);
-//				l.addActionListener(new ActionListener() {
-//
-//					public void actionPerformed(ActionEvent arg0) {
-//						removeAll1();
-//					}
-//
-//					
-//				});
-//				this.add(l);
-				
-				
-				
-				
-//				Dimension d = new Dimension(200, 650);
-//				size=13;
-//				this.setMinimumSize(d);
-//				this.setPreferredSize(d);
-//				this.setMaximumSize(d);
-//				this.addMouseListener(this);
-//				GridBagConstraints g=new GridBagConstraints();
-//				g.gridx = 0;
-//				g.gridy = 0;
-//				g.weightx = 0.50;
-//				g.weighty = 0.50;
-//				g.ipadx = 10;
-//				g.ipady = 10;
-//				JScrollPane sp=new JScrollPane();
-//				Box box=new Box(3);
-//				box=box.createHorizontalBox();
-//				sp.getViewport().add(box.createVerticalGlue(), g);
-//				this.add(sp,BorderLayout.CENTER);
-				
-				
-				
-				
+//				this.drawCityInfoButtons();
+				this.initCitListButtons();
+				this.drawCityListButtons();
+			}
+			private void initInfoButtons() {
 				
 			}
 			private void removeAll1() {
 				this.removeAll();
+				this.validate();
 				this.repaint();
 			}
 			
-//			public ListDisplayPanel() {
-//				super();
-//				this.setBackground(Color.WHITE);
-//				Dimension d = new Dimension(200, 650);
-//				size=13;
-//				this.setMinimumSize(d);
-//				this.setPreferredSize(d);
-//				this.setMaximumSize(d);
-//				this.addMouseListener(this);
-//			}
-//			public GridBagConstraints initScrollPane(JScrollPane scrollPane ) {
-//			    scrollPane.setLayout( new ScrollPaneLayout() );
-//			    scrollPane.setBorder( BorderFactory.createEmptyBorder( 2, 2, 2, 2 ) );
-//			    GridBagConstraints gb = new GridBagConstraints();
-//			    gb.gridx = 0;
-//			    gb.gridy = 0;
-//			    gb.insets = new Insets( 2, 2, 2, 2 );
-//			    return gb;
-//			}
 			
 			
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
-				drawBoxes(g);
+				
 			}
-			public void drawBoxes(Graphics g){
-				
-				
-				
-				
-				
-				
-				Graphics2D g1=(Graphics2D) g;
-				Rectangle r= new Rectangle(0, 0, 248, 50); 
-				g1.setPaint(Color.yellow);
-				for(int i=0;i<size;i++){
-					r.setLocation(0, i*55);
-					g1.draw(r);
-					g1.fill(r);
+			
+			private void drawCityInfoButtons() {
+				Dimension d = new Dimension(250, 50);
+				for (int i = 1; i < size; i++) {
+					JButton l = new JButton();
+					l.setText("City " + i);
+					l.setMinimumSize(d);
+					l.setPreferredSize(d);
+					l.setMaximumSize(d);
+					cityListButtons.add(l);
+					l.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent arg0) {
+							removeAll1();
+							drawCityInfoButtons();
+							repaint();
+						}
+
+					});
 				}
+				this.setPreferredSize(new Dimension(250, 650));
+				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+				this.setMaximumSize(new Dimension(250, 650));
+				Dimension dimText = new Dimension(250, 300);
+				JTextArea txt = new JTextArea("Some information");// put a
+																	// string of
+																	// inforamtion
+																	// here
+				Font font = new Font("", Font.PLAIN, 15);
+				txt.setFont(font);
+				txt.setMinimumSize(dimText);
+				txt.setPreferredSize(dimText);
+				txt.setMaximumSize(dimText);
+				txt.setEditable(false);
+				this.add(txt);
+				for (int i = 1; i < 5; i++) {
+					JButton POIButton = new JButton();
+					POIButton.setText("POI " + i);
+					POIButton.setMinimumSize(d);
+					POIButton.setPreferredSize(d);
+					POIButton.setMaximumSize(d);
+					cityInfoButtons.add(POIButton);
+					POIButton.addActionListener(new ActionListener() {
+
+						public void actionPerformed(ActionEvent arg0) {
+							removeAll1();
+							drawCityListButtons();
+						}
+
+					});
+				}
+				for (int i = 0; i < cityInfoButtons.size(); i++) {
+					this.add(cityInfoButtons.get(i));
+				}
+				
+			}
+			private void initCitListButtons(){
+				Dimension d = new Dimension(250, 50);
+				for(int i=1;i<size;i++){
+					JButton l = new JButton();
+					l.setText("City "+i);
+					l.setMinimumSize(d);
+					l.setPreferredSize(d);
+					l.setMaximumSize(d);
+					cityListButtons.add(l);
+					l.addActionListener(new ActionListener() {
+					
+										public void actionPerformed(ActionEvent arg0) {
+											removeAll1();
+											drawCityInfoButtons();
+											repaint();
+										}
+					
+										
+									});
+				}
+			}
+			private void drawCityListButtons() {
+				for(int i=0;i<cityListButtons.size();i++){
+					this.add(cityListButtons.get(i));
+				}				
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				System.out.println("first box clicked");
-				if(e.getButton()==1){
-//					if()
-				}
 			}
 
 			public void mousePressed(MouseEvent e) {
