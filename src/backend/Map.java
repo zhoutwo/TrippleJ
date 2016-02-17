@@ -48,15 +48,17 @@ public class Map {
 		
 	}
 	
+	
 	/**
 	 * fillTrees() method imports all the city data from population tree to the other 
-	 * remaining trees for easily accesable data 
+	 * remaining trees for easily accesable data and fills the hashmap places
 	 */
 	private void fillTrees(){
 		Iterator<City> i = popCityTree.iterator();
 		City temp;
 		while(i.hasNext()){
 			temp = i.next();
+			places.put(temp.getName(), temp);
 			alpCityTree.insert(temp);
 			ratCityTree.insert(temp);
 		}
