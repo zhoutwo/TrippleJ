@@ -53,17 +53,15 @@ public class Map {
 		
 	}
 	
-	
 	/**
 	 * fillTrees() method imports all the city data from population tree to the other 
-	 * remaining trees for easily accesable data and fills the hashmap places
+	 * remaining trees for easily accesable data 
 	 */
 	private void fillTrees(){
 		Iterator<City> i = popCityTree.iterator();
 		City temp;
 		while(i.hasNext()){
 			temp = i.next();
-			places.put(temp.getName(), temp);
 			alpCityTree.insert(temp);
 			ratCityTree.insert(temp);
 		}
@@ -124,9 +122,17 @@ public class Map {
 	public ArrayList<Place> getRoute(String from, String to) {
 		return null;
 	}
-	
-	public ArrayList<Place> navigateTo(Place current, Place destin){
-		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin);
+	public ArrayList<Place> findRoute(Place current,Place destin, String type){
+		char c=type.charAt(0);
+		if(c=='d'||c=='D'){
+			return navigateByDistance(current, destin);
+		}else if(c=='t'||c=='T'){
+			return navigateByTime(current, destin);
+		}
+		return null;
+	}
+	public ArrayList<Place> navigateByTime(Place current, Place destin){
+		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin,true);
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
 		while(true){
 			
@@ -134,7 +140,39 @@ public class Map {
 				return null;//null will represent not available route found.
 			}
 			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
-				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin);
+				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin,true);
+				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
+				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i) ));
+				list.add(pwd);
+			}
+			
+			//if not arrived keep the loop going
+			if(list.size()==0) return null; //When there is no "OPEN" place that you can visit through, null will represent not available route found.
+			if(!list.peek().getPlace().equals(destin)){
+				currentPwd=list.poll();//If you poll, that place will be removed from the list, and will be considered as closed(but its neighbors will still be open)
+			}
+			//if Arrived make sure it is the lowest cost.
+			else {
+				return list.peek().getRoute();
+//				if(currentPwd.isArrived){
+//					return currentPwd.getRoute();
+//				}
+//				currentPwd.setTrue();
+//				currentPwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
+			}
+		}
+	}
+	
+	public ArrayList<Place> navigateByDistance(Place current, Place destin){
+		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin,false);
+		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
+		while(true){
+			
+			if(currentPwd.getPlace().neighbors.size()==0){
+				return null;//null will represent not available route found.
+			}
+			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
+				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin,false);
 				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
 				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i) ));
 				list.add(pwd);
@@ -191,10 +229,13 @@ public class Map {
 		private ArrayList<Place> route;
 		private double distanceToDestin;
 		private boolean isArrived;
-		public PlaceWithDistance(Place p,Place destin) {
+		private boolean byTime;
+		public PlaceWithDistance(Place p,Place destin,Boolean isTime) {
+			byTime=isTime;
 			place=p;
 			distanceTraveled=0;
 			distanceToDestin=distanceToDestin(p,destin);
+			if(byTime) distanceToDestin/=85;
 			route=new ArrayList<Place>();
 			isArrived=false;
 			
@@ -203,6 +244,7 @@ public class Map {
 			return distanceTraveled;
 		}
 		protected void addDistanceTraveled(double distanceToAdd){
+			if(byTime) distanceToAdd/=85;
 			distanceToDestin+=distanceToAdd;
 		}
 		protected double getDistanceToDestin(){
