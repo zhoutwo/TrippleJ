@@ -173,22 +173,7 @@ public class Map {
 		return false;
 	}
 	
-	/**
-	 * this method will load the last state of the map for continuing usage
-	 * 
-	 * @param filename this is the name of the file to be loaded
-	 * @return this method return a map of the last state the program was left in
-	 * @throws Exception
-	 */
-	public static Map read(String filename) throws Exception {
-        XMLDecoder decoder = 
-        	new XMLDecoder(
-        			new BufferedInputStream(
-        					new FileInputStream(filename)));
-        Map l = (Map) decoder.readObject();
-        decoder.close();
-        return l;
-    }
+	
 	
 	protected class PlaceWithDistance{
 		private Place place;
