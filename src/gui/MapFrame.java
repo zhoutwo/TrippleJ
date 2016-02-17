@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -226,21 +227,106 @@ public class MapFrame extends JFrame{
 		public class ListDisplayPanel extends JPanel implements MouseListener{
 			private int size;
 			private ArrayList<Rectangle> arr;
+			private ArrayList<JButton> buttons;
+			
 			public ListDisplayPanel() {
 				super();
-				size=13;
-				this.setBackground(Color.WHITE);
-				Dimension d = new Dimension(200, 650);
-				this.setMinimumSize(d);
-				this.setPreferredSize(d);
-				this.setMaximumSize(d);
-				this.addMouseListener(this);
+				size=10;
+				buttons=new ArrayList<>();
+				this.setPreferredSize(new Dimension(250, 650));
+				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+				this.setMaximumSize(new Dimension(250, 650));
+				Dimension ld = new Dimension(250, 50);
+				for(int i=1;i<size;i++){
+					JButton l = new JButton();
+					l.setText("City "+i);
+					l.setMinimumSize(ld);
+					l.setPreferredSize(ld);
+					l.setMaximumSize(ld);
+					buttons.add(l);
+				}
+				for(int i=0;i<buttons.size();i++){
+					this.add(buttons.get(i));
+				}
+//				JButton cb = new JButton("City 1");
+//				Dimension cd = new Dimension(250, 30);
+//				cb.setMinimumSize(cd);
+//				cb.setPreferredSize(cd);
+//				cb.setMaximumSize(cd);
+//				l.addActionListener(new ActionListener() {
+//
+//					public void actionPerformed(ActionEvent arg0) {
+//						removeAll1();
+//					}
+//
+//					
+//				});
+//				this.add(l);
+				
+				
+				
+				
+//				Dimension d = new Dimension(200, 650);
+//				size=13;
+//				this.setMinimumSize(d);
+//				this.setPreferredSize(d);
+//				this.setMaximumSize(d);
+//				this.addMouseListener(this);
+//				GridBagConstraints g=new GridBagConstraints();
+//				g.gridx = 0;
+//				g.gridy = 0;
+//				g.weightx = 0.50;
+//				g.weighty = 0.50;
+//				g.ipadx = 10;
+//				g.ipady = 10;
+//				JScrollPane sp=new JScrollPane();
+//				Box box=new Box(3);
+//				box=box.createHorizontalBox();
+//				sp.getViewport().add(box.createVerticalGlue(), g);
+//				this.add(sp,BorderLayout.CENTER);
+				
+				
+				
+				
+				
 			}
+			private void removeAll1() {
+				this.removeAll();
+				this.repaint();
+			}
+			
+//			public ListDisplayPanel() {
+//				super();
+//				this.setBackground(Color.WHITE);
+//				Dimension d = new Dimension(200, 650);
+//				size=13;
+//				this.setMinimumSize(d);
+//				this.setPreferredSize(d);
+//				this.setMaximumSize(d);
+//				this.addMouseListener(this);
+//			}
+//			public GridBagConstraints initScrollPane(JScrollPane scrollPane ) {
+//			    scrollPane.setLayout( new ScrollPaneLayout() );
+//			    scrollPane.setBorder( BorderFactory.createEmptyBorder( 2, 2, 2, 2 ) );
+//			    GridBagConstraints gb = new GridBagConstraints();
+//			    gb.gridx = 0;
+//			    gb.gridy = 0;
+//			    gb.insets = new Insets( 2, 2, 2, 2 );
+//			    return gb;
+//			}
+			
+			
 			public void paintComponent(Graphics g){
 				super.paintComponent(g);
 				drawBoxes(g);
 			}
 			public void drawBoxes(Graphics g){
+				
+				
+				
+				
+				
+				
 				Graphics2D g1=(Graphics2D) g;
 				Rectangle r= new Rectangle(0, 0, 248, 50); 
 				g1.setPaint(Color.yellow);
@@ -253,9 +339,9 @@ public class MapFrame extends JFrame{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				//mouse.contains(e.getX(),e.getY())
+				System.out.println("first box clicked");
 				if(e.getButton()==1){
 //					if()
-					System.out.println("first box clicked");
 				}
 				
 				
