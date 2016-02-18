@@ -3,6 +3,8 @@ package gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +28,8 @@ import backend.Place;
 
 public class EditFrame extends JFrame {
 	private final boolean isCity;
-	private final City currentCity;
-	private final POI currentPOI;
+	private City currentCity;
+	private POI currentPOI;
 	private final ArrayList<City> cityList;
 	private final HashMap<String, City> cityMap;
 	private final ArrayList<POI> poiList;
@@ -123,7 +125,18 @@ public class EditFrame extends JFrame {
 			// BoxLayout.Y_AXIS tells the layout manager that we want to add things vertically.
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
-			
+			nameComboRow.cb.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent arg0) {
+					if (arg0.getStateChange() == ItemEvent.SELECTED) {
+						if (isCity) {
+							currentCity = cityMap.get(arg0.getItem());
+						} else {
+							currentPOI = poiMap.get(arg0.getItem());
+						}
+						populateInfo();
+					}
+				}
+			});
 			
 			populateInfo();
 			populateFormBasic();
@@ -196,11 +209,9 @@ public class EditFrame extends JFrame {
 		
 		public class FormattedTextFieldRow extends TextFieldRow{
 			private JFormattedTextField ft;
-			private final boolean isRating;
 			
 			public FormattedTextFieldRow(String lt, boolean isRating) {
 				super(lt);
-				this.isRating = isRating;
 				this.remove(t);
 				// Why is this not working.
 				DecimalFormat format = new DecimalFormat();
@@ -310,7 +321,7 @@ public class EditFrame extends JFrame {
 				EditFrame.this.dispose();
 			}
 			
-			private boolean submitForm() {//TODO
+			private boolean submitForm() {
 				FormData data;
 				if (isCity) {
 					data = new FormData(currentCity, nameComboRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue()));
