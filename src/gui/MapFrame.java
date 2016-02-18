@@ -95,6 +95,35 @@ public class MapFrame extends JFrame{
 		}
 	}
 	
+	private void placeSelected(Place p) {
+		if (p instanceof City) {
+			City c = (City) p;
+			selectedCity = c;
+			selectedPOI = null;
+//			TODO: ldp.displayInfo(selectedPlace);
+			
+			
+		} else {
+			POI poi = (POI) p;
+			selectedCity = null;
+			selectedPOI = poi;
+		}
+		
+		// Set the to and from fields 
+		if (mp.sfp.lockFrom.isSelected()) {
+			if (!mp.sfp.lockTo.isSelected()) {
+				// Updating To city
+				mp.sfp.to.setText(p.getName());
+				selectedToPlace = p;
+//				if (!cl.getCity().getName().equals(cl.getLabel())) throw new RuntimeException("Labels are different!");
+			}
+		} else {
+			// Updating From city
+			mp.sfp.from.setText(p.getName());
+			selectedFromPlace = p;
+		}
+	}
+	
 	public class MapPanel extends JPanel {
 //		private Map stateMap;
 		private MapDisplayPanel mdp;
@@ -174,23 +203,7 @@ public class MapFrame extends JFrame{
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
 								
-								selectedCity = cl.getCity();
-								selectedPOI = null;
-//								TODO: ldp.displayInfo(selectedPlace);
-								
-								// Set the to and from fields 
-								if (mp.sfp.lockFrom.isSelected()) {
-									if (!mp.sfp.lockTo.isSelected()) {
-										// Updating To city
-										mp.sfp.to.setText(cl.getLabel());
-										selectedToPlace = cl.getCity();
-//										if (!cl.getCity().getName().equals(cl.getLabel())) throw new RuntimeException("Labels are different!");
-									}
-								} else {
-									// Updating From city
-									mp.sfp.from.setText(cl.getLabel());
-									selectedFromPlace = cl.getCity();
-								}
+								placeSelected(cl.getCity());
 								return;
 							}
 						}
@@ -309,13 +322,14 @@ public class MapFrame extends JFrame{
 					public void actionPerformed(ActionEvent e) {
 						ListDisplayPanel.this.removeAll();
 						drawCityListButtons();
+//						placeSelected
 						ListDisplayPanel.this.repaint();
 					}
 				});
 				
 				for (int i = 0; i < currentMap.getAlpCityList().get(num).getAlpPOITree().size(); i++) {
-					JButton POIButton = new JButton();
-					POIButton.setText(currentMap.getAlpCityList().get(num).getAlpPOITree().get(i).getName());
+					POI poi = currentMap.getAlpCityList().get(num).getAlpPOITree().get(i);
+					PlaceButton POIButton = new PlaceButton(poi.getName(), poi);
 					POIButton.setMinimumSize(d);
 					POIButton.setPreferredSize(d);
 					POIButton.setMaximumSize(d);
@@ -349,8 +363,7 @@ public class MapFrame extends JFrame{
 				Dimension d = new Dimension(250, 50);
 				ArrayList<City> arr= currentMap.getAlpCityList();
 				for (int i = 0; i < arr.size(); i++) {
-					JButton l = new JButton();
-					l.setText(arr.get(i).getName());
+					PlaceButton l = new PlaceButton(arr.get(i).getName(), arr.get(i));
 					l.setMinimumSize(d);
 					l.setPreferredSize(d);
 					l.setMaximumSize(d);
@@ -392,6 +405,18 @@ public class MapFrame extends JFrame{
 			}
 
 			public void mouseExited(MouseEvent e) {
+			}
+			
+			public class PlaceButton extends JButton {
+				private final Place p;
+				public PlaceButton(String s, Place place) {
+					super(s);
+					p = place;
+				}
+				
+				public Place getPlace() {
+					return p;
+				}
 			}
 			
 		}
