@@ -16,6 +16,9 @@ public class City extends Place {
 	public City(String name,int population, Coordinate location, double rating) {
 		super(name, location, rating);
 		this.population = population;
+		alpPOITree = new FlexRedBlackTree<POI>(new AlphabetComparator<POI>());
+		ratPOITree = new FlexRedBlackTree<POI>(new RatingComparator<POI>());
+		pois = new ArrayList<POI>();
 		setMapLocal();
 	}
 	

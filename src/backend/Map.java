@@ -1,20 +1,17 @@
 package backend;
-import java.beans.XMLDecoder;
-import java.io.BufferedInputStream;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.util.Spliterator;
-
 import utils.*;
 
 public class Map {
 	
-	private HashMap<String, City> places;
+	private HashMap<String, City> cities;
+	private HashMap<String, Place> places;
 	private FlexRedBlackTree<City> alpCityTree;
 	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
@@ -26,7 +23,8 @@ public class Map {
 	protected boolean isActive;
 	
 	public Map() {
-		this.places = new HashMap<String, City>();
+		this.places = new HashMap<String, Place>();
+		this.cities = new HashMap<String, City>();
 		this.alpCityTree = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
@@ -50,7 +48,8 @@ public class Map {
 			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
-		
+		System.out.println(cities.get("KansasCity").getPois().size());
+//		System.out.println(cities.get("KansasCity").getPois().toString());
 	}
 	
 	/**
@@ -62,6 +61,7 @@ public class Map {
 		City temp;
 		while(i.hasNext()){
 			temp = i.next();
+			cities.put(temp.name, temp);
 			alpCityTree.insert(temp);
 			ratCityTree.insert(temp);
 		}
@@ -79,7 +79,7 @@ public class Map {
 		String pName;
 		String type;
 		while(inScanner.hasNext()){
-			temp = places.get(inScanner.next());
+			temp = cities.get(inScanner.next());
 			pName = inScanner.next();
 			cost = inScanner.nextDouble();
 			rating = inScanner.nextDouble();
