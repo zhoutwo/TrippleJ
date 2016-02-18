@@ -136,13 +136,14 @@ public class Map {
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
 		while(true){
 			
-			if(currentPwd.getPlace().neighbors.size()==0){
+			if(currentPwd.getPlace().getNeighbors().size()==0){
 				return null;//null will represent not available route found.
 			}
-			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
+			for(int i=0;i<currentPwd.getPlace().getNeighbors().size();i++){
 				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i).getPlace(), destin,true);
 				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
-				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
+				pwd.addDistanceTraveled(currentPwd.getPlace().getNeighbors().get(i).getTime());
+//				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
 				list.add(pwd);
 			}
 			
@@ -151,6 +152,8 @@ public class Map {
 			if(!list.peek().getPlace().equals(destin)){
 				currentPwd=list.poll();//If you poll, that place will be removed from the list, and will be considered as closed(but its neighbors will still be open)
 			}
+			
+			
 			//if Arrived make sure it is the lowest cost.
 			else {
 				return list.peek().getRoute();
@@ -168,13 +171,14 @@ public class Map {
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
 		while(true){
 			
-			if(currentPwd.getPlace().neighbors.size()==0){
+			if(currentPwd.getPlace().getNeighbors().size()==0){
 				return null;//null will represent not available route found.
 			}
-			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
+			for(int i=0;i<currentPwd.getPlace().getNeighbors().size();i++){
 				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i).getPlace(), destin,false);
 				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
-				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
+				pwd.addDistanceTraveled(currentPwd.getPlace().getNeighbors().get(i).getDistance());
+//				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
 				list.add(pwd);
 			}
 			
@@ -223,7 +227,7 @@ public class Map {
 	
 	
 	
-	protected class PlaceWithDistance{
+	public class PlaceWithDistance{
 		private Place place;
 		private double distanceTraveled;
 		private ArrayList<Place> route;
