@@ -37,6 +37,7 @@ import javax.swing.text.StyledEditorKit.BoldAction;
 
 import backend.City;
 import backend.Map;
+import backend.POI;
 import backend.Place;
 
 
@@ -48,8 +49,10 @@ public class MapFrame extends JFrame{
 	// fields
 	private Console cs;
 	private MapPanel mp;
-	private int state;
-	private Place selectedPlace;
+//	private int state;
+	private City selectedCity;
+	private POI selectedPOI;
+//	private Place selectedPlace;
 	private Place selectedFromPlace;
 	private Place selectedToPlace;
 	private Map currentMap;
@@ -157,7 +160,8 @@ public class MapFrame extends JFrame{
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
 								
-								selectedPlace = cl.getCity();
+								selectedCity = cl.getCity();
+								selectedPOI = null;
 //								TODO: ldp.displayInfo(selectedPlace);
 								
 								// Set the to and from fields 
@@ -176,7 +180,8 @@ public class MapFrame extends JFrame{
 								return;
 							}
 						}
-						selectedPlace = null;
+						selectedCity = null;
+						selectedPOI = null;
 //						TODO: ldp.clearDisplayInfo();
 						System.out.println("Mouse click detected on map!");
 					}
@@ -560,9 +565,14 @@ public class MapFrame extends JFrame{
 				this.setMaximumSize(d);
 				JButton edit = new JButton("Edit");
 				edit.addActionListener(new ActionListener() {
-
 					public void actionPerformed(ActionEvent arg0) {
-						new EditFrame();
+						if (selectedCity != null) {
+							if (selectedPOI == null) {
+								new EditFrame(selectedCity, currentMap.getAlpCityList(), currentMap);
+							} else {
+								new EditFrame(selectedPOI, selectedCity.getAlpPOITree(), currentMap);
+							}
+						}
 					}
 				});
 				this.add(edit);

@@ -3,8 +3,9 @@ package gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -21,35 +22,88 @@ import backend.City;
 import backend.FormData;
 import backend.Map;
 import backend.POI;
+import backend.Place;
 
 public class EditFrame extends JFrame {
+	private final boolean isCity;
+	private final City currentCity;
+	private final POI currentPOI;
+	private final ArrayList<City> cityList;
+	private final HashMap<String, City> cityMap;
+	private final ArrayList<POI> poiList;
+	private final HashMap<String, POI> poiMap;
+	private final String[] names;
+	private final Map map;
 	
-	public EditFrame() {
+	public EditFrame(City c, ArrayList<City> cl, Map m) {
 		super();
 		Dimension d = new Dimension(300, 300);
 		this.setMinimumSize(d);
 		this.setPreferredSize(d);
 		this.setMaximumSize(d);
 		this.setResizable(false);
-		this.add(new EditPanel(null, new ArrayList<City>(), null));
+		
+		isCity = true;
+		currentCity = c;
+		currentPOI = null;
+		cityList = cl;
+		cityMap = new HashMap<String, City>();
+		poiList = null;
+		poiMap = null;
+		map = m;
+		
+		names = new String[cl.size()];
+		for (int i = 0; i < cl.size(); i++) {
+			cityMap.put(cl.get(i).getName(), cl.get(i));
+			names[i] = cl.get(i).getName();
+		}
+		
+		EditPanel ep = new EditPanel();
+		this.add(ep);
+		this.setTitle("Editing " + (isCity ? "City" : "Point-Of-Interest"));
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null); // Centers it.
 		this.setVisible(true);
 	}
 	
-	public class EditPanel extends JPanel {
-		private final boolean isCity;
-		private final City currentCity;
-		private final POI currentPOI;
-		private final ArrayList<City> cityList;
-		private final ArrayList<POI> poiList;
-		private final Map map;
+	public EditFrame(POI p, ArrayList<POI> pl, Map m) {
+		super();
+		Dimension d = new Dimension(300, 300);
+		this.setMinimumSize(d);
+		this.setPreferredSize(d);
+		this.setMaximumSize(d);
+		this.setResizable(false);
 		
+		isCity = false;
+		currentCity = null;
+		currentPOI = p;
+		cityList = null;
+		cityMap = null;
+		poiList = pl;
+		poiMap = new HashMap<String, POI>();
+		map = m;
+		
+		names = new String[pl.size()];
+		for (int i = 0; i < pl.size(); i++) {
+			poiMap.put(pl.get(i).getName(), pl.get(i));
+			names[i] = pl.get(i).getName();
+		}
+		
+		EditPanel ep = new EditPanel();
+		this.add(ep);
+		this.setTitle("Editing " + (isCity ? "City" : "Point-Of-Interest"));
+		this.pack();
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setLocationRelativeTo(null); // Centers it.
+		this.setVisible(true);
+	}
+	
+	public class EditPanel extends JPanel {	
 		// 1th row
 //		private final Box.Filler placeHolder;
 		// 2nd row
-		private final ComboBoxRow nameComboRow = new ComboBoxRow("Name: ", new String[0]);
+		private final ComboBoxRow nameComboRow = new ComboBoxRow("Name: ", names);;
 		// 3rd row
 		private final TextFieldRow xRow = new TextFieldRow("X: ");
 		// 4th row
@@ -64,34 +118,27 @@ public class EditFrame extends JFrame {
 		// last row
 		private final SubmitPanel submitRow = new SubmitPanel();
 		
-		public EditPanel(City c, ArrayList<City> cl, Map m) {
+		public EditPanel() {
 			super();
 			// BoxLayout.Y_AXIS tells the layout manager that we want to add things vertically.
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
-			isCity = true;
-			currentCity = c;
-			currentPOI = null;
-			cityList = cl;
-			poiList = null;
-			map = m;
-			
+			populateInfo();
 			populateFormBasic();
 		}
 		
-		public EditPanel(POI p, ArrayList<POI> pl, Map m) {
-			super();
-			// BoxLayout.Y_AXIS tells the layout manager that we want to add things vertically.
-			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			
-			isCity = false;
-			currentCity = null;
-			currentPOI = p;
-			cityList = null;
-			poiList = pl;
-			map = m;
-			
-			populateFormBasic();
+		private void populateInfo() {
+			Place p = isCity ? currentCity : currentPOI;
+			nameComboRow.setValue(p.getName());
+			xRow.setValue(p.getLocation().getX() + "");
+			yRow.setValue(p.getLocation().getY() + "");
+			ratingRow.setValue(p.getRating() + "");
+			if (isCity) {
+				populationRow.setValue(currentCity.getPopulation() + "");
+			} else {
+				typeRow.setValue(currentPOI.getType());
+				costRow.setValue(currentPOI.getCost() + "");
+			}
 		}
 		
 		private void populateFormBasic() {
@@ -101,56 +148,15 @@ public class EditFrame extends JFrame {
 			this.add(xRow);
 			this.add(yRow);
 			this.add(ratingRow);
-//			typeRow.setEnabled(!isCity);
-//			this.add(typeRow);
-//			populationRow.setEnabled(isCity);
 			this.add(isCity ? populationRow : typeRow);
 			this.add(Box.createVerticalGlue());
 			if (!isCity) {
-				this.add(submitRow);
+				this.add(costRow);
 			}
 			this.add(submitRow);
 			this.add(Box.createVerticalGlue());
 			EditFrame.this.pack();
 			EditFrame.this.repaint();
-		}
-		
-		public class ModePanel extends JPanel {
-//			private final ButtonGroup g;
-//			private final JRadioButton c;
-//			private final JRadioButton e;
-			
-			/**
-			 * 
-			 */
-			public ModePanel() {
-				super();
-//				this.setPreferredSize(new Dimension(250, 30));
-//				this.setMaximumSize(new Dimension(250, 30));
-//				this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-//				g = new ButtonGroup();
-//				c = new JRadioButton("Create");
-//				e = new JRadioButton("Edit");
-//				g.add(c);
-//				g.add(e);
-//				this.add(c);
-//				this.add(e);
-//				this.add(Box.createHorizontalGlue());
-//				c.addItemListener(new ItemListener() {
-//					public void itemStateChanged(ItemEvent arg0) {
-//						if (isCreateMode != c.isSelected()) switchMode();
-//					}
-//				});
-			}
-//			
-//			public boolean isCreateModeSelected() {
-//				return c.isSelected();
-//			}
-//			
-//			private void setCreateModeSelected(boolean b) {
-//				c.setSelected(b);
-//				e.setSelected(!b);
-//			}
 		}
 		
 		public class TextFieldRow extends JPanel {
@@ -188,21 +194,24 @@ public class EditFrame extends JFrame {
 		
 		public class FormattedTextFieldRow extends TextFieldRow{
 			private JFormattedTextField ft;
+			private final boolean isRating;
 			
 			public FormattedTextFieldRow(String lt, boolean isRating) {
 				super(lt);
+				this.isRating = isRating;
 				this.remove(t);
 				// Why is this not working.
-				NumberFormat format = NumberFormat.getInstance();
-				NumberFormatter formatter = new NumberFormatter(format);
+				DecimalFormat format = new DecimalFormat();
+				
 				if (isRating) {
-					format.setMaximumIntegerDigits(1);
-					format.setMaximumFractionDigits(1);
-					formatter.setMaximum(5);
+//					format.setMaximumIntegerDigits(1);
+//					format.setMaximumFractionDigits(1);
+					format.applyPattern("0.0"); // TODO: Can't set fraction numbers
 				} else {
 					format.setMaximumFractionDigits(0);
 				}
-//				formatter.setFormat(format);
+				NumberFormatter formatter = new NumberFormatter(format);
+				if (isRating) formatter.setMaximum(5);
 				ft = new JFormattedTextField(formatter);
 				Dimension ftd = new Dimension(150, 30);
 				ft.setMinimumSize(ftd);
@@ -212,7 +221,7 @@ public class EditFrame extends JFrame {
 			}
 			
 			public void setValue(String s) {
-				ft.setValue(s);
+				ft.setValue(Double.parseDouble(s));
 			}
 			
 			public String getValue() {
@@ -252,7 +261,7 @@ public class EditFrame extends JFrame {
 			}
 			
 			public void setValue(String s) {
-				cb.setSelectedItem(s); //TODO This might not work
+				cb.setSelectedItem(s);
 			}
 			
 			public String getValue() {
@@ -299,7 +308,7 @@ public class EditFrame extends JFrame {
 				EditFrame.this.dispose();
 			}
 			
-			private boolean submitForm() {
+			private boolean submitForm() {//TODO
 				FormData data = null;
 				if (isCity) {
 //					data = new FormData(isCreateMode, currentCity, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue()));
