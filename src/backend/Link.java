@@ -4,11 +4,12 @@ import utils.RoadType;
 
 public class Link {
 	
-	private static final int ISPEED = 85;
-	private static final int HSPEED = 45;
-	private static final int RSPEED = 40;
-	private int time;
-	private int distance;
+	private static final double ISPEED = 85.0;
+	private static final double HSPEED = 45.0;
+	private static final double RSPEED = 40.0;
+	private static final double MILPERGPS = 0.0195234613673439;
+	private double time;
+	private double distance;
 	private RoadType type;
 	private Place place;
 	private String name;
@@ -18,11 +19,18 @@ public class Link {
 		place = pPlace;
 		name = pName;
 		setType();
-		setDistance();
+		setDistance(fromCor);
 		setTime();
 	}
 	
-	private void setDistance() {
+	private void setDistance(Coordinate f) {
+		double xf = Math.abs(f.getX());
+		double yf = Math.abs(f.getY());
+		double xt = Math.abs(place.getLocation().getX());
+		double yt = Math.abs(place.getLocation().getY());
+		double xDis = xf-xt;
+		double yDis = yf - yt;
+		distance = Math.sqrt((xDis*xDis)+(yDis*yDis));
 		
 	}
 	
@@ -52,11 +60,11 @@ public class Link {
 		}
 	}
 
-	public int getTime() {
+	public double getTime() {
 		return this.time;
 	}
 	
-	public int getDistance() {
+	public double getDistance() {
 		return this.distance;
 	}
 	
