@@ -49,6 +49,7 @@ public class MapFrame extends JFrame{
 	private Console cs;
 	private MapPanel mp;
 	private int state;
+	private Place selectedPlace;
 	private Place selectedFromPlace;
 	private Place selectedToPlace;
 	private Map currentMap;
@@ -155,17 +156,28 @@ public class MapFrame extends JFrame{
 					public void mouseClicked(MouseEvent e) {
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
+								
+								selectedPlace = cl.getCity();
+//								TODO: ldp.displayInfo(selectedPlace);
+								
 								// Set the to and from fields 
 								if (mp.sfp.lockFrom.isSelected()) {
 									if (!mp.sfp.lockTo.isSelected()) {
+										// Updating To city
 										mp.sfp.to.setText(cl.getLabel());
+										selectedToPlace = cl.getCity();
+//										if (!cl.getCity().getName().equals(cl.getLabel())) throw new RuntimeException("Labels are different!");
 									}
 								} else {
+									// Updating From city
 									mp.sfp.from.setText(cl.getLabel());
+									selectedFromPlace = cl.getCity();
 								}
 								return;
 							}
 						}
+						selectedPlace = null;
+//						TODO: ldp.clearDisplayInfo();
 						System.out.println("Mouse click detected on map!");
 					}
 
@@ -307,7 +319,6 @@ public class MapFrame extends JFrame{
 			
 			private void drawCityInfoButtons() {
 
-				
 				this.add(txt);
 				for (int i = 0; i < cityInfoButtons.size(); i++) {
 					this.add(cityInfoButtons.get(i));
@@ -460,7 +471,27 @@ public class MapFrame extends JFrame{
 				options.add(distance);
 				
 				JButton findRoute = new JButton("Find Route");
+				findRoute.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						// TODO Auto-generated method stub
+						
+					}
+				});
 				JButton reset = new JButton("Reset");
+				reset.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent arg0) {
+						from.setEnabled(true);
+						from.setText(null);
+						lockFrom.setEnabled(true);
+						lockFrom.setSelected(false);
+						lockTo.setEnabled(false);
+						lockTo.setSelected(false);
+						to.setEnabled(true);
+						to.setText(null);
+						to.setEnabled(false);
+						options.clearSelection();
+					}
+				});
 				
 				// Start adding elements
 				sl.setHorizontalGroup(
@@ -514,7 +545,6 @@ public class MapFrame extends JFrame{
 							
 							
 						);
-				System.out.println(this.getPreferredSize());
 			}
 			
 		}

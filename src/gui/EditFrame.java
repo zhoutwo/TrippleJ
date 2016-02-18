@@ -3,21 +3,17 @@ package gui;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.text.NumberFormatter;
 
@@ -35,7 +31,7 @@ public class EditFrame extends JFrame {
 		this.setPreferredSize(d);
 		this.setMaximumSize(d);
 		this.setResizable(false);
-		this.add(new EditPanel());
+		this.add(new EditPanel(null, new ArrayList<City>(), null));
 		this.pack();
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setLocationRelativeTo(null); // Centers it.
@@ -43,21 +39,16 @@ public class EditFrame extends JFrame {
 	}
 	
 	public class EditPanel extends JPanel {
-		private boolean isCreateMode;
-		private boolean isCity;
-		private final int state;
+		private final boolean isCity;
 		private final City currentCity;
 		private final POI currentPOI;
 		private final ArrayList<City> cityList;
 		private final ArrayList<POI> poiList;
 		private final Map map;
 		
-		// 0th row
-		private final Box.Filler placeHolder;
-		// 1st row
-		private final ModePanel modeRow = new ModePanel();
+		// 1th row
+//		private final Box.Filler placeHolder;
 		// 2nd row
-		private final TextFieldRow nameRow = new TextFieldRow("Name: ");
 		private final ComboBoxRow nameComboRow = new ComboBoxRow("Name: ", new String[0]);
 		// 3rd row
 		private final TextFieldRow xRow = new TextFieldRow("X: ");
@@ -66,199 +57,60 @@ public class EditFrame extends JFrame {
 		// 5th row
 		private final FormattedTextFieldRow ratingRow = new FormattedTextFieldRow("Rating: ", true);
 		// 6th row
+		private final FormattedTextFieldRow populationRow = new FormattedTextFieldRow("Population: ", false);
 		private final ComboBoxRow typeRow = new ComboBoxRow("Type: ", new String[0]);
 		// 7th row
-		private final FormattedTextFieldRow populationRow = new FormattedTextFieldRow("Population: ", false);
+		private final FormattedTextFieldRow costRow = new FormattedTextFieldRow("Cost: ", false);
 		// last row
 		private final SubmitPanel submitRow = new SubmitPanel();
 		
-		public EditPanel() {
+		public EditPanel(City c, ArrayList<City> cl, Map m) {
 			super();
 			// BoxLayout.Y_AXIS tells the layout manager that we want to add things vertically.
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
-			this.cityList = null;
-			this.currentCity = null;
-			this.currentPOI = null;
-			this.poiList = null;
-			this.map = null;
-			this.state = 0;
-			this.isCreateMode = true;
-			this.isCity = true;
-			
-			// Making a padding at the top.
-			Dimension placeHolderDimension = new Dimension(300, 5);
-			this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
-			
-			populateFormBasic();
-		}
-
-		/**
-		 * 
-		 * @param cityList
-		 * @param map
-		 */
-		public EditPanel(ArrayList<City> cityList, Map map) {
-			super();
-			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			
-			this.cityList = cityList;
-			this.currentCity = null;
-			this.currentPOI = null;
-			this.poiList = null;
-			this.map = map;
-			this.state = 1;
-			this.isCreateMode = true;
-			this.isCity = true;
-			
-			Dimension placeHolderDimension = new Dimension(300, 5);
-			this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
+			isCity = true;
+			currentCity = c;
+			currentPOI = null;
+			cityList = cl;
+			poiList = null;
+			map = m;
 			
 			populateFormBasic();
 		}
 		
-		/**
-		 * 
-		 * @param selected
-		 * @param cityList
-		 * @param map
-		 */
-		public EditPanel(City selected, ArrayList<City> cityList, Map map) {
+		public EditPanel(POI p, ArrayList<POI> pl, Map m) {
 			super();
+			// BoxLayout.Y_AXIS tells the layout manager that we want to add things vertically.
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
-			this.cityList = cityList;
-			this.currentCity = selected;
-			this.currentPOI = null;
-			this.poiList = null;
-			this.map = map;
-			this.state = 2;
-			this.isCreateMode = false;
-			this.isCity = true;
+			isCity = false;
+			currentCity = null;
+			currentPOI = p;
+			cityList = null;
+			poiList = pl;
+			map = m;
 			
-			Dimension placeHolderDimension = new Dimension(300, 5);
-			this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
-			
-			populateFormWithInfo();
+			populateFormBasic();
 		}
 		
-		/**
-		 * 
-		 * @param selected
-		 * @param parent
-		 * @param poiList
-		 * @param map
-		 */
-		public EditPanel(POI selected, City parent, ArrayList<POI> poiList, Map map) {
-			super();
-			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			
-			this.cityList = null;
-			this.currentCity = parent;
-			this.currentPOI = selected;
-			this.poiList = poiList;
-			this.map = map;
-			this.state = 3;
-			this.isCreateMode = false;
-			this.isCity = false;
-			
-			Dimension placeHolderDimension = new Dimension(300, 5);
-			this.placeHolder = new Box.Filler(placeHolderDimension, placeHolderDimension, placeHolderDimension);
-			
-			populateFormWithInfo();
-		}
-
 		private void populateFormBasic() {
 			this.removeAll();
-			this.add(placeHolder);
-//			modeRow.setCreateModeSelected(isCreateMode);
-			this.add(modeRow);
 			this.add(Box.createVerticalGlue());
-			this.add(isCreateMode ? nameRow : nameComboRow);
+			this.add(nameComboRow);
 			this.add(xRow);
 			this.add(yRow);
 			this.add(ratingRow);
-			typeRow.setEnabled(!isCity);
-			this.add(typeRow);
-			populationRow.setEnabled(isCity);
-			this.add(populationRow);
+//			typeRow.setEnabled(!isCity);
+//			this.add(typeRow);
+//			populationRow.setEnabled(isCity);
+			this.add(isCity ? populationRow : typeRow);
 			this.add(Box.createVerticalGlue());
+			if (!isCity) {
+				this.add(submitRow);
+			}
 			this.add(submitRow);
 			this.add(Box.createVerticalGlue());
-			EditFrame.this.pack();
-			EditFrame.this.repaint();
-		}
-		
-		private void populateFormWithInfo() {
-			switch (state) {
-			case 1:
-				if (!isCreateMode) {
-					populateFormFromCity();
-				}
-				break;
-			case 2:
-				if (isCreateMode) {
-					populateFormFromCity();
-				}
-				break;
-			case 3:
-				if (!isCreateMode) {
-					populateFormFromPOI();
-				}
-				break;
-			default:
-				//Do nothing
-				break;
-			}
-			populateFormBasic();
-		}
-		
-		private void populateFormFromCity() {
-			if (isCreateMode) {
-				nameComboRow.setValue(currentCity.getName());
-			} else {
-				nameRow.setValue(currentCity.getName());
-			}
-			xRow.setValue(currentCity.getLocation().getX() + "");
-			yRow.setValue(currentCity.getLocation().getY() + "");
-			ratingRow.setValue(currentCity.getRating() + "");
-			populationRow.setValue(currentCity.getPopulation() + "");
-		}
-		
-		private void populateFormFromPOI() {
-			if (isCreateMode) {
-				nameComboRow.setValue(currentPOI.getName());
-			} else {
-				nameRow.setValue(currentPOI.getName());
-			}
-			xRow.setValue(currentPOI.getLocation().getX() + "");
-			yRow.setValue(currentPOI.getLocation().getY() + "");
-			ratingRow.setValue(currentPOI.getRating() + "");
-			typeRow.setValue(currentPOI.getType());
-		}
-		
-		private void closeWindow() {
-			EditFrame.this.setVisible(false);
-			EditFrame.this.dispose();
-		}
-		
-		private boolean submitForm() {
-			FormData data;
-			if (isCity) {
-				data = new FormData(isCreateMode, currentCity, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue()));
-			} else {
-				data = new FormData(isCreateMode, currentPOI, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), currentCity, typeRow.getValue(), Double.parseDouble(ratingRow.getValue()), Double.parseDouble(null)); 
-			}
-			return map.upsert(data);
-		}
-		
-		private void switchMode() {
-			isCreateMode = !isCreateMode;
-			this.remove(nameRow);
-			this.remove(nameComboRow);
-			this.add(isCreateMode ? nameRow : nameComboRow, 3);
-			typeRow.setEnabled(!isCity);
-			populationRow.setEnabled(isCity);
 			EditFrame.this.pack();
 			EditFrame.this.repaint();
 		}
@@ -344,10 +196,9 @@ public class EditFrame extends JFrame {
 				NumberFormat format = NumberFormat.getInstance();
 				NumberFormatter formatter = new NumberFormatter(format);
 				if (isRating) {
-					format.setMinimumIntegerDigits(1);
-					format.setMaximumIntegerDigits(2);
-					format.setMaximumFractionDigits(2);
-					formatter.setMaximum(10);
+					format.setMaximumIntegerDigits(1);
+					format.setMaximumFractionDigits(1);
+					formatter.setMaximum(5);
 				} else {
 					format.setMaximumFractionDigits(0);
 				}
@@ -442,6 +293,22 @@ public class EditFrame extends JFrame {
 				this.add(c);
 				this.add(Box.createHorizontalGlue());
 			}
+			
+			private void closeWindow() {
+				EditFrame.this.setVisible(false);
+				EditFrame.this.dispose();
+			}
+			
+			private boolean submitForm() {
+				FormData data = null;
+				if (isCity) {
+//					data = new FormData(isCreateMode, currentCity, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue()));
+				} else {
+//					data = new FormData(isCreateMode, currentPOI, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), currentCity, typeRow.getValue(), Double.parseDouble(ratingRow.getValue()), Double.parseDouble(null)); 
+				}
+				return map.upsert(data);
+			}
 		}
 	}
 }
+	
