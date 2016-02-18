@@ -14,7 +14,7 @@ import utils.*;
 
 public class Map {
 	
-	private HashMap<String, Place> places;
+	private HashMap<String, City> places;
 	private FlexRedBlackTree<City> alpCityTree;
 	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
@@ -26,7 +26,7 @@ public class Map {
 	protected boolean isActive;
 	
 	public Map() {
-		this.places = new HashMap<String, Place>();
+		this.places = new HashMap<String, City>();
 		this.alpCityTree = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
@@ -68,7 +68,27 @@ public class Map {
 	}
 	
 	private void importFromTxtFileToalpPOIList() throws IOException{
-		
+		File inputFile = new File("src/data/POIS.txt");
+		// create a scanner to scan through the newly created file
+		Scanner inScanner = new Scanner(inputFile);
+		// iterate through scanner and load all data into a tree until scanner is empty 
+		City temp;
+		Coordinate c;
+		double cost;
+		double rating;
+		String pName;
+		String type;
+		while(inScanner.hasNext()){
+			temp = places.get(inScanner.next());
+			pName = inScanner.next();
+			cost = inScanner.nextDouble();
+			rating = inScanner.nextDouble();
+			type = inScanner.next();
+			c = temp.getLocation();
+			temp.addPOI(new POI(pName,c,type,rating,cost));
+		}
+		// close scanner
+		inScanner.close();
 	}
 	
 	/**
