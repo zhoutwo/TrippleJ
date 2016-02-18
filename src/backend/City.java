@@ -22,6 +22,11 @@ public class City extends Place {
 		setMapLocal();
 	}
 	
+	public City(String name,int population, Coordinate location, double rating, ArrayList<POI> pois) {
+		this(name, population, location, rating);
+		loadPOIList(pois);
+	}
+	
 	// Testing only
 	public City(String name, int p){
 		super(name, null, 0);
@@ -65,6 +70,25 @@ public class City extends Place {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	public boolean removePOI(POI poi) {
+		if (alpPOITree.remove(poi) && ratPOITree.remove(poi)) {
+			pois.remove(poi);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void loadPOIList(ArrayList<POI> pl) {
+		this.pois = pl;
+		alpPOITree = new FlexRedBlackTree<POI>(new AlphabetComparator<POI>());
+		ratPOITree = new FlexRedBlackTree<POI>(new RatingComparator<POI>());
+		for (POI p : pl) {
+			alpPOITree.insert(p);
+			ratPOITree.insert(p);
 		}
 	}
 }

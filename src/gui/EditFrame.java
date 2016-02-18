@@ -123,6 +123,8 @@ public class EditFrame extends JFrame {
 			// BoxLayout.Y_AXIS tells the layout manager that we want to add things vertically.
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
+			
+			
 			populateInfo();
 			populateFormBasic();
 		}
@@ -309,13 +311,13 @@ public class EditFrame extends JFrame {
 			}
 			
 			private boolean submitForm() {//TODO
-				FormData data = null;
+				FormData data;
 				if (isCity) {
-//					data = new FormData(isCreateMode, currentCity, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue()));
+					data = new FormData(currentCity, nameComboRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue()));
 				} else {
-//					data = new FormData(isCreateMode, currentPOI, nameRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), currentCity, typeRow.getValue(), Double.parseDouble(ratingRow.getValue()), Double.parseDouble(null)); 
+					data = new FormData(currentPOI, nameComboRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), currentCity, typeRow.getValue(), Double.parseDouble(ratingRow.getValue()), Double.parseDouble(costRow.getValue())); 
 				}
-				return map.upsert(data);
+				return map.updateFromFormData(data);
 			}
 		}
 	}

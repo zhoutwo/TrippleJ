@@ -226,26 +226,54 @@ public class Map {
 		return Math.sqrt(x*x+y*y);
 	}
 	
-	public boolean upsert(FormData fd) {
-		if (!fd.isNew()) {
-			
-		}
+	public boolean updateFromFormData(FormData fd) {
 		if (fd.isCity()) {
-			boolean success = true;
-			if (!alpCityTree.insert(fd.getNewCity())) success = false;
-			if (!ratCityTree.insert(fd.getNewCity())) success = false;
-			if (!popCityTree.insert(fd.getNewCity())) success = false;
-			places.put(fd.getNewCity().getName(), fd.getNewCity());
-			return success;
+			return remove(fd.getOldCity()) ? insert(fd.getNewCity()) : false;
 		} else {
 			boolean success = true;
 			City parent = fd.getParentCity();
-			// TODO
+			return remove(fd.getOldPOI(), parent) ? insert(fd.getNewPOI(), parent) : false;
 		}
-		return false;
 	}
 	
+	public boolean remove(City c) {
+		boolean success = true;
+		if (!alpCityTree.remove(c)) success = false;
+		if (!ratCityTree.remove(c)) success = false;
+		if (!popCityTree.remove(c)) success = false;
+		places.remove(c.getName());
+		cities.remove(c.getName());
+		return success;
+	}
 	
+	public boolean remove(POI p, City parent) {
+		if (parent.removePOI(p)) {
+			places.remove(p.getName());
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
+	public boolean insert(City c) {
+		boolean success = true;
+		if (!alpCityTree.insert(c)) success = false;
+		if (!ratCityTree.insert(c)) success = false;
+		if (!popCityTree.insert(c)) success = false;
+		places.put(c.getName(), c);
+		cities.put(c.getName(), c);
+		return success;
+	}
+	
+	public boolean insert(POI p, City parent) {
+		if (parent.addPOI(p)) {
+			places.put(p.getName(), p);
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	public class PlaceWithDistance{
 		private Place place;
