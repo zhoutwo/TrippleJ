@@ -30,6 +30,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -121,7 +122,20 @@ public class MapFrame extends JFrame{
 			c.ipadx = 50;
 			c.ipady = 50;
 			ldp = new ListDisplayPanel();
+			
 			this.add(ldp, c);
+			//I am trying to make scrolls to work
+//			JScrollPane scrollPane = new JScrollPane(ldp);
+//	        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+//	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+//	        scrollPane.setBounds(0, 0, 250, 650);
+//	        this.add(scrollPane);
+//			asfdsaf 3242 343.3 -13.213424
+//			KWswsaf 302 313.3 -93.215421
+//			a23saf 324 33.3 -13.232424
+//			a43dsaf 242 13.3 -53.213004
+//			as345af 300 34.3 -43.213634
+
 			// Inserting SearchFormPanel
 			c.gridx = 0;
 			c.gridy = 1;
@@ -269,6 +283,7 @@ public class MapFrame extends JFrame{
 				index=0;
 				this.initCitListButtons();
 				this.drawCityListButtons();
+				 
 			}
 			
 			private void initInfoButtons(int num) {
@@ -346,7 +361,13 @@ public class MapFrame extends JFrame{
 							ListDisplayPanel.this.removeAll();
 							index=getMousePosition().y/50;
 							drawCityInfoButtons(index);
-							txt.setText("Information about "+currentMap.getAlpCityList().get(index).getName());
+							txt.setText(currentMap.getAlpCityList().get(index).getName()
+									+"\n"+"Population: "+currentMap.getAlpCityList().get(index).getPopulationAsString()
+									+"\n"+"Rating (out of 5.0): "+currentMap.getAlpCityList().get(index).getRating()
+									
+									
+									
+									);
 							ListDisplayPanel.this.repaint();
 						}
 					});

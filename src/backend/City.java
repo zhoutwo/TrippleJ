@@ -47,6 +47,13 @@ public class City extends Place {
 	public int getPopulation() {
 		return this.population;
 	}
+	public String getPopulationAsString(){
+		String s=this.population+"";///123151
+		for(int i=s.length();i>2;i-=2){
+			s=s.substring(0, i-2)+","+s.substring(i-3,s.length());
+		}
+		return s;
+	}
 	
 	public String toString() {
 		return this.name + ' ' + this.population;

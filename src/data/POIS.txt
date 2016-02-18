@@ -10,14 +10,14 @@ KansasCity KansaCityZoo 7.0 4.2 Zoo
 Olathe ErnieMillerNatureCenter 0.0 4.4 NaturePreserve
 Olathe TimberRidgeAdventureCenter 0.0 4.6 Park
 Olathe AdvancedLaserTag 6.0 4.1 LaserTagCenter
-Topeka BrownVBoardOfEducationNationalHistoricSite 0.0 4.4 Museum
+Topeka BrownVBoardOfEducation 0.0 4.4 Museum
 Topeka TopekaZoo 5.75 4.1 Zoo
 Topeka KansasStateCapital 0.0 4.3 Capital
 Lawrence SpenceMuseumOfArt 0.0 4.4 Museum
-Lawrence UniversityOfKansasNaturalHistoryMuseum 0.0 4.6 Museum
+Lawrence NaturalHistoryMuseum(UnivOfKansas) 0.0 4.6 Museum
 Lawrence ClintonStatePark 0.0 4.3 Park
 Shawnee JohnsonCountyMuseum 3.0 4.6 Museum
-Shawnee Wonderscop0eChildren'sMuseumOfKansasCity 7.0 3.4 Museum
+Shawnee WonderscopeChildren'sMuseum 7.0 3.4 Museum
 Shawnee KCIndoorSkatePark 0.0 4.2 IndoorPark
 Manhattan SunsetZoo 5.0 4.3 Zoo
 Manhattan MariannaKistlerBeachMuseumOfArt 0.0 4.0 Museum
