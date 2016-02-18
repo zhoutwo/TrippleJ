@@ -8,7 +8,13 @@ public class Link {
 	private int distance;
 	private RoadType type;
 	private Place place;
+	private String name;
 //	private Place dest;
+	
+	public Link(String pName,Coordinate fromCor,Place pPlace){
+		place = pPlace;
+		name = pName;
+	}
 	
 	public int getTime() {
 		return this.time;

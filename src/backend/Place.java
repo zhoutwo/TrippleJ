@@ -33,5 +33,9 @@ public abstract class Place {
 	public double getRating() {
 		return this.rating;
 	}
+	
+	public void addNeighbor(Link n){
+		neighbors.add(n);
+	}
 
 }
