@@ -1,0 +1,12 @@
+I70 KansasCity Topeka 
+I70 Topeka Salina
+I35 KansasCity Lenexa
+I35 Lenexa Wichita
+H24 Topeka Manhattan
+H24 Manhattan Salina
+H24 Salina Lawrence 
+H69 Lawrence KansasCity
+H69 KansasCity Shawnee
+H69 Shawnee Olathe
+H69 Olathe Lenexa
+H69 Lenexa OverlandPark
