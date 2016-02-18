@@ -269,11 +269,11 @@ public class MapFrame extends JFrame{
 //				this.drawCityInfoButtons();
 				index=0;
 				this.initCitListButtons();
-				this.initInfoButtons();
+				this.initInfoButtons(0);
 				this.drawCityListButtons();
 			}
 			
-			private void initInfoButtons() {
+			private void initInfoButtons(int num) {
 				Dimension dimText = new Dimension(250, 300);
 				txt = new JTextArea("Information about a city");//InfoOfCity
 				Font font = new Font("", Font.PLAIN, 15);
@@ -298,25 +298,26 @@ public class MapFrame extends JFrame{
 					}
 				});
 				
-				for (int i = 1; i < 5; i++) {
+				for (int i = 0; i < currentMap.getAlpCityList().get(num).getAlpPOITree().size(); i++) {
 					JButton POIButton = new JButton();
-					POIButton.setText("POI " + i);
+					POIButton.setText(currentMap.getAlpCityList().get(num).getAlpPOITree().get(i).getName());
 					POIButton.setMinimumSize(d);
 					POIButton.setPreferredSize(d);
 					POIButton.setMaximumSize(d);
 					POIButton.setAlignmentX(CENTER_ALIGNMENT);
 					cityInfoButtons.add(POIButton);
 					POIButton.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {
-							txt.setText("POI Clicked");
+						public void actionPerformed(ActionEvent arg0) {//300 +50 +50
+							index=getMousePosition().y/50-6;
+							txt.setText("POI "+(index+1)+" Clicked");
 						}
 					});
 				}
 				cityInfoButtons.add(goBack);
 			}
 			
-			private void drawCityInfoButtons() {
-
+			private void drawCityInfoButtons(int index) {
+//				initInfoButtons(index);
 				this.add(txt);
 				for (int i = 0; i < cityInfoButtons.size(); i++) {
 					this.add(cityInfoButtons.get(i));
@@ -341,8 +342,7 @@ public class MapFrame extends JFrame{
 							ListDisplayPanel.this.removeAll();
 							index=getMousePosition().y/50;
 							txt.setText("Information about "+currentMap.getAlpCityList().get(index).getName());
-//							System.out.println(getMousePosition().y);
-							drawCityInfoButtons();
+							drawCityInfoButtons(index);
 							ListDisplayPanel.this.repaint();
 						}
 					});
