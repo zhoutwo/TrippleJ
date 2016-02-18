@@ -43,7 +43,7 @@ import backend.Place;
 
 public class MapFrame extends JFrame{
 	// constants
-	private static final int FRAME_WIDTH = 1050;
+	private static final int FRAME_WIDTH = 1100;
 	private static final int FRAME_HEIGHT = 930;
 	private static final String FRAME_TITLE = "Kansas";
 	// fields
@@ -251,7 +251,6 @@ public class MapFrame extends JFrame{
 		}
 		
 		public class ListDisplayPanel extends JPanel implements MouseListener{
-			private int size;
 			private ArrayList<Rectangle> arr;
 			private ArrayList<JButton> cityListButtons;
 			private ArrayList<JButton> cityInfoButtons;
@@ -259,27 +258,19 @@ public class MapFrame extends JFrame{
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
-				size=10;
 				cityListButtons=new ArrayList<>();
 				cityInfoButtons=new ArrayList<>();
-				this.setMinimumSize(new Dimension(250, 650));
-				this.setPreferredSize(new Dimension(250, 650));
+				Dimension d = new Dimension(250, 650);
+				this.setMinimumSize(d);
+				this.setPreferredSize(d);
+				this.setMaximumSize(d);
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-				this.setMaximumSize(new Dimension(250, 650));
 //				this.drawCityInfoButtons();
 				this.initInfoButtons();
 				this.initCitListButtons();
 				this.drawCityListButtons();
 			}
-			private void removeAll1() {
-				this.removeAll();
-				this.validate();
-				this.repaint();
-			}
-			public void paintComponent(Graphics g){
-				super.paintComponent(g);
-				
-			}
+			
 			private void initInfoButtons() {
 				Dimension dimText = new Dimension(250, 300);
 				txt = new JTextArea("Information about a city");//InfoOfCity
@@ -289,19 +280,19 @@ public class MapFrame extends JFrame{
 				txt.setPreferredSize(dimText);
 				txt.setMaximumSize(dimText);
 				txt.setEditable(false);
+				txt.setAlignmentX(CENTER_ALIGNMENT);
 				Dimension d = new Dimension(250, 50);
 				
 				JButton goBack = new JButton("BACK");
 				goBack.setMinimumSize(d);
 				goBack.setPreferredSize(d);
 				goBack.setMaximumSize(d);
+				goBack.setAlignmentX(CENTER_ALIGNMENT);
 				goBack.addActionListener(new ActionListener() {
-					
-					@Override
 					public void actionPerformed(ActionEvent e) {
-						removeAll1();
+						ListDisplayPanel.this.removeAll();
 						drawCityListButtons();
-						
+						ListDisplayPanel.this.repaint();
 					}
 				});
 				
@@ -311,9 +302,9 @@ public class MapFrame extends JFrame{
 					POIButton.setMinimumSize(d);
 					POIButton.setPreferredSize(d);
 					POIButton.setMaximumSize(d);
+					POIButton.setAlignmentX(CENTER_ALIGNMENT);
 					cityInfoButtons.add(POIButton);
 					POIButton.addActionListener(new ActionListener() {
-						
 						public void actionPerformed(ActionEvent arg0) {
 							txt.setText("POI Clicked");
 						}
@@ -341,15 +332,14 @@ public class MapFrame extends JFrame{
 					l.setMinimumSize(d);
 					l.setPreferredSize(d);
 					l.setMaximumSize(d);
+					l.setAlignmentX(CENTER_ALIGNMENT);
 					cityListButtons.add(l);
 					l.addActionListener(new ActionListener() {
-
 						public void actionPerformed(ActionEvent arg0) {
-							removeAll1();
+							ListDisplayPanel.this.removeAll();
 							drawCityInfoButtons();
-							repaint();
+							ListDisplayPanel.this.repaint();
 						}
-
 					});
 				}
 			}
@@ -358,7 +348,7 @@ public class MapFrame extends JFrame{
 					this.add(cityListButtons.get(i));
 				}				
 			}
-			@Override
+
 			public void mouseClicked(MouseEvent e) {
 			}
 
@@ -559,7 +549,7 @@ public class MapFrame extends JFrame{
 			public EditButtonPanel() {
 				super();
 				this.setBackground(Color.BLUE);
-				Dimension d = new Dimension(200, 80);
+				Dimension d = new Dimension(250, 80);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
