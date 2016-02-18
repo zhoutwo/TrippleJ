@@ -256,24 +256,24 @@ public class MapFrame extends JFrame{
 			private ArrayList<JButton> cityInfoButtons;
 			private JTextArea txt;
 			private int index;
+			private int indexPOI;
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
 				cityListButtons=new ArrayList<>();
-				cityInfoButtons=new ArrayList<>();
 				Dimension d = new Dimension(250, 650);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-//				this.drawCityInfoButtons();
 				index=0;
 				this.initCitListButtons();
-				this.initInfoButtons(0);
 				this.drawCityListButtons();
 			}
 			
 			private void initInfoButtons(int num) {
+				indexPOI=num;
+				cityInfoButtons=new ArrayList<>();
 				Dimension dimText = new Dimension(250, 300);
 				txt = new JTextArea("Information about a city");//InfoOfCity
 				Font font = new Font("", Font.PLAIN, 15);
@@ -308,8 +308,12 @@ public class MapFrame extends JFrame{
 					cityInfoButtons.add(POIButton);
 					POIButton.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {//300 +50 +50
-							index=getMousePosition().y/50-6;
-							txt.setText("POI "+(index+1)+" Clicked");
+							int indexP=getMousePosition().y/50-6;
+							txt.setText(currentMap.getAlpCityList().get(index).getAlpPOITree().get(indexP).getName()+
+									"\n"+"Type: "+currentMap.getAlpCityList().get(index).getAlpPOITree().get(indexP).getType()+
+									"\n"+"Rating (out of 5.0): "+currentMap.getAlpCityList().get(index).getAlpPOITree().get(indexP).getRating()+
+									"\n"+"Estimated Cost ($): "+currentMap.getAlpCityList().get(index).getAlpPOITree().get(indexP).getCost()
+									);
 						}
 					});
 				}
@@ -317,7 +321,7 @@ public class MapFrame extends JFrame{
 			}
 			
 			private void drawCityInfoButtons(int index) {
-//				initInfoButtons(index);
+				initInfoButtons(index);
 				this.add(txt);
 				for (int i = 0; i < cityInfoButtons.size(); i++) {
 					this.add(cityInfoButtons.get(i));
@@ -341,8 +345,8 @@ public class MapFrame extends JFrame{
 						public void actionPerformed(ActionEvent arg0) {
 							ListDisplayPanel.this.removeAll();
 							index=getMousePosition().y/50;
-							txt.setText("Information about "+currentMap.getAlpCityList().get(index).getName());
 							drawCityInfoButtons(index);
+							txt.setText("Information about "+currentMap.getAlpCityList().get(index).getName());
 							ListDisplayPanel.this.repaint();
 						}
 					});
