@@ -1,19 +1,16 @@
 package backend;
-import java.beans.XMLDecoder;
-import java.io.BufferedInputStream;
+
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
-import java.util.Spliterator;
-
 import utils.*;
 
 public class Map {
 	
+	private HashMap<String, City> cities;
 	private HashMap<String, Place> places;
 	private FlexRedBlackTree<City> alpCityTree;
 	private FlexRedBlackTree<City> ratCityTree;
@@ -27,6 +24,7 @@ public class Map {
 	
 	public Map() {
 		this.places = new HashMap<String, Place>();
+		this.cities = new HashMap<String, City>();
 		this.alpCityTree = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
@@ -44,8 +42,14 @@ public class Map {
 //		for(int i=0;i<al.size();i++){
 //			System.out.println(al.get(i).toString());
 //		}
-		
-		
+		try {
+			importFromTxtFileToalpPOIList(); 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace();
+		}
+		System.out.println(cities.get("KansasCity").getPois().size());
+//		System.out.println(cities.get("KansasCity").getPois().toString());
 	}
 	
 	/**
@@ -57,9 +61,34 @@ public class Map {
 		City temp;
 		while(i.hasNext()){
 			temp = i.next();
+			cities.put(temp.name, temp);
 			alpCityTree.insert(temp);
 			ratCityTree.insert(temp);
 		}
+	}
+	
+	private void importFromTxtFileToalpPOIList() throws IOException{
+		File inputFile = new File("src/data/POIS.txt");
+		// create a scanner to scan through the newly created file
+		Scanner inScanner = new Scanner(inputFile);
+		// iterate through scanner and load all data into a tree until scanner is empty 
+		City temp;
+		Coordinate c;
+		double cost;
+		double rating;
+		String pName;
+		String type;
+		while(inScanner.hasNext()){
+			temp = cities.get(inScanner.next());
+			pName = inScanner.next();
+			cost = inScanner.nextDouble();
+			rating = inScanner.nextDouble();
+			type = inScanner.next();
+			c = temp.getLocation();
+			temp.addPOI(new POI(pName,c,type,rating,cost));
+		}
+		// close scanner
+		inScanner.close();
 	}
 	
 	/**
@@ -113,19 +142,63 @@ public class Map {
 	public ArrayList<Place> getRoute(String from, String to) {
 		return null;
 	}
-	
-	public ArrayList<Place> navigateTo(Place current, Place destin){
-		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin);
+	public ArrayList<Place> findRoute(Place current,Place destin, String type){
+		char c=type.charAt(0);
+		if(c=='d'||c=='D'){
+			return navigateByDistance(current, destin);
+		}else if(c=='t'||c=='T'){
+			return navigateByTime(current, destin);
+		}
+		return null;
+	}
+	public ArrayList<Place> navigateByTime(Place current, Place destin){
+		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin,true);
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
 		while(true){
 			
-			if(currentPwd.getPlace().neighbors.size()==0){
+			if(currentPwd.getPlace().getNeighbors().size()==0){
 				return null;//null will represent not available route found.
 			}
-			for(int i=0;i<currentPwd.getPlace().neighbors.size();i++){
-				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i), destin);
+			for(int i=0;i<currentPwd.getPlace().getNeighbors().size();i++){
+				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i).getPlace(), destin,true);
 				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
-				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i) ));
+				pwd.addDistanceTraveled(currentPwd.getPlace().getNeighbors().get(i).getTime());
+//				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
+				list.add(pwd);
+			}
+			
+			//if not arrived keep the loop going
+			if(list.size()==0) return null; //When there is no "OPEN" place that you can visit through, null will represent not available route found.
+			if(!list.peek().getPlace().equals(destin)){
+				currentPwd=list.poll();//If you poll, that place will be removed from the list, and will be considered as closed(but its neighbors will still be open)
+			}
+			
+			
+			//if Arrived make sure it is the lowest cost.
+			else {
+				return list.peek().getRoute();
+//				if(currentPwd.isArrived){
+//					return currentPwd.getRoute();
+//				}
+//				currentPwd.setTrue();
+//				currentPwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
+			}
+		}
+	}
+	
+	public ArrayList<Place> navigateByDistance(Place current, Place destin){
+		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin,false);
+		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
+		while(true){
+			
+			if(currentPwd.getPlace().getNeighbors().size()==0){
+				return null;//null will represent not available route found.
+			}
+			for(int i=0;i<currentPwd.getPlace().getNeighbors().size();i++){
+				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i).getPlace(), destin,false);
+				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
+				pwd.addDistanceTraveled(currentPwd.getPlace().getNeighbors().get(i).getDistance());
+//				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
 				list.add(pwd);
 			}
 			
@@ -174,16 +247,19 @@ public class Map {
 	
 	
 	
-	protected class PlaceWithDistance{
+	public class PlaceWithDistance{
 		private Place place;
 		private double distanceTraveled;
 		private ArrayList<Place> route;
 		private double distanceToDestin;
 		private boolean isArrived;
-		public PlaceWithDistance(Place p,Place destin) {
+		private boolean byTime;
+		public PlaceWithDistance(Place p,Place destin,Boolean isTime) {
+			byTime=isTime;
 			place=p;
 			distanceTraveled=0;
 			distanceToDestin=distanceToDestin(p,destin);
+			if(byTime) distanceToDestin/=85;
 			route=new ArrayList<Place>();
 			isArrived=false;
 			
@@ -192,6 +268,7 @@ public class Map {
 			return distanceTraveled;
 		}
 		protected void addDistanceTraveled(double distanceToAdd){
+			if(byTime) distanceToAdd/=85;
 			distanceToDestin+=distanceToAdd;
 		}
 		protected double getDistanceToDestin(){

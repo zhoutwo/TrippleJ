@@ -7,6 +7,7 @@ public class Link {
 	private int time;
 	private int distance;
 	private RoadType type;
+	private Place place;
 //	private Place dest;
 	
 	public int getTime() {
@@ -25,6 +26,10 @@ public class Link {
 		return this.type;
 	}
 	
+	public Place getPlace(){
+		return place;
+	}
+	
 	public void setTime(int time) {
 		this.time = time;
 	}
@@ -35,5 +40,8 @@ public class Link {
 	
 	public void setRoadType(RoadType type) {
 		this.type = type;
+	}
+	public void setPlace(Place place){
+		this.place=place;
 	}
 }
