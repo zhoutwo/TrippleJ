@@ -315,7 +315,7 @@ public class MapFrame extends JFrame{
 				
 				for (int i = 0; i < currentMap.getAlpCityList().get(num).getAlpPOITree().size(); i++) {
 					JButton POIButton = new JButton();
-					POIButton.setText(currentMap.getAlpCityList().get(num).getAlpPOITree().get(i).getName());
+					POIButton.setText(currentMap.getAlpCityList().get(num).getAlpPOITree().toArrayList().get(i).getName());
 					POIButton.setMinimumSize(d);
 					POIButton.setPreferredSize(d);
 					POIButton.setMaximumSize(d);
@@ -324,10 +324,10 @@ public class MapFrame extends JFrame{
 					POIButton.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {//300 +50 +50
 							int indexP=getMousePosition().y/50-6;
-							txt.setText(currentMap.getAlpCityList().get(index).getAlpPOITree().get(indexP).getName()+
-									"\n"+"Type: "+currentMap.getAlpCityList().get(index).getAlpPOITree().get(indexP).getType()+
-									"\n"+"Rating (out of 5.0): "+currentMap.getAlpCityList().get(index).getAlpPOITree().get(indexP).getRating()+
-									"\n"+"Estimated Cost ($): "+currentMap.getAlpCityList().get(index).getAlpPOITree().get(indexP).getCost()
+							txt.setText(currentMap.getAlpCityList().get(index).getAlpPOITree().toArrayList().get(indexP).getName()+
+									"\n"+"Type: "+currentMap.getAlpCityList().get(index).getAlpPOITree().toArrayList().get(indexP).getType()+
+									"\n"+"Rating (out of 5.0): "+currentMap.getAlpCityList().get(index).getAlpPOITree().toArrayList().get(indexP).getRating()+
+									"\n"+"Estimated Cost ($): "+currentMap.getAlpCityList().get(index).getAlpPOITree().toArrayList().get(indexP).getCost()
 									);
 						}
 					});
@@ -590,7 +590,7 @@ public class MapFrame extends JFrame{
 							if (selectedPOI == null) {
 								new EditFrame(selectedCity, currentMap.getAlpCityList(), currentMap);
 							} else {
-								new EditFrame(selectedPOI, selectedCity.getAlpPOITree(), currentMap);
+								new EditFrame(selectedPOI, selectedCity.getAlpPOITree().toArrayList(), currentMap);
 							}
 						}
 					}
