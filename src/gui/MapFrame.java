@@ -255,6 +255,7 @@ public class MapFrame extends JFrame{
 			private ArrayList<JButton> cityListButtons;
 			private ArrayList<JButton> cityInfoButtons;
 			private JTextArea txt;
+			private int index;
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
@@ -266,8 +267,9 @@ public class MapFrame extends JFrame{
 				this.setMaximumSize(d);
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 //				this.drawCityInfoButtons();
-				this.initInfoButtons();
+				index=0;
 				this.initCitListButtons();
+				this.initInfoButtons();
 				this.drawCityListButtons();
 			}
 			
@@ -337,6 +339,9 @@ public class MapFrame extends JFrame{
 					l.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
 							ListDisplayPanel.this.removeAll();
+							index=getMousePosition().y/50;
+							txt.setText("Information about "+currentMap.getAlpCityList().get(index).getName());
+//							System.out.println(getMousePosition().y);
 							drawCityInfoButtons();
 							ListDisplayPanel.this.repaint();
 						}

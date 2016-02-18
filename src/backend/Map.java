@@ -296,7 +296,6 @@ public class Map {
 			return distanceTraveled;
 		}
 		protected void addDistanceTraveled(double distanceToAdd){
-			if(byTime) distanceToAdd/=85;
 			distanceToDestin+=distanceToAdd;
 		}
 		protected double getDistanceToDestin(){
