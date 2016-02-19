@@ -195,10 +195,10 @@ public class Map {
 		al.add(fromPlace);
 		if(c=='d'||c=='D'){
 //			System.out.println("calling dRoute");
-			return dRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(fromPlace.getDEst(toPlace),0.0,al)));
+			return dRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(toPlace,fromPlace.getDEst(toPlace),0.0,al)));
 			
 		}else if(c=='t'||c=='T'){
-			return tRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(fromPlace.getTEst(toPlace),0.0,al)));
+			return tRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(toPlace,fromPlace.getTEst(toPlace),0.0,al)));
 		}
 		return null;
 	}
@@ -208,13 +208,13 @@ public class Map {
 	}
 	
 	public ArrayList<Place> dRoute(Place from,Place to,PriorityQueue<PathNode> pq){
-//		System.out.println("size = "+pq.size());
+		System.out.println("inside dRoute");
 		PathNode temp = pq.poll();
 //		System.out.println("size = "+pq.size());
 //		System.out.println(from);
 //		System.out.println(to);
 		Place last = temp.getWIB().get(temp.getWIB().size()-1);
-//		System.out.println(temp);
+//		System.out.println(last);
 //		System.out.println("size wib = "+temp.getWIB().size());
 		if(last.equals(to)){return temp.getWIB();}
 ////		System.out.println("here i am");
@@ -222,6 +222,7 @@ public class Map {
 		else{
 			ArrayList<Link> nBors = last.getNeighbors();
 			for(int i=0;i<nBors.size();i++){
+				System.out.println("for loop number "+i);
 				Link nB = nBors.get(i);
 				
 				Double disTrav = nB.getDistance();
@@ -231,13 +232,16 @@ public class Map {
 					return wib;
 				}
 				if(!wib.contains(nB.getPlace())){
-				wib.add(nB.getPlace());
-				pq.offer(new PathNode(disTrav+nB.getPlace().getDEst(to),disTrav+temp.getCostTraveled(),wib));
+				System.out.println("adding "+nB.getPlace()+" to queue");
+				pq.offer(new PathNode(nB.getPlace(),disTrav+nB.getPlace().getDEst(to),disTrav+temp.getCostTraveled(),wib));
 				}
 			}
-			dRoute(from,to,pq);
+			Place newFrom = pq.peek().getToPlace();
+			System.out.println("finding route from "+newFrom+" to "+to);
+			return null;
+//			dRoute(pq.poll().getToPlace(),to,pq);
 		}
-		return null;
+//		return null;
 	}
 	
 	public ArrayList<Place> findRoute(Place current,Place destin, String type){

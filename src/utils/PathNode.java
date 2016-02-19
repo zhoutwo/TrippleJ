@@ -6,14 +6,20 @@ import backend.Place;
 
 public class PathNode implements Comparable<PathNode> {
 
+	private Place toPlace;
 	private Double costTraveled;
 	private Double totalCost;
 	private ArrayList<Place> whereIveBeen;
 	
-	public PathNode(double pTotalCost, double pCostTraveled, ArrayList<Place> wib) {
+	public PathNode(Place ptoPlace,double pTotalCost, double pCostTraveled, ArrayList<Place> wib) {
 		totalCost = pTotalCost;
 		costTraveled = pCostTraveled;
 		whereIveBeen = wib;
+		toPlace = ptoPlace;
+	}
+	
+	public Place getToPlace(){
+		return toPlace;
 	}
 	
 	public String toString(){

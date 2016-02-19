@@ -99,7 +99,7 @@ public class MapFrame extends JFrame{
 //			}
 //		}
 //		System.out.println("this one "+currentMap.getPlaces().toString());
-		ArrayList<Place> route = currentMap.getRoute(" Kansas City"," Lenexa","distance");
+		ArrayList<Place> route = currentMap.getRoute(" Kansas City"," Overland Park","distance");
 		System.out.println(route);
 	}
 
