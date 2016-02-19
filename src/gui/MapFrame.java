@@ -90,6 +90,15 @@ public class MapFrame extends JFrame{
 		mp.mdp.addCityToMap();
 
 		this.setVisible(true);
+		// the following code is for testing purposes only 
+		ArrayList<City> testcitylist = currentMap.getPopCityList();
+		for(int i=0;i<testcitylist.size();i++){
+			ArrayList<Link> nbors = testcitylist.get(i).getNeighbors();
+			for(int k=0;k<nbors.size();k++){
+				System.out.println("from "+testcitylist.get(i).getName()+nbors.get(k).toString());
+			}
+		}
+		System.out.println();
 	}
 
 	private void placeSelected(Place p) {

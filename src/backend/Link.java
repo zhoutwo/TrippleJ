@@ -53,7 +53,6 @@ public class Link {
 		String i = "Interstar";
 		if(c=='I'){
 			type = RoadType.INTERSTATE;
-			System.out.println("making interstate");
 		}
 		else if(c=='H'){
 			type = RoadType.HIGHWAY;
@@ -92,5 +91,8 @@ public class Link {
 	}
 	public void setPlace(Place place){
 		this.place=place;
+	}
+	public String toString(){
+		return " to "+place.name+" dis = "+distance+", t = "+time+", roadtype = "+type+", roadname = "+name;
 	}
 }
