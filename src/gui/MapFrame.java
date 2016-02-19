@@ -291,6 +291,7 @@ public class MapFrame extends JFrame{
 			private void drawList() {
 				list.removeAll();
 				if (selectedPlaces.isEmpty()) {
+					System.out.println(currentMap.getAlpCityList());
 					for (City c : currentMap.getAlpCityList()) {//TODO incorporate this with the order selection.
 						list.add(new PlaceButton(c.getName(), c));
 					}

@@ -24,9 +24,9 @@ public abstract class Place {
 		printName = "";
 		for(int i=0;i<pname.length();i++){
 			if(Character.isUpperCase(pname.charAt(i))){
-				printName = " "+printName;
+				printName = printName + " "+pname.charAt(i);
 			}
-			printName=printName+pname.charAt(i);
+			else printName=printName+pname.charAt(i);
 		}
 	}
 
