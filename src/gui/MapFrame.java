@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Stack;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -37,6 +38,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.text.StyledEditorKit.BoldAction;
 
 import backend.City;
@@ -249,6 +252,9 @@ public class MapFrame extends JFrame{
 			private final JPanel list;
 			private final JPanel orderOptions;
 			private final ButtonGroup orders;
+			private final JRadioButton alp;
+			private final JRadioButton pop;
+			private final JRadioButton rat;
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
@@ -272,34 +278,45 @@ public class MapFrame extends JFrame{
 				// Create gap to place options at the bottom.
 				this.add(Box.createVerticalGlue());
 				
-				// TODO Initialize radio buttons
+				// Initialize radio buttons
 				orderOptions = new JPanel();
 				orderOptions.setLayout(new BoxLayout(orderOptions, BoxLayout.X_AXIS));
 				orders = new ButtonGroup();
-				JRadioButton alp = new JRadioButton("Alphabetical");
-				alp.addActionListener(null);//TODO
+				ChangeListener rbl = new ChangeListener() {
+					public void stateChanged(ChangeEvent arg0) {
+						drawList();
+					}
+				};
+				alp = new JRadioButton("Alphabetical");
+				alp.addChangeListener(rbl);
+				pop = new JRadioButton("Population");
+				pop.addChangeListener(rbl);
+				rat = new JRadioButton("Rating");
+				rat.addChangeListener(rbl);
 				orderOptions.add(alp);
+				orderOptions.add(pop);
+				orderOptions.add(rat);
 				orders.add(alp);
+				orders.add(pop);
+				orders.add(rat);
 				alp.setSelected(true);
 				
 				this.add(orderOptions);
 				
 				drawList();
-//				list.add(back);
 			}
 			
 			private void drawList() {
 				list.removeAll();
 				if (selectedPlaces.isEmpty()) {
-					System.out.println(currentMap.getAlpCityList());
-					for (City c : currentMap.getAlpCityList()) {//TODO incorporate this with the order selection.
+					for (City c : getCityList()) {
 						list.add(new PlaceButton(c.getName(), c));
 					}
 				} else if (selectedPlaces.peek() instanceof City) {
 					City c = (City) selectedPlaces.peek();
 					txt.setPlace(c);
 					list.add(txt);
-					for (POI p : c.getAlpPOITree()) {
+					for (POI p : getPOIList(c)) {
 						list.add(new PlaceButton(p.getName(), p));
 					}
 					list.add(back);
@@ -309,12 +326,30 @@ public class MapFrame extends JFrame{
 					selectedPlaces.push(poi);
 					txt.setPlace(poi);
 					list.add(txt);
-					for (POI p : c.getAlpPOITree()) {
+					for (POI p : getPOIList(c)) {
 						list.add(new PlaceButton(p.getName(), p));
 					}
 					list.add(back);
 				}
 				this.updateUI();
+			}
+			
+			public ArrayList<City> getCityList() {
+				if (orders.getSelection().equals(alp.getModel())) {
+					return currentMap.getAlpCityList();
+				} else if (orders.getSelection().equals(rat.getModel())) {
+					return currentMap.getRatCityList();
+				} else {
+					return currentMap.getPopCityList();
+				}
+			}
+			
+			public ArrayList<POI> getPOIList(City c) {
+				if (orders.getSelection().equals(alp.getModel())) {
+					return c.getAlpPOITree().toArrayList();
+				} else {
+					return c.getRatPOITree().toArrayList();
+				}
 			}
 			
 			public class InfoArea extends JTextArea {
@@ -356,8 +391,12 @@ public class MapFrame extends JFrame{
 					
 					this.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							while (!selectedPlaces.isEmpty() && selectedPlaces.peek() instanceof POI) {
-								System.out.println(selectedPlaces.pop());
+							if (!selectedPlaces.isEmpty() && selectedPlaces.peek() instanceof POI) {
+								selectedPlaces.pop();
+							} else {
+//								alp.setSelected(true);
+								if (pop.isSelected()) alp.setSelected(true);
+								pop.setEnabled(false);
 							}
 							placeSelected(p);
 						}
@@ -380,8 +419,8 @@ public class MapFrame extends JFrame{
 					
 					this.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
-//							selectedPlaces.pop();
 							selectedPlaces.clear();
+							pop.setEnabled(true);
 							drawList();
 						}
 					});
@@ -508,6 +547,14 @@ public class MapFrame extends JFrame{
 						to.setText(null);
 						to.setEnabled(false);
 						options.clearSelection();
+						
+						// Reset selected
+						selectedPlaces.clear();
+						
+						// Reset ListDisplayPanel
+						MapPanel.this.ldp.alp.setSelected(true);
+						MapPanel.this.ldp.pop.setEnabled(true);
+						MapPanel.this.ldp.drawList();
 					}
 				});
 				
