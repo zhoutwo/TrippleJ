@@ -16,7 +16,7 @@ public class Map {
 	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
 	private FlexRedBlackTree<Place> alphaPlaceTree;
-	
+	private ArrayList<Place> route;
 	private ArrayList<City> alpCityList;
 	private ArrayList<City> ratCityList;
 	private ArrayList<City> popCityList;
@@ -30,6 +30,7 @@ public class Map {
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
 		alphaPlaceTree = new FlexRedBlackTree<Place>(new AlphabetComparator<Place>());
+		route = new ArrayList<Place>();
 		isActive = true;
 		// try catch block surrounds the import process of raw data into system
 		try {
@@ -212,62 +213,55 @@ public class Map {
 		return this.popCityList;
 	}
 	
+	/**
+	 * returnRoute method return the variable route 
+	 * @return
+	 */
+	public ArrayList<Place> returnRoute(){
+		return route;
+	}
+	
 	// josh implementation of findroute
-	public ArrayList<Place> getRoute(String from, String to,String type) {
+	public void getRoute(String from, String to,String type) {
 		char c=type.charAt(0);
 		Place fromPlace = places.get(from);
+//		route.add(fromPlace);
 		Place toPlace = places.get(to);
 		ArrayList<Place> al = new ArrayList<Place>();
 		al.add(fromPlace);
 		if(c=='d'||c=='D'){
-//			System.out.println("calling dRoute");
-			return dRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(toPlace,fromPlace.getDEst(toPlace),0.0,al)));
+			dRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(toPlace,fromPlace.getDEst(toPlace),0.0,al)));
 			
 		}else if(c=='t'||c=='T'){
-			return tRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(toPlace,fromPlace.getTEst(toPlace),0.0,al)));
+			tRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(toPlace,fromPlace.getTEst(toPlace),0.0,al)));
 		}
-		return null;
+		route.add(toPlace);
 	}
 	
 	public ArrayList<Place> tRoute(Place from,Place to,PriorityQueue<PathNode> pq){
 		return null;
 	}
 	
-	public ArrayList<Place> dRoute(Place from,Place to,PriorityQueue<PathNode> pq){
-		System.out.println("inside dRoute");
+	public void dRoute(Place from,Place to,PriorityQueue<PathNode> pq){
 		PathNode temp = pq.poll();
-//		System.out.println("size = "+pq.size());
-//		System.out.println(from);
-//		System.out.println(to);
 		Place last = temp.getWIB().get(temp.getWIB().size()-1);
-//		System.out.println(last);
-//		System.out.println("size wib = "+temp.getWIB().size());
-		if(last.equals(to)){return temp.getWIB();}
-////		System.out.println("here i am");
-////		return null;
+		if(last.equals(to)){temp.getWIB();}
 		else{
 			ArrayList<Link> nBors = last.getNeighbors();
 			for(int i=0;i<nBors.size();i++){
-				System.out.println("for loop number "+i);
 				Link nB = nBors.get(i);
-				
 				Double disTrav = nB.getDistance();
 				ArrayList<Place> wib = temp.getWIB();
 				if(nB.getPlace().equals(to)){
 					wib.add(nB.getPlace());
-					return wib;
 				}
 				if(!wib.contains(nB.getPlace())){
-				System.out.println("adding "+nB.getPlace()+" to queue");
 				pq.offer(new PathNode(nB.getPlace(),disTrav+nB.getPlace().getDEst(to),disTrav+temp.getCostTraveled(),wib));
 				}
 			}
-			Place newFrom = pq.peek().getToPlace();
-			System.out.println("finding route from "+newFrom+" to "+to);
-			return null;
-//			dRoute(pq.poll().getToPlace(),to,pq);
+			Place newFrom = pq.poll().getToPlace();
+			route.add(newFrom);
 		}
-//		return null;
 	}
 	
 //	public ArrayList<Place> findRoute(Place current,Place destin, String type){
