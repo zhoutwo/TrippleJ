@@ -23,6 +23,10 @@ public abstract class Place {
 		setMapLocal();
 	}
 	
+	public boolean equals(Object obj) {
+		return name.equals(((Place) obj).name);
+	}
+	
 	public double getDEst(Place p){
 		return est.get(p);
 	}
