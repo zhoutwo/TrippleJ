@@ -15,6 +15,7 @@ public class Map {
 	private FlexRedBlackTree<City> alpCityTree;
 	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
+	private FlexRedBlackTree<Place> alphaPlaceTree;
 	
 	private ArrayList<City> alpCityList;
 	private ArrayList<City> ratCityList;
@@ -28,10 +29,11 @@ public class Map {
 		this.alpCityTree = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
+		alphaPlaceTree = new FlexRedBlackTree<Place>(new AlphabetComparator<Place>());
 		isActive = true;
 		// try catch block surrounds the import process of raw data into system
 		try {
-			importFromTxtFileToPopCityTree(); 
+			importFromTxtFileToAlpCityTree(); 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block 
 			e.printStackTrace();
@@ -50,6 +52,19 @@ public class Map {
 			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
+		fillEstimateTables();
+	}
+	
+	public void fillEstimateTables(){
+		ArrayList<Place> allP = alphaPlaceTree.toArrayList();
+		Iterator<Place> i = alphaPlaceTree.iterator();
+		while(i.hasNext()){
+			i.next().fillEstTable(allP);
+		}
+	}
+	
+	public HashMap<String,Place> getPlaces(){
+		return places;
 	}
 	
 	private String putSpaceInName(String pname) {
@@ -92,8 +107,10 @@ public class Map {
 		while(i.hasNext()){
 			temp = i.next();
 			cities.put(temp.name, temp);
-			alpCityTree.insert(temp);
+			places.put(temp.name, temp);
+			popCityTree.insert(temp);
 			ratCityTree.insert(temp);
+			alphaPlaceTree.insert(temp);
 		}
 	}
 	
@@ -127,7 +144,7 @@ public class Map {
 	 * data storage 
 	 * @throws IOException
 	 */
-	private void importFromTxtFileToPopCityTree() throws IOException{
+	private void importFromTxtFileToAlpCityTree() throws IOException{
 		// import data from a file and store it in a file type
 		File inputFile = new File("src/data/KansasCities.txt");
 		// create a scanner to scan through the newly created file
@@ -169,9 +186,60 @@ public class Map {
 		return this.popCityList;
 	}
 	
-	public ArrayList<Place> getRoute(String from, String to) {
+	// josh implementation of findroute
+	public ArrayList<Place> getRoute(String from, String to,String type) {
+		char c=type.charAt(0);
+		Place fromPlace = places.get(from);
+		Place toPlace = places.get(to);
+		ArrayList<Place> al = new ArrayList<Place>();
+		al.add(fromPlace);
+		if(c=='d'||c=='D'){
+//			System.out.println("calling dRoute");
+			return dRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(fromPlace.getDEst(toPlace),0.0,al)));
+			
+		}else if(c=='t'||c=='T'){
+			return tRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(fromPlace.getTEst(toPlace),0.0,al)));
+		}
 		return null;
 	}
+	
+	public ArrayList<Place> tRoute(Place from,Place to,PriorityQueue<PathNode> pq){
+		return null;
+	}
+	
+	public ArrayList<Place> dRoute(Place from,Place to,PriorityQueue<PathNode> pq){
+//		System.out.println("size = "+pq.size());
+		PathNode temp = pq.poll();
+//		System.out.println("size = "+pq.size());
+//		System.out.println(from);
+//		System.out.println(to);
+		Place last = temp.getWIB().get(temp.getWIB().size()-1);
+//		System.out.println(temp);
+//		System.out.println("size wib = "+temp.getWIB().size());
+		if(last.equals(to)){return temp.getWIB();}
+////		System.out.println("here i am");
+////		return null;
+		else{
+			ArrayList<Link> nBors = last.getNeighbors();
+			for(int i=0;i<nBors.size();i++){
+				Link nB = nBors.get(i);
+				
+				Double disTrav = nB.getDistance();
+				ArrayList<Place> wib = temp.getWIB();
+				if(nB.getPlace().equals(to)){
+					wib.add(nB.getPlace());
+					return wib;
+				}
+				if(!wib.contains(nB.getPlace())){
+				wib.add(nB.getPlace());
+				pq.offer(new PathNode(disTrav+nB.getPlace().getDEst(to),disTrav+temp.getCostTraveled(),wib));
+				}
+			}
+			dRoute(from,to,pq);
+		}
+		return null;
+	}
+	
 	public ArrayList<Place> findRoute(Place current,Place destin, String type){
 		char c=type.charAt(0);
 		if(c=='d'||c=='D'){
@@ -181,6 +249,7 @@ public class Map {
 		}
 		return null;
 	}
+	
 	public ArrayList<Place> navigateByTime(Place current, Place destin){
 		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin,true);
 		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();

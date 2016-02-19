@@ -33,7 +33,6 @@ public class Link {
 		double xDis = xf-xt;
 		double yDis = yf - yt;
 		distance = Math.sqrt((xDis*xDis)+(yDis*yDis));
-		
 	}
 	
 	private void setTime() {
