@@ -7,7 +7,8 @@ import backend.City;
 public class PopulationComparator implements Comparator<City> {
 
 	public int compare(City o1, City o2) {
-		return ((new Integer(o1.getPopulation())).compareTo((new Integer(o2.getPopulation()))));
+		// We want largest to smallest, so switch order
+		return ((new Integer(o2.getPopulation())).compareTo((new Integer(o1.getPopulation()))));
 	}
 
 }
