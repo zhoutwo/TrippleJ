@@ -52,6 +52,17 @@ public class Map {
 		}
 	}
 	
+	private String putSpaceInName(String pname) {
+		String printName = "";
+		for(int i=0;i<pname.length();i++){
+			if(Character.isUpperCase(pname.charAt(i))){
+				printName = printName + " "+pname.charAt(i);
+			}
+			else printName=printName+pname.charAt(i);
+		}
+		return printName;
+	}
+	
 	private void importFromTxtFileLinks() throws IOException{
 		File inputFile = new File("src/data/Links.txt");
 		// create a scanner to scan through the newly created file
@@ -62,10 +73,10 @@ public class Map {
 		String name;
 		while(inScanner.hasNext()){
 			name = inScanner.next();
-			tempFrom = cities.get(inScanner.next());
-			tempTo = cities.get(inScanner.next());
-			tempFrom.addNeighbor(new Link(name,tempFrom.getLocation(),tempTo));
-			tempTo.addNeighbor(new Link(name,tempTo.getLocation(),tempFrom));
+			tempFrom = cities.get(putSpaceInName(inScanner.next()));
+			tempTo = cities.get(putSpaceInName(inScanner.next()));
+			tempFrom.addNeighbor(new Link(putSpaceInName(name),tempFrom.getLocation(),tempTo));
+			tempTo.addNeighbor(new Link(putSpaceInName(name),tempTo.getLocation(),tempFrom));
 		}
 		// close scanner
 		inScanner.close();
@@ -98,13 +109,13 @@ public class Map {
 		String pName;
 		String type;
 		while(inScanner.hasNext()){
-			temp = cities.get(inScanner.next());
+			temp = cities.get(putSpaceInName(inScanner.next()));
 			pName = inScanner.next();
 			cost = inScanner.nextDouble();
 			rating = inScanner.nextDouble();
 			type = inScanner.next();
 			c = temp.getLocation();
-			temp.addPOI(new POI(pName,c,type,rating,cost));
+			temp.addPOI(new POI(putSpaceInName(pName),c,type,rating,cost));
 		}
 		// close scanner
 		inScanner.close();
@@ -123,7 +134,7 @@ public class Map {
 		Scanner inScanner = new Scanner(inputFile);
 		// iterate through scanner and load all data into a tree until scanner is empty 
 		while(inScanner.hasNext()){
-			popCityTree.insert(new City(inScanner.next(),inScanner.nextInt(),new Coordinate(inScanner.nextDouble(),inScanner.nextDouble()),0));
+			popCityTree.insert(new City(putSpaceInName(inScanner.next()),inScanner.nextInt(),new Coordinate(inScanner.nextDouble(),inScanner.nextDouble()),0));
 		}
 		// close scanner
 		inScanner.close();
