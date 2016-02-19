@@ -19,8 +19,11 @@ import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Stack;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.GroupLayout;
@@ -48,11 +51,11 @@ public class MapFrame extends JFrame{
 	private static final int FRAME_HEIGHT = 930;
 	private static final String FRAME_TITLE = "Kansas";
 	// fields
-	private Console cs;
 	private MapPanel mp;
 //	private int state;
-	private City selectedCity;
-	private POI selectedPOI;
+	private final Stack<Place> selectedPlaces;
+//	private City selectedCity;
+//	private POI selectedPOI;
 //	private Place selectedPlace;
 	private Place selectedFromPlace;
 	private Place selectedToPlace;
@@ -62,13 +65,15 @@ public class MapFrame extends JFrame{
 	public MapFrame(Map map){
 		super();
 		currentMap = map;
-		cs = new Console();
 		Dimension d = new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setTitle(FRAME_TITLE);
 		this.setMinimumSize(d);
 		this.setPreferredSize(d);
 		this.setMaximumSize(d);
 		this.setResizable(false);
+		
+		selectedPlaces = new Stack<Place>();
+		
 		mp = new MapPanel();
 		this.add(mp);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,20 +84,22 @@ public class MapFrame extends JFrame{
 		this.setVisible(true);
 	}
 
-	class Console extends JTextArea {
-		public Console() {
-			this.setEditable(false);
-			TitledBorder border = BorderFactory.createTitledBorder(
-					BorderFactory.createLoweredBevelBorder(), "Console");
-			border.setTitleJustification(TitledBorder.LEFT);
-			this.setBorder(border);
-			this.setPreferredSize(new Dimension(145, 5));
-			this.append("Treevisualizer Helper:\n "
-					+ " The add button add the \n  integer u put in in the \n  text field, \n"
-					+ "  the Random button add \n  a random  node having \n  the random value\n  from 0 to 100, \n"
-					+ "  the slider controls the \n  space between nodes.\n   NOW ADD A NODE!\n\n                   @author niz;)");
-
+	private void placeSelected(Place p) {
+		selectedPlaces.push(p);
+		// Set the to and from fields 
+		if (mp.sfp.lockFrom.isSelected()) {
+			if (!mp.sfp.lockTo.isSelected()) {
+				// Updating To city
+				mp.sfp.to.setText(p.getName());
+				selectedToPlace = p;
+//				if (!cl.getCity().getName().equals(cl.getLabel())) throw new RuntimeException("Labels are different!");
+			}
+		} else {
+			// Updating From city
+			mp.sfp.from.setText(p.getName());
+			selectedFromPlace = p;
 		}
+		mp.ldp.drawList();
 	}
 	
 	public class MapPanel extends JPanel {
@@ -124,17 +131,6 @@ public class MapFrame extends JFrame{
 			ldp = new ListDisplayPanel();
 			
 			this.add(ldp, c);
-			//I am trying to make scrolls to work
-//			JScrollPane scrollPane = new JScrollPane(ldp);
-//	        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-//	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-//	        scrollPane.setBounds(0, 0, 250, 650);
-//	        this.add(scrollPane);
-//			asfdsaf 3242 343.3 -13.213424
-//			KWswsaf 302 313.3 -93.215421
-//			a23saf 324 33.3 -13.232424
-//			a43dsaf 242 13.3 -53.213004
-//			as345af 300 34.3 -43.213634
 
 			// Inserting SearchFormPanel
 			c.gridx = 0;
@@ -174,29 +170,12 @@ public class MapFrame extends JFrame{
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
 								
-								selectedCity = cl.getCity();
-								selectedPOI = null;
-//								TODO: ldp.displayInfo(selectedPlace);
-								
-								// Set the to and from fields 
-								if (mp.sfp.lockFrom.isSelected()) {
-									if (!mp.sfp.lockTo.isSelected()) {
-										// Updating To city
-										mp.sfp.to.setText(cl.getLabel());
-										selectedToPlace = cl.getCity();
-//										if (!cl.getCity().getName().equals(cl.getLabel())) throw new RuntimeException("Labels are different!");
-									}
-								} else {
-									// Updating From city
-									mp.sfp.from.setText(cl.getLabel());
-									selectedFromPlace = cl.getCity();
-								}
+								placeSelected(cl.getCity());
 								return;
 							}
 						}
-						selectedCity = null;
-						selectedPOI = null;
-//						TODO: ldp.clearDisplayInfo();
+						selectedPlaces.clear();
+						ldp.drawList();
 						System.out.println("Mouse click detected on map!");
 					}
 
@@ -264,136 +243,149 @@ public class MapFrame extends JFrame{
 			}
 		}
 		
-		public class ListDisplayPanel extends JPanel implements MouseListener{
-			private ArrayList<Rectangle> arr;
-			private ArrayList<JButton> cityListButtons;
-			private ArrayList<JButton> cityInfoButtons;
-			private JTextArea txt;
-			private int index;
-			private int indexPOI;
+		public class ListDisplayPanel extends JPanel{
+			private final InfoArea txt;
+			private final BackButton back;
+			private final JPanel list;
+			private final JPanel orderOptions;
+			private final ButtonGroup orders;
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
-				cityListButtons=new ArrayList<>();
+				txt = new InfoArea();
 				Dimension d = new Dimension(250, 650);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-				index=0;
-				this.initCitListButtons();
-				this.drawCityListButtons();
-				 
+				
+				back = new BackButton();
+
+				// Initialize List Panel
+				list = new JPanel();
+//				list.setMinimumSize(d);
+//				list.setPreferredSize(d);
+//				list.setMaximumSize(d);
+				list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
+				this.add(list);
+				
+				// Create gap to place options at the bottom.
+				this.add(Box.createVerticalGlue());
+				
+				// TODO Initialize radio buttons
+				orderOptions = new JPanel();
+				orderOptions.setLayout(new BoxLayout(orderOptions, BoxLayout.X_AXIS));
+				orders = new ButtonGroup();
+				JRadioButton alp = new JRadioButton("Alphabetical");
+				alp.addActionListener(null);//TODO
+				orderOptions.add(alp);
+				orders.add(alp);
+				alp.setSelected(true);
+				
+				this.add(orderOptions);
+				
+				drawList();
+//				list.add(back);
 			}
 			
-			private void initInfoButtons(int num) {
-				indexPOI=num;
-				cityInfoButtons=new ArrayList<>();
-				Dimension dimText = new Dimension(250, 300);
-				txt = new JTextArea("Information about a city");//InfoOfCity
-				Font font = new Font("", Font.PLAIN, 15);
-				txt.setFont(font);
-				txt.setMinimumSize(dimText);
-				txt.setPreferredSize(dimText);
-				txt.setMaximumSize(dimText);
-				txt.setEditable(false);
-				txt.setAlignmentX(CENTER_ALIGNMENT);
-				Dimension d = new Dimension(250, 50);
-				
-				JButton goBack = new JButton("BACK");
-				goBack.setMinimumSize(d);
-				goBack.setPreferredSize(d);
-				goBack.setMaximumSize(d);
-				goBack.setAlignmentX(CENTER_ALIGNMENT);
-				goBack.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						ListDisplayPanel.this.removeAll();
-						drawCityListButtons();
-						ListDisplayPanel.this.repaint();
+			private void drawList() {
+				list.removeAll();
+				if (selectedPlaces.isEmpty()) {
+					for (City c : currentMap.getAlpCityList()) {//TODO incorporate this with the order selection.
+						list.add(new PlaceButton(c.getName(), c));
 					}
-				});
+				} else if (selectedPlaces.peek() instanceof City) {
+					City c = (City) selectedPlaces.peek();
+					txt.setPlace(c);
+					list.add(txt);
+					for (POI p : c.getAlpPOITree()) {
+						list.add(new PlaceButton(p.getName(), p));
+					}
+					list.add(back);
+				} else {
+					POI poi = (POI) selectedPlaces.pop();
+					City c = (City) selectedPlaces.peek();
+					selectedPlaces.push(poi);
+					txt.setPlace(poi);
+					list.add(txt);
+					for (POI p : c.getAlpPOITree()) {
+						list.add(new PlaceButton(p.getName(), p));
+					}
+					list.add(back);
+				}
+				this.updateUI();
+			}
+			
+			public class InfoArea extends JTextArea {
 				
-				for (int i = 0; i < currentMap.getAlpCityList().get(num).getAlpPOITree().size(); i++) {
-					JButton POIButton = new JButton();
-					POIButton.setText(currentMap.getAlpCityList().get(num).getAlpPOITree().toArrayList().get(i).getName());
-					POIButton.setMinimumSize(d);
-					POIButton.setPreferredSize(d);
-					POIButton.setMaximumSize(d);
-					POIButton.setAlignmentX(CENTER_ALIGNMENT);
-					cityInfoButtons.add(POIButton);
-					POIButton.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent arg0) {//300 +50 +50
-							int indexP=getMousePosition().y/50-6;
-							txt.setText(currentMap.getAlpCityList().get(index).getAlpPOITree().toArrayList().get(indexP).getName()+
-									"\n"+"Type: "+currentMap.getAlpCityList().get(index).getAlpPOITree().toArrayList().get(indexP).getType()+
-									"\n"+"Rating (out of 5.0): "+currentMap.getAlpCityList().get(index).getAlpPOITree().toArrayList().get(indexP).getRating()+
-									"\n"+"Estimated Cost ($): "+currentMap.getAlpCityList().get(index).getAlpPOITree().toArrayList().get(indexP).getCost()
-									);
+				public InfoArea() {
+					super();
+					Dimension d = new Dimension(250, 300);
+					this.setMinimumSize(d);
+					this.setPreferredSize(d);
+					this.setMaximumSize(d);
+					this.setEditable(false);
+					this.setAlignmentX(CENTER_ALIGNMENT);
+				}
+				
+				public void setPlace(Place p) {
+					setText(null);
+					append(p.getName() + '\n');
+					append("Rating: " + p.getRating() + "/5.0\n");
+					if (p instanceof City) {
+						append("Population: " + ((City) p).getPopulation());
+					} else {
+						append("Type: " + ((POI) p).getType() + '\n');
+						append("Estimated Cost:" + ((POI) p).getCost());
+					}					
+				}
+			}
+			
+			public class PlaceButton extends JButton {
+				private final Place p;
+				public PlaceButton(String s, Place place) {
+					super(s);
+					Dimension d = new Dimension(250, 50);
+					this.setMinimumSize(d);
+					this.setPreferredSize(d);
+					this.setMaximumSize(d);
+					this.setAlignmentX(CENTER_ALIGNMENT);
+					
+					p = place;
+					
+					this.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							while (!selectedPlaces.isEmpty() && selectedPlaces.peek() instanceof POI) {
+								System.out.println(selectedPlaces.pop());
+							}
+							placeSelected(p);
 						}
 					});
 				}
-				cityInfoButtons.add(goBack);
+				
+				public Place getPlace() {
+					return p;
+				}
 			}
 			
-			private void drawCityInfoButtons(int index) {
-				initInfoButtons(index);
-				this.add(txt);
-				for (int i = 0; i < cityInfoButtons.size(); i++) {
-					this.add(cityInfoButtons.get(i));
-				}
-				
-				updateUI();
-				
-			}
-			private void initCitListButtons(){
-				Dimension d = new Dimension(250, 50);
-				ArrayList<City> arr= currentMap.getAlpCityList();
-				for (int i = 0; i < arr.size(); i++) {
-					JButton l = new JButton();
-					l.setText(arr.get(i).getName());
-					l.setMinimumSize(d);
-					l.setPreferredSize(d);
-					l.setMaximumSize(d);
-					l.setAlignmentX(CENTER_ALIGNMENT);
-					cityListButtons.add(l);
-					l.addActionListener(new ActionListener() {
+			public class BackButton extends JButton {
+				public BackButton() {
+					super("Back");
+					Dimension d = new Dimension(250, 50);
+					this.setMinimumSize(d);
+					this.setPreferredSize(d);
+					this.setMaximumSize(d);
+					this.setAlignmentX(CENTER_ALIGNMENT);
+					
+					this.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent arg0) {
-							ListDisplayPanel.this.removeAll();
-							index=getMousePosition().y/50;
-							drawCityInfoButtons(index);
-							txt.setText(currentMap.getAlpCityList().get(index).getName()
-									+"\n"+"Population: "+currentMap.getAlpCityList().get(index).getPopulationAsString()
-									+"\n"+"Rating (out of 5.0): "+currentMap.getAlpCityList().get(index).getRating()
-									
-									
-									
-									);
-							ListDisplayPanel.this.repaint();
+//							selectedPlaces.pop();
+							selectedPlaces.clear();
+							drawList();
 						}
 					});
 				}
 			}
-			private void drawCityListButtons() {
-				for(int i=0;i<cityListButtons.size();i++){
-					this.add(cityListButtons.get(i));
-				}				
-			}
-
-			public void mouseClicked(MouseEvent e) {
-			}
-
-			public void mousePressed(MouseEvent e) {
-			}
-
-			public void mouseReleased(MouseEvent e) {
-			}
-
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			public void mouseExited(MouseEvent e) {
-			}
-			
 		}
 		
 		public class SearchFormPanel extends JPanel {
@@ -586,11 +578,14 @@ public class MapFrame extends JFrame{
 				JButton edit = new JButton("Edit");
 				edit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						if (selectedCity != null) {
-							if (selectedPOI == null) {
-								new EditFrame(selectedCity, currentMap.getAlpCityList(), currentMap);
+						if (selectedPlaces.peek() != null) {
+							if (selectedPlaces.peek() instanceof City) {
+								new EditFrame((City) selectedPlaces.peek(), currentMap.getAlpCityList(), currentMap);
 							} else {
-								new EditFrame(selectedPOI, selectedCity.getAlpPOITree().toArrayList(), currentMap);
+								POI poi = (POI) selectedPlaces.pop();
+								City c = (City) selectedPlaces.peek();
+								selectedPlaces.push(poi);
+								new EditFrame(poi, c.getAlpPOITree().toArrayList(), currentMap);
 							}
 						}
 					}
