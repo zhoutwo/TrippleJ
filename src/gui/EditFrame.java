@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -215,17 +217,23 @@ public class EditFrame extends JFrame {
 				this.remove(t);
 				// Why is this not working.
 				DecimalFormat format = new DecimalFormat();
-				
 				if (isRating) {
-//					format.setMaximumIntegerDigits(1);
-//					format.setMaximumFractionDigits(1);
-					format.applyPattern("0.0"); // TODO: Can't set fraction numbers
+					format.setMaximumIntegerDigits(1);
+					format.setMaximumFractionDigits(1);
+					format.applyPattern("0.0");
 				} else {
 					format.setMaximumFractionDigits(0);
 				}
-				NumberFormatter formatter = new NumberFormatter(format);
-				if (isRating) formatter.setMaximum(5);
-				ft = new JFormattedTextField(formatter);
+				ft = new JFormattedTextField(format);
+				if (isRating) {
+					ft.addPropertyChangeListener("value", new PropertyChangeListener() {
+						public void propertyChange(PropertyChangeEvent arg0) {
+							if (Double.parseDouble(FormattedTextFieldRow.this.ft.getValue().toString()) > 5) {
+								FormattedTextFieldRow.this.ft.setValue(5);
+							}
+						}
+					});
+				}
 				Dimension ftd = new Dimension(150, 30);
 				ft.setMinimumSize(ftd);
 				ft.setPreferredSize(ftd);
