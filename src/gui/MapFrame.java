@@ -585,7 +585,7 @@ public class MapFrame extends JFrame{
 								POI poi = (POI) selectedPlaces.pop();
 								City c = (City) selectedPlaces.peek();
 								selectedPlaces.push(poi);
-								new EditFrame(poi, c.getAlpPOITree(), currentMap);
+								new EditFrame(poi, c.getAlpPOITree().toArrayList(), currentMap);
 							}
 						}
 					}

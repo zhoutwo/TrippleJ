@@ -38,18 +38,37 @@ public class Map {
 		}
 		// call fillTrees() to fill other trees with data
 		fillTrees();
-//		ArrayList<City> al = alpCityTree.toArrayList();
-//		for(int i=0;i<al.size();i++){
-//			System.out.println(al.get(i).toString());
-//		}
 		try {
 			importFromTxtFileToalpPOIList(); 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
-		System.out.println(cities.get("KansasCity").getPois().size());
-//		System.out.println(cities.get("KansasCity").getPois().toString());
+		try {
+			importFromTxtFileLinks(); 
+		} catch (IOException e) {
+			// TODO Auto-generated catch block 
+			e.printStackTrace();
+		}
+	}
+	
+	private void importFromTxtFileLinks() throws IOException{
+		File inputFile = new File("src/data/Links.txt");
+		// create a scanner to scan through the newly created file
+		Scanner inScanner = new Scanner(inputFile);
+		// iterate through scanner and load all data into a tree until scanner is empty 
+		City tempFrom;
+		City tempTo;
+		String name;
+		while(inScanner.hasNext()){
+			name = inScanner.next();
+			tempFrom = cities.get(inScanner.next());
+			tempTo = cities.get(inScanner.next());
+			tempFrom.addNeighbor(new Link(name,tempFrom.getLocation(),tempTo));
+			tempTo.addNeighbor(new Link(name,tempTo.getLocation(),tempFrom));
+		}
+		// close scanner
+		inScanner.close();
 	}
 	
 	/**

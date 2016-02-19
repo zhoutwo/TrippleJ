@@ -63,12 +63,12 @@ public class City extends Place {
 		return this.pois;
 	}
 	
-	public ArrayList<POI> getAlpPOITree() {
-		return this.alpPOITree.toArrayList();
+	public FlexRedBlackTree<POI> getAlpPOITree() {
+		return alpPOITree;
 	}
 	
-	public ArrayList<POI> getRatPOITree() {
-		return this.ratPOITree.toArrayList();
+	public FlexRedBlackTree<POI> getRatPOITree() {
+		return ratPOITree;
 	}
 	
 	public boolean addPOI(POI poi) {
