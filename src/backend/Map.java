@@ -108,6 +108,7 @@ public class Map {
 			temp = i.next();
 			cities.put(temp.name, temp);
 			places.put(temp.name, temp);
+			alpCityTree.insert(temp);
 			popCityTree.insert(temp);
 			ratCityTree.insert(temp);
 			alphaPlaceTree.insert(temp);
@@ -166,6 +167,7 @@ public class Map {
 	}
 	
 	public ArrayList<City> getAlpCityList() {
+//		System.out.println(alpCityTree);
 		if (this.alpCityTree.listNeedsUpdate()) {
 			this.alpCityList = this.alpCityTree.toArrayList();
 		}

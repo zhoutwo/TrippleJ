@@ -2,14 +2,11 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -20,11 +17,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Stack;
 
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -35,14 +29,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 import backend.City;
 import backend.Link;
 import backend.Map;
@@ -568,6 +558,7 @@ public class MapFrame extends JFrame{
 				// Radio buttons belong to a ButtonGroup
 				options = new ButtonGroup();
 				time = new JRadioButton("time");
+				time.setSelected(true);
 //				noToll = new JRadioButton("no toll");
 //				noToll.setEnabled(false);
 //				rating = new JRadioButton("rating");
@@ -597,7 +588,8 @@ public class MapFrame extends JFrame{
 						to.setEnabled(true);
 						to.setText(null);
 						to.setEnabled(false);
-						options.clearSelection();
+//						options.clearSelection();
+						time.setSelected(true);
 						
 						// Reset selected
 						selectedPlaces.clear();
