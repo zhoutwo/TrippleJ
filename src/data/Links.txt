@@ -10,3 +10,5 @@ H69 KansasCity Shawnee
 H69 Shawnee Olathe
 H69 Olathe Lenexa
 H69 Lenexa OverlandPark
+R12 Shawnee Lawrence
+R12 Lawrence KansasCity

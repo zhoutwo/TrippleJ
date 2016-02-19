@@ -1,5 +1,7 @@
 package backend;
 
+import java.awt.Point;
+
 import utils.RoadType;
 
 public class Link {
@@ -15,11 +17,11 @@ public class Link {
 	private String name;
 //	private Place dest;
 	
-	public Link(String pName,Coordinate fromCor,Place pPlace){
-		place = pPlace;
+	public Link(String pName,Place pFromPlace,Place pToPlace){
+		place = pToPlace;
 		name = pName;
 		setType();
-		setDistance(fromCor);
+		setDistance(pFromPlace.getLocation());
 		setTime();
 	}
 	
@@ -47,10 +49,11 @@ public class Link {
 	}
 
 	private void setType() {
-		char c = name.charAt(0);
+		char c = name.charAt(1);
 		String i = "Interstar";
 		if(c=='I'){
 			type = RoadType.INTERSTATE;
+			System.out.println("making interstate");
 		}
 		else if(c=='H'){
 			type = RoadType.HIGHWAY;
@@ -67,10 +70,6 @@ public class Link {
 	public double getDistance() {
 		return this.distance;
 	}
-	
-//	public Place getDest() {
-//		return this.dest;
-//	}
 	
 	public RoadType getRoadType() {
 		return this.type;

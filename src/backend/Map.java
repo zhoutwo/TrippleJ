@@ -75,8 +75,8 @@ public class Map {
 			name = inScanner.next();
 			tempFrom = cities.get(putSpaceInName(inScanner.next()));
 			tempTo = cities.get(putSpaceInName(inScanner.next()));
-			tempFrom.addNeighbor(new Link(putSpaceInName(name),tempFrom.getLocation(),tempTo));
-			tempTo.addNeighbor(new Link(putSpaceInName(name),tempTo.getLocation(),tempFrom));
+			tempFrom.addNeighbor(new Link(putSpaceInName(name),tempFrom,tempTo));
+			tempTo.addNeighbor(new Link(putSpaceInName(name),tempTo,tempFrom));
 		}
 		// close scanner
 		inScanner.close();

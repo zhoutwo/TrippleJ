@@ -17,6 +17,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -43,9 +44,11 @@ import javax.swing.event.ChangeListener;
 import javax.swing.text.StyledEditorKit.BoldAction;
 
 import backend.City;
+import backend.Link;
 import backend.Map;
 import backend.POI;
 import backend.Place;
+import utils.RoadType;
 
 
 public class MapFrame extends JFrame{
@@ -53,6 +56,8 @@ public class MapFrame extends JFrame{
 	private static final int FRAME_WIDTH = 1100;
 	private static final int FRAME_HEIGHT = 930;
 	private static final String FRAME_TITLE = "Kansas";
+	private static final int CITY_SIZE = 20;
+	
 	// fields
 	private MapPanel mp;
 //	private int state;
@@ -158,6 +163,7 @@ public class MapFrame extends JFrame{
 		public class MapDisplayPanel extends JPanel {
 			
 			private ArrayList<CircleLabel> cls;
+			private ArrayList<RoadLine> roads;
 			
 			public MapDisplayPanel() {
 				super();
@@ -200,10 +206,25 @@ public class MapFrame extends JFrame{
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				Graphics2D g2 = (Graphics2D) g;
+				for (RoadLine rd : roads) {
+					if(rd.getRtype().equals(RoadType.INTERSTATE)){
+						g2.setPaint(Color.RED);
+					}
+					else if(rd.getRtype().equals(RoadType.HIGHWAY)){
+						g2.setPaint(Color.BLACK);
+					}
+					else{
+						g2.setPaint(Color.GRAY);
+					}
+					g2.draw(rd);
+					g2.fill(rd);
+//					g2.setPaint(Color.BLACK);
+//					g2.drawString(rd.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
+				}
 				for (CircleLabel cl : cls) {
-					g2.setPaint(Color.RED);
-					g2.draw(cl);
 					g2.setPaint(Color.YELLOW);
+					g2.draw(cl);
+//					g2.setPaint(Color.YELLOW);
 					g2.fill(cl);
 					g2.setPaint(Color.BLACK);
 					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
@@ -212,6 +233,8 @@ public class MapFrame extends JFrame{
 			
 			private void addCityToMap(){
 				cls = new ArrayList<CircleLabel>();
+				roads = new ArrayList<RoadLine>();
+				ArrayList<Link> links;
 				Iterator<City> i = currentMap.getPopTree().iterator();
 				int x;
 				int y;
@@ -222,7 +245,24 @@ public class MapFrame extends JFrame{
 					location = temp.getMapLoc();
 					x = (int)location.getX();
 					y = (int)location.getY();
-					cls.add(new CircleLabel(temp.getName(), x, y, 25, c));
+					cls.add(new CircleLabel(temp.getName(), x, y, CITY_SIZE, c));
+					links = temp.getNeighbors();
+					for(int t=0;t<links.size();t++){
+						roads.add(new RoadLine(links.get(t).getRoadType(),location.getX()+(CITY_SIZE/2), location.getY()+(CITY_SIZE/2), links.get(t).getPlace().getMapLoc().getX()+(CITY_SIZE/2), links.get(t).getPlace().getMapLoc().getY()+(CITY_SIZE/2)));
+					}
+				}
+			}
+			
+			public class RoadLine extends Line2D.Double{
+				private RoadType type;
+				
+				public RoadLine(RoadType ptype,double w,double x,double y,double z){
+					super(w,x,y,z);
+					type = ptype;
+				}
+				
+				public RoadType getRtype(){
+					return type;
 				}
 			}
 			

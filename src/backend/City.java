@@ -11,7 +11,6 @@ public class City extends Place {
 	private ArrayList<POI> pois;
 	private FlexRedBlackTree<POI> alpPOITree;
 	private FlexRedBlackTree<POI> ratPOITree;
-	private Point mapLoc;
 	
 	public City(String name,int population, Coordinate location, double rating) {
 		super(name, location, rating);
@@ -19,7 +18,7 @@ public class City extends Place {
 		alpPOITree = new FlexRedBlackTree<POI>(new AlphabetComparator<POI>());
 		ratPOITree = new FlexRedBlackTree<POI>(new RatingComparator<POI>());
 		pois = new ArrayList<POI>();
-		setMapLocal();
+		
 	}
 	
 	public City(String name,int population, Coordinate location, double rating, ArrayList<POI> pois) {
@@ -33,16 +32,9 @@ public class City extends Place {
 		this.population = p;
 	}
 	
-	public void setMapLocal(){
-		mapLoc = new Point();
-		double y = (location.getY()-40)*(-233);
-		double x = (location.getX()+98)*(150);
-		mapLoc.setLocation(x,y);
-	}
 	
-	public Point getMapLoc(){
-		return mapLoc;
-	}
+	
+	
 	
 	public int getPopulation() {
 		return this.population;
