@@ -38,6 +38,10 @@ public class Map {
 		}
 		// call fillTrees() to fill other trees with data
 		fillTrees();
+//		ArrayList<City> ap = alpCityTree.toArrayList();
+//		for(int p=0;p<ap.size();p++){
+//			System.out.println(ap.get(p).getPrintName());
+//		}
 		try {
 			importFromTxtFileToalpPOIList(); 
 		} catch (IOException e) {
