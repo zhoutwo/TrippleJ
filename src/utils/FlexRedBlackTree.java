@@ -168,6 +168,10 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			this.color = Color.RED;
 		}
 		
+		public String toString() {
+			return element.toString();
+		}
+		
 		public void setBlack(){
 			color = Color.BLACK;
 		}
@@ -263,8 +267,21 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				sibling = leftChild;
 			}
 			else{
-				if(leftChild==null&&rightChild==null){
-					root = null;
+				if(isLeaf()){
+					BinaryNode current = this;
+					BinaryNode previous = null;
+					while(current != null && !current.element.equals(removeElement)) {
+						previous = current;
+						current = current.next;
+					}
+					if (current == null) {
+						b.setFalse();
+						return;
+					} else if (previous == null) {
+						root = next;
+					} else {
+						previous.next = current.next;
+					}
 					return;
 				}
 				X = root;
@@ -494,6 +511,14 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 
 		private void removeStep3(T removeElement, MyBoolean b,BinaryNode X,BinaryNode sibling,BinaryNode p){
 			boolean isXLC = isXLeftChild(X);
+			if(X.next != null) {
+				X.next.color=X.color;
+				if(isXLC){
+					leftChild=X.next;
+				}
+				else {rightChild=X.next;}
+				return;
+			}
 			if(X.isLeaf()){
 				if(isXLC){
 					leftChild = null;
