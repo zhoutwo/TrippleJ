@@ -669,7 +669,7 @@ public class MapFrame extends JFrame{
 				JButton edit = new JButton("Edit");
 				edit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						if (selectedPlaces.peek() != null) {
+						if (!selectedPlaces.isEmpty()) {
 							if (selectedPlaces.peek() instanceof City) {
 								new EditFrame((City) selectedPlaces.peek(), currentMap.getAlpCityList(), currentMap);
 							} else {

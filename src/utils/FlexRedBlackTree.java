@@ -155,6 +155,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 		private T element; // this is the generic item being stored in the node and tree 
 		private BinaryNode leftChild; // this is the left child of the node
 		private BinaryNode rightChild; // this is the right child of the node
+		private BinaryNode next; // In case we need a linked list
 		private Color color;
 		
 		/** this constructor instantiates the BinaryNode class with a generic element
@@ -162,7 +163,8 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 		private BinaryNode(T element){
 			this.element = element;
 			this.leftChild = null;
-			this.rightChild = null;	
+			this.rightChild = null;
+			this.next = null;
 			this.color = Color.RED;
 		}
 		
@@ -213,9 +215,18 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			}
 			int compareValue = c.compare(addition, element);
 			if(compareValue==0){
+				BinaryNode current = this;
+				while(!current.element.equals(addition)) {
+					if (current.next != null) {
+						current = current.next;
+					} else {
+						current.next = new BinaryNode(addition);
+						return;
+					}
+				}
 				b.setFalse();
 			}
-			else if(compareValue==-1){ 
+			else if(compareValue<0){ 
 				if(leftChild!=null){leftChild.insert(addition, b, this,p,gp);}
 				else {
 					leftChild = new BinaryNode(addition);
@@ -238,16 +249,16 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 					}
 			}
 		}
-
+		// TODO I will worry about remove later.
 		private void removeStep1(T removeElement, MyBoolean b){	
 			int compareTo = c.compare(removeElement, element);
 			BinaryNode sibling;
 			BinaryNode X;
-			if(compareTo==-1){
+			if(compareTo<0){
 				X = leftChild;
 				sibling = rightChild;
 			}
-			else if(compareTo==1){
+			else if(compareTo>0){
 				X = rightChild;
 				sibling = leftChild;
 			}
@@ -326,7 +337,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 					return;}
@@ -357,7 +368,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 					return;}
@@ -387,7 +398,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 					return;}
@@ -410,7 +421,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 					return;
@@ -441,7 +452,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 				}
@@ -586,7 +597,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				root = temp;
 			}
 			else {
-				if(c.compare(temp.element, p.element)==-1){
+				if(c.compare(temp.element, p.element)<0){
 					p.leftChild = temp;
 				}
 				else {
@@ -605,7 +616,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				root = temp;
 			}
 			else{
-				if(c.compare(temp.element, p.element)==-1){
+				if(c.compare(temp.element, p.element)<0){
 					p.leftChild = temp;
 				}
 				else{
@@ -693,6 +704,10 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				throw new NoSuchElementException(); 
 			}
 			BinaryNode temp = s.pop();
+			// Puts the linked list to the stack
+			if (temp.next != null) {
+				s.push(temp.next);
+			}
 			if(temp.rightChild!=null){
 				putLeftMostNodeOnStack(temp.rightChild);
 			}
