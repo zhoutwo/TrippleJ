@@ -7,7 +7,26 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Scanner;
 import utils.*;
-
+/**
+ * The Map class is the class that keeps track of the current state of a map and gives all other classes 
+ * access to information about the current state of the map it also determines the best route given time or 
+ * distance to determine cost 
+ * Fields: 
+ * cities - hashmap from city name to the city object
+ * places - hashmap from place name to the place object
+ * alpCityTree - flex red black tree of city objects sorted by alphabetical order according to name
+ * ratCityTree - flex red black tree of city objects sorted by numerical order of rating
+ * popCityTree  - flex red black tree of city objects sorted by numerical order of population
+ * alphaPlaceTree - flex red black tree of Place objects sorted by alphabetical order according to name
+ * route - arraylist of place objects that is in order of places to visit along the route to destination
+ * alpCityList - arraylist of city objects in alphabetical order 
+ * ratCityList - arraylist of city objects in numerical order according to rating
+ * popCityList - arraylist of city objects in numerical order according to rating
+ * isActive - boolean value that determines if the map is still active or not
+ * 
+ * @author 
+ *
+ */
 public class Map {
 	
 	private HashMap<String, City> cities;
@@ -20,9 +39,11 @@ public class Map {
 	private ArrayList<City> alpCityList;
 	private ArrayList<City> ratCityList;
 	private ArrayList<City> popCityList;
-	
 	protected boolean isActive;
 	
+	/**
+	 * empty constructor that loads all information from text files into the appropriate variable fields
+	 */
 	public Map() {
 		this.places = new HashMap<String, Place>();
 		this.cities = new HashMap<String, City>();
@@ -56,6 +77,9 @@ public class Map {
 		fillEstimateTables();
 	}
 	
+	/**
+	 * this method fills all of the estimate tables in each place for each place 
+	 */
 	public void fillEstimateTables(){
 		ArrayList<Place> allP = alphaPlaceTree.toArrayList();
 		Iterator<Place> i = alphaPlaceTree.iterator();
@@ -187,18 +211,29 @@ public class Map {
 		isActive = false;
 	}
 	
+	/**
+	 * returns the population red black tree 
+	 * @return
+	 */
 	public FlexRedBlackTree<City> getPopTree(){
 		return popCityTree;
 	}
 	
+	/**
+	 * returns the alphabetical city red black tree
+	 * @return
+	 */
 	public ArrayList<City> getAlpCityList() {
-//		System.out.println(alpCityTree);
 		if (this.alpCityTree.listNeedsUpdate()) {
 			this.alpCityList = this.alpCityTree.toArrayList();
 		}
 		return this.alpCityList;
 	}
 	
+	/**
+	 * returns the rating city red black tree
+	 * @return
+	 */
 	public ArrayList<City> getRatCityList() {
 		if (this.ratCityTree.listNeedsUpdate()) {
 			this.ratCityList = this.ratCityTree.toArrayList();
@@ -206,6 +241,10 @@ public class Map {
 		return this.ratCityList;
 	}
 	
+	/**
+	 * returns the population red black tree
+	 * @return
+	 */
 	public ArrayList<City> getPopCityList() {
 		if (this.popCityTree.listNeedsUpdate()) {
 			this.popCityList = this.popCityTree.toArrayList();
@@ -221,7 +260,12 @@ public class Map {
 		return route;
 	}
 	
-	// josh implementation of findroute
+	/**
+	 * this method finds a route from one place to another place given what determines cost
+	 * @param from
+	 * @param to
+	 * @param type
+	 */
 	public void getRoute(String from, String to,String type) {
 		// clear old route that might be present
 		route.clear();
@@ -234,16 +278,10 @@ public class Map {
 		char c=type.charAt(0);
 		// use string to get the Place from 
 		Place fromPlace = places.get(from);
-//		// add 
-//		route.add(fromPlace);
 		// use string to get the Place to 
 		Place toPlace = places.get(to);
-//		ArrayList<Place> al = new ArrayList<Place>();
-//		al.add(fromPlace);
 		// create a PriorityQueue to use in finding least cost path
 		PriorityQueue<PathNode> pq = new PriorityQueue<PathNode>();
-//		// add our current position to the priorityQueue
-//		pq.offer(new PathNode())
 		ArrayList<Place> wib = new ArrayList<Place>();
 		wib.add(fromPlace);
 		// determine which route determining function to call
@@ -252,9 +290,16 @@ public class Map {
 		}else if(c=='t'||c=='T'){
 			tRoute(fromPlace, toPlace,0.0,pq,wib);
 		}
-//		route.add(toPlace);
 	}
 	
+	/**
+	 * this method finds the best route using time as a cost function
+	 * @param current
+	 * @param to
+	 * @param traveledCost
+	 * @param pq
+	 * @param pwib
+	 */
 	public void tRoute(Place current,Place to,Double traveledCost,PriorityQueue<PathNode> pq,ArrayList<Place> pwib){
 		ArrayList<Place> wib = pwib;
 		ArrayList<Link> neighbors = current.getNeighbors();
@@ -312,16 +357,25 @@ public class Map {
 		}
 	}
 	
+	/**
+	 * this methid updates the map data if something is changed in the edit panel
+	 * @param fd
+	 * @return
+	 */
 	public boolean updateFromFormData(FormData fd) {
 		if (fd.isCity()) {
 			return remove(fd.getOldCity()) ? insert(fd.getNewCity()) : false;
 		} else {
-			boolean success = true;
 			City parent = fd.getParentCity();
 			return remove(fd.getOldPOI(), parent) ? insert(fd.getNewPOI(), parent) : false;
 		}
 	}
 	
+	/**
+	 * this method removes a city from all places if the city is removed from the edit panel
+	 * @param c
+	 * @return
+	 */
 	public boolean remove(City c) {
 		boolean success = true;
 		if (!alpCityTree.remove(c)) success = false;
@@ -332,6 +386,11 @@ public class Map {
 		return success;
 	}
 	
+	/**
+	 * this method removes a point of interest from all places if the city is removed from the edit panel
+	 * @param c
+	 * @return
+	 */
 	public boolean remove(POI p, City parent) {
 		if (parent.removePOI(p)) {
 			places.remove(p.getName());
@@ -342,6 +401,11 @@ public class Map {
 		
 	}
 	
+	/**
+	 * this method inserts a city from all places if the city is removed from the edit panel
+	 * @param c
+	 * @return
+	 */
 	public boolean insert(City c) {
 		boolean success = true;
 		if (!alpCityTree.insert(c)) success = false;
@@ -352,6 +416,11 @@ public class Map {
 		return success;
 	}
 	
+	/**
+	 * this method inserts a point of interest from all places if the city is removed from the edit panel
+	 * @param c
+	 * @return
+	 */
 	public boolean insert(POI p, City parent) {
 		if (parent.addPOI(p)) {
 			places.put(p.getName(), p);
