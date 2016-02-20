@@ -332,9 +332,9 @@ public class EditFrame extends JFrame {
 			private boolean submitForm() {
 				FormData data;
 				if (isCity) {
-					data = new FormData(currentCity, nameComboRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue()));
+					data = new FormData(currentCity, nameComboRow.getValue(), Double.parseDouble(xRow.getValue()), Double.parseDouble(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue().replace(",","")));
 				} else {
-					data = new FormData(currentPOI, nameComboRow.getValue(), Integer.parseInt(xRow.getValue()), Integer.parseInt(yRow.getValue()), currentCity, typeRow.getValue(), Double.parseDouble(ratingRow.getValue()), Double.parseDouble(costRow.getValue())); 
+					data = new FormData(currentPOI, nameComboRow.getValue(), Double.parseDouble(xRow.getValue()), Double.parseDouble(yRow.getValue()), currentCity, typeRow.getValue(), Double.parseDouble(ratingRow.getValue()), Double.parseDouble(costRow.getValue())); 
 				}
 				return map.updateFromFormData(data);
 			}
