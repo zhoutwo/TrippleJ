@@ -9,7 +9,7 @@ public class FormData {
 	private final City newCity;
 	private final POI newPOI;
 	
-	public FormData(City oldCity, String newName, int x, int y, double rating, int population) {
+	public FormData(City oldCity, String newName, double x, double y, double rating, int population) {
 		this.oldCity = oldCity;
 		this.oldPOI = null;
 		this.isCity = true;
@@ -18,7 +18,7 @@ public class FormData {
 		this.newPOI = null;
 	}
 	
-	public FormData(POI oldPOI, String newName, int x, int y, City parentCity, String type, double rating, double cost) {
+	public FormData(POI oldPOI, String newName, double x, double y, City parentCity, String type, double rating, double cost) {
 		this.oldCity = null;
 		this.oldPOI = oldPOI;
 		this.isCity = false;
