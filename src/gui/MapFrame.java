@@ -572,8 +572,8 @@ public class MapFrame extends JFrame{
 				JButton findRoute = new JButton("Find Route");
 				findRoute.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						
+						currentMap.getRoute(from.getText(), to.getText(), (time.isSelected() ? "time" : "distance"));
+						System.out.println(currentMap.returnRoute());
 					}
 				});
 				JButton reset = new JButton("Reset");
