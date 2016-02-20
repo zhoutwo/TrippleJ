@@ -588,7 +588,6 @@ public class MapFrame extends JFrame{
 						to.setEnabled(true);
 						to.setText(null);
 						to.setEnabled(false);
-//						options.clearSelection();
 						time.setSelected(true);
 						
 						// Reset selected
