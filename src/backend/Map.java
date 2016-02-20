@@ -250,13 +250,34 @@ public class Map {
 		if(c=='d'||c=='D'){
 			dRoute(fromPlace, toPlace,0.0,pq,wib);
 		}else if(c=='t'||c=='T'){
-			tRoute(fromPlace, toPlace,pq);
+			tRoute(fromPlace, toPlace,0.0,pq,wib);
 		}
 //		route.add(toPlace);
 	}
 	
-	public ArrayList<Place> tRoute(Place from,Place to,PriorityQueue<PathNode> pq){
-		return null;
+	public void tRoute(Place current,Place to,Double traveledCost,PriorityQueue<PathNode> pq,ArrayList<Place> pwib){
+		ArrayList<Place> wib = pwib;
+		ArrayList<Link> neighbors = current.getNeighbors();
+		ArrayList<Place> newWIB = new ArrayList<Place>();
+		for(int i=0;i<neighbors.size();i++){
+			Place neighborPlace = neighbors.get(i).getPlace(); 
+			Double travelCost = neighbors.get(i).getTime();
+			newWIB = new ArrayList<Place>();
+			for(int k=0;k<wib.size();k++){
+				newWIB.add(wib.get(k));
+			}
+			if(newWIB.add(neighborPlace)){
+				pq.offer(new PathNode(neighborPlace,to,traveledCost+travelCost,neighborPlace.getTEst(to),newWIB));
+			}
+		}
+		PathNode temp2 = pq.poll();
+		Place temp3 = temp2.getCurrentPlace();
+		if(temp3.equals(to)){
+			route= temp2.getWIB();
+		}
+		else{
+			dRoute(temp3,to,temp2.getCostTraveled(),pq,temp2.getWIB());
+		}
 	}
 	
 	/**
@@ -268,121 +289,28 @@ public class Map {
 	 */
 	public void dRoute(Place current,Place to,Double traveledCost,PriorityQueue<PathNode> pq,ArrayList<Place> pwib){
 		ArrayList<Place> wib = pwib;
-		System.out.println("inside dRoute("+current+","+to+","+pq+","+wib+")");
 		ArrayList<Link> neighbors = current.getNeighbors();
-		System.out.println(neighbors);
 		ArrayList<Place> newWIB = new ArrayList<Place>();
 		for(int i=0;i<neighbors.size();i++){
 			Place neighborPlace = neighbors.get(i).getPlace(); 
-			newWIB.clear();
+			Double travelCost = neighbors.get(i).getDistance();
+			newWIB = new ArrayList<Place>();
 			for(int k=0;k<wib.size();k++){
 				newWIB.add(wib.get(k));
 			}
 			if(newWIB.add(neighborPlace)){
-//			newWIB.add(neighborPlace);
-				System.out.println("neighborPlace "+neighborPlace);
-				System.out.println(i+" "+newWIB);
-				pq.offer(new PathNode(neighborPlace,to,neighborPlace.getDEst(to)+traveledCost,newWIB));
+				pq.offer(new PathNode(neighborPlace,to,traveledCost+travelCost,neighborPlace.getDEst(to),newWIB));
 			}
 		}
-		System.out.println(pq);
 		PathNode temp2 = pq.poll();
-		System.out.println("temp2 "+temp2);
 		Place temp3 = temp2.getCurrentPlace();
-		System.out.println("temp3 "+temp3);
-		System.out.println("to "+to);
 		if(temp3.equals(to)){
 			route= temp2.getWIB();
 		}
 		else{
-			dRoute(temp3,to,neighbors.get(neighbors.indexOf(temp3)).getDistance()+traveledCost,pq,temp2.getWIB());
+			dRoute(temp3,to,temp2.getCostTraveled(),pq,temp2.getWIB());
 		}
 	}
-	
-//	public ArrayList<Place> findRoute(Place current,Place destin, String type){
-//		char c=type.charAt(0);
-//		if(c=='d'||c=='D'){
-//			return navigateByDistance(current, destin);
-//		}else if(c=='t'||c=='T'){
-//			return navigateByTime(current, destin);
-//		}
-//		return null;
-//	}
-//	
-//	public ArrayList<Place> navigateByTime(Place current, Place destin){
-//		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin,true);
-//		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
-//		while(true){
-//			
-//			if(currentPwd.getPlace().getNeighbors().size()==0){
-//				return null;//null will represent not available route found.
-//			}
-//			for(int i=0;i<currentPwd.getPlace().getNeighbors().size();i++){
-//				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i).getPlace(), destin,true);
-//				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
-//				pwd.addDistanceTraveled(currentPwd.getPlace().getNeighbors().get(i).getTime());
-////				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
-//				list.add(pwd);
-//			}
-//			
-//			//if not arrived keep the loop going
-//			if(list.size()==0) return null; //When there is no "OPEN" place that you can visit through, null will represent not available route found.
-//			if(!list.peek().getPlace().equals(destin)){
-//				currentPwd=list.poll();//If you poll, that place will be removed from the list, and will be considered as closed(but its neighbors will still be open)
-//			}
-//			
-//			
-//			//if Arrived make sure it is the lowest cost.
-//			else {
-//				return list.peek().getRoute();
-////				if(currentPwd.isArrived){
-////					return currentPwd.getRoute();
-////				}
-////				currentPwd.setTrue();
-////				currentPwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
-//			}
-//		}
-//	}
-//	
-//	public ArrayList<Place> navigateByDistance(Place current, Place destin){
-//		PlaceWithDistance currentPwd= new PlaceWithDistance(current, destin,false);
-//		FlexPriorityQueue<PlaceWithDistance> list= new FlexPriorityQueue<PlaceWithDistance>();
-//		while(true){
-//			
-//			if(currentPwd.getPlace().getNeighbors().size()==0){
-//				return null;//null will represent not available route found.
-//			}
-//			for(int i=0;i<currentPwd.getPlace().getNeighbors().size();i++){
-//				PlaceWithDistance pwd = new PlaceWithDistance(currentPwd.getPlace().getNeighbors().get(i).getPlace(), destin,false);
-//				pwd.getRoute().add(currentPwd.getPlace()); //keep current place in the route information
-//				pwd.addDistanceTraveled(currentPwd.getPlace().getNeighbors().get(i).getDistance());
-////				pwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(),currentPwd.getPlace().getNeighbors().get(i).getPlace() ));
-//				list.add(pwd);
-//			}
-//			
-//			//if not arrived keep the loop going
-//			if(list.size()==0) return null; //When there is no "OPEN" place that you can visit through, null will represent not available route found.
-//			if(!list.peek().getPlace().equals(destin)){
-//				currentPwd=list.poll();//If you poll, that place will be removed from the list, and will be considered as closed(but its neighbors will still be open)
-//			}
-//			//if Arrived make sure it is the lowest cost.
-//			else {
-//				return list.peek().getRoute();
-////				if(currentPwd.isArrived){
-////					return currentPwd.getRoute();
-////				}
-////				currentPwd.setTrue();
-////				currentPwd.addDistanceTraveled(distanceToDestin(currentPwd.getPlace(), destin));
-//			}
-//		}
-//	}
-//	
-//	
-//	public static double distanceToDestin(Place current, Place destin){
-//		double x= current.getLocation().getX()-destin.getLocation().getX();
-//		double y= current.getLocation().getY()-destin.getLocation().getY();
-//		return Math.sqrt(x*x+y*y);
-//	}
 	
 	public boolean updateFromFormData(FormData fd) {
 		if (fd.isCity()) {
@@ -433,50 +361,4 @@ public class Map {
 			return false;
 		}
 	}
-	
-//	public class PlaceWithDistance{
-//		private Place place;
-//		private double distanceTraveled;
-//		private ArrayList<Place> route;
-//		private double distanceToDestin;
-//		private boolean isArrived;
-//		private boolean byTime;
-//		public PlaceWithDistance(Place p,Place destin,Boolean isTime) {
-//			byTime=isTime;
-//			place=p;
-//			distanceTraveled=0;
-//			distanceToDestin=distanceToDestin(p,destin);
-//			if(byTime) distanceToDestin/=85;
-//			route=new ArrayList<Place>();
-//			isArrived=false;
-//			
-//		}
-//		protected double getDistanceTraveled(){
-//			return distanceTraveled;
-//		}
-//		protected void addDistanceTraveled(double distanceToAdd){
-//			distanceToDestin+=distanceToAdd;
-//		}
-//		protected double getDistanceToDestin(){
-//			return distanceToDestin;
-//		}
-//		protected Place getPlace(){
-//			return place;
-//		}
-//		protected double getCost(){
-//			return distanceToDestin+distanceTraveled;
-//		}
-//		protected ArrayList<Place> getRoute(){
-//			return route;
-//		}
-//		protected boolean getIsArrived(){
-//			return isArrived;
-//		}
-//		protected void setTrue(){
-//			isArrived=true;
-//		}
-//		
-//		
-//	}
-	
 }
