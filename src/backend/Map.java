@@ -223,44 +223,79 @@ public class Map {
 	
 	// josh implementation of findroute
 	public void getRoute(String from, String to,String type) {
-		char c=type.charAt(0);
-		Place fromPlace = places.get(from);
-//		route.add(fromPlace);
-		Place toPlace = places.get(to);
-		ArrayList<Place> al = new ArrayList<Place>();
-		al.add(fromPlace);
-		if(c=='d'||c=='D'){
-			dRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(toPlace,fromPlace.getDEst(toPlace),0.0,al)));
-			
-		}else if(c=='t'||c=='T'){
-			tRoute(fromPlace, toPlace,new PriorityQueue<PathNode>(new PathNode(toPlace,fromPlace.getTEst(toPlace),0.0,al)));
+		// clear old route that might be present
+		route.clear();
+		// if from = to then we are looking for ourselves and just add from to route and return
+		if(from.equals(to)){
+			route.add(places.get(from));
+			return;
 		}
-		route.add(toPlace);
+		//get character representation of which route to use time or distance 
+		char c=type.charAt(0);
+		// use string to get the Place from 
+		Place fromPlace = places.get(from);
+//		// add 
+//		route.add(fromPlace);
+		// use string to get the Place to 
+		Place toPlace = places.get(to);
+//		ArrayList<Place> al = new ArrayList<Place>();
+//		al.add(fromPlace);
+		// create a PriorityQueue to use in finding least cost path
+		PriorityQueue<PathNode> pq = new PriorityQueue<PathNode>();
+//		// add our current position to the priorityQueue
+//		pq.offer(new PathNode())
+		ArrayList<Place> wib = new ArrayList<Place>();
+		wib.add(fromPlace);
+		// determine which route determining function to call
+		if(c=='d'||c=='D'){
+			dRoute(fromPlace, toPlace,0.0,pq,wib);
+		}else if(c=='t'||c=='T'){
+			tRoute(fromPlace, toPlace,pq);
+		}
+//		route.add(toPlace);
 	}
 	
 	public ArrayList<Place> tRoute(Place from,Place to,PriorityQueue<PathNode> pq){
 		return null;
 	}
 	
-	public void dRoute(Place from,Place to,PriorityQueue<PathNode> pq){
-		PathNode temp = pq.poll();
-		Place last = temp.getWIB().get(temp.getWIB().size()-1);
-		if(last.equals(to)){temp.getWIB();}
-		else{
-			ArrayList<Link> nBors = last.getNeighbors();
-			for(int i=0;i<nBors.size();i++){
-				Link nB = nBors.get(i);
-				Double disTrav = nB.getDistance();
-				ArrayList<Place> wib = temp.getWIB();
-				if(nB.getPlace().equals(to)){
-					wib.add(nB.getPlace());
-				}
-				if(!wib.contains(nB.getPlace())){
-				pq.offer(new PathNode(nB.getPlace(),disTrav+nB.getPlace().getDEst(to),disTrav+temp.getCostTraveled(),wib));
-				}
+	/**
+	 * dRoute() method determines the shortest route using distance as the cost factor and it will populate 
+	 * the ArrayList<Place> with all of the places visited along the way
+	 * @param from
+	 * @param to
+	 * @param pq
+	 */
+	public void dRoute(Place current,Place to,Double traveledCost,PriorityQueue<PathNode> pq,ArrayList<Place> pwib){
+		ArrayList<Place> wib = pwib;
+		System.out.println("inside dRoute("+current+","+to+","+pq+","+wib+")");
+		ArrayList<Link> neighbors = current.getNeighbors();
+		System.out.println(neighbors);
+		ArrayList<Place> newWIB = new ArrayList<Place>();
+		for(int i=0;i<neighbors.size();i++){
+			Place neighborPlace = neighbors.get(i).getPlace(); 
+			newWIB.clear();
+			for(int k=0;k<wib.size();k++){
+				newWIB.add(wib.get(k));
 			}
-			Place newFrom = pq.poll().getToPlace();
-			route.add(newFrom);
+			if(newWIB.add(neighborPlace)){
+//			newWIB.add(neighborPlace);
+				System.out.println("neighborPlace "+neighborPlace);
+				System.out.println(i+" "+newWIB);
+				pq.offer(new PathNode(neighborPlace,to,neighborPlace.getDEst(to)+traveledCost,newWIB));
+			}
+		}
+		System.out.println(pq);
+		PathNode temp2 = pq.poll();
+		System.out.println("temp2 "+temp2);
+		Place temp3 = temp2.getCurrentPlace();
+		System.out.println("temp3 "+temp3);
+		System.out.println("to "+to);
+		if(temp3.equals(to)){
+			route= temp2.getWIB();
+		}
+		else{
+			dRoute(temp3,to,neighbors.get(neighbors.indexOf(temp3)).getDistance()+traveledCost,pq,temp2.getWIB());
 		}
 	}
 	

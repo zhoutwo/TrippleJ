@@ -48,7 +48,7 @@ public class City extends Place {
 	}
 	
 	public String toString() {
-		return this.name + ' ' + this.population;
+		return this.name;// + ' ' + this.population;
 	}
 	
 	public ArrayList<POI> getPois(){

@@ -12,14 +12,18 @@ public class Testing {
 	
 	@Test 
 	public void testNoHop(){
-//		System.out.println("from Salina to Salina is "+testMap.getRoute(" Salina"," Salina","distance"));
-//		System.out.println("from Topeka to Topeka is "+testMap.getRoute(" Topeka"," Topeka","distance"));
+		testMap.getRoute(" Salina"," Salina","distance");
+		System.out.println("from Salina to Salina is "+testMap.returnRoute());
+		testMap.getRoute(" Topeka"," Topeka","distance");
+		System.out.println("from Topeka to Topeka is "+testMap.returnRoute());
 	}
 
 	@Test
 	public void testOneHop() {
-//		System.out.println("from Salina to Manhattan is "+testMap.getRoute(" Salina"," Manhattan","distance"));
-//		System.out.println("from Salina to Topeka is "+testMap.getRoute(" Salina"," Topeka","distance"));
+		testMap.getRoute(" Salina"," Manhattan","distance");
+		System.out.println("from Salina to Manhattan is "+testMap.returnRoute());
+		testMap.getRoute(" Salina"," Topeka","distance");
+		System.out.println("from Salina to Topeka is "+testMap.returnRoute());
 //		System.out.println("from Salina to Lawrence is "+testMap.getRoute(" Salina"," Lawrence","distance"));
 //		System.out.println("from Manhattan to Salina is "+testMap.getRoute(" Manhattan"," Salina","distance"));
 //		System.out.println("from Manhattan to topeka is "+testMap.getRoute(" Manhattan"," Topeka","distance"));
@@ -29,15 +33,23 @@ public class Testing {
 	public void testTwoHop(){
 		testMap.getRoute(" Salina"," Kansas City","distance");
 		System.out.println("from Salina to Kansas City is "+testMap.returnRoute());
-//		System.out.println("from Salina to Shawnee is "+testMap.getRoute(" Salina"," Shawnee","distance"));
-//		System.out.println("from Salina to Lawrence is "+testMap.getRoute(" Salina"," Lawrence","distance"));
-//		System.out.println("from Topeka to Lenexa is "+testMap.getRoute(" Topeka"," Lenexa","distance"));
-//		System.out.println("from Topeka to Shawnee is "+testMap.getRoute(" Topeka"," Shawnee","distance"));
+		testMap = new Map();
+		testMap.getRoute(" Salina"," Shawnee","distance");
+		System.out.println("from Salina to Shawnee is "+testMap.returnRoute());
+		testMap = new Map();
+		testMap.getRoute(" Salina"," Lawrence","distance");
+		System.out.println("from Salina to Lawrence is "+testMap.returnRoute());
+		testMap = new Map();
+		testMap.getRoute(" Topeka"," Lenexa","distance");
+		System.out.println("from Topeka to Lenexa is "+testMap.returnRoute());
+		testMap = new Map();
+		testMap.getRoute(" Topeka"," Shawnee","distance");
+		System.out.println("from Topeka to Shawnee is "+testMap.returnRoute());
 	}
 	
 	@Test
 	public void testAll(){
-		
+		System.out.println(testMap.getPopCityList());
 	}
 
 }
