@@ -304,7 +304,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 		}
 		
 		private void removeStep2(T removeElement, MyBoolean b,BinaryNode X,BinaryNode sibling,BinaryNode p){
-			if(leftChild==null&&rightChild==null){b.setFalse();return;}
+			if(isLeaf()){b.setFalse();return;}
 			if((X.leftChild==null||X.leftChild.color.equals(Color.BLACK))&&(X.rightChild==null||X.rightChild.color.equals(Color.BLACK))){
 				removeStep2A(removeElement,b,X,sibling,p);
 			}
@@ -419,13 +419,15 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				if(X.leftChild==null){
 					b.setFalse();
 					return;}
-				else X.removeStep2(removeElement, b, X.leftChild, X.rightChild,this);
+//				else X.removeStep2(removeElement, b, X.leftChild, X.rightChild,this);
+				else X.removeStep2(removeElement, b, X.leftChild, X.rightChild,X);
 			}
 			else{
 				if(X.rightChild==null){
 					b.setFalse();
 					return;}
-				else X.removeStep2(removeElement, b, X.rightChild, X.leftChild,this);
+//				else X.removeStep2(removeElement, b, X.rightChild, X.leftChild,this);
+				else X.removeStep2(removeElement, b, X.rightChild, X.leftChild,X);
 			}
 		}
 		
@@ -529,10 +531,12 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				BinaryNode biggestLeftNode = X.leftChild.getBiggestNodeToLeft();
 				if(X.color.equals(Color.RED)){
 					X.element = biggestLeftNode.element;
-					X.removeStep2(X.element, b, X.leftChild, X.rightChild,this);
+					X.removeStep2(X.element, b, X.leftChild, X.rightChild,X);
+//					X.removeStep2(X.element, b, X.leftChild, X.rightChild,this);
 				}
 				else{
-					removeStep2B(biggestLeftNode.element, b, X, sibling,p);
+//					removeStep2B(biggestLeftNode.element, b, X, sibling,p);
+					X.removeStep2B(biggestLeftNode.element, b, X, sibling,p);
 					X.element = biggestLeftNode.element;
 				}
 			}
