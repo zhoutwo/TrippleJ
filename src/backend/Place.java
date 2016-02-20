@@ -24,7 +24,7 @@ public abstract class Place {
 	}
 	
 	public boolean equals(Object obj) {
-		return name.equals(((Place) obj).name);
+		return (name.compareTo(((Place) obj).name) == 0);
 	}
 	
 	public double getDEst(Place p){

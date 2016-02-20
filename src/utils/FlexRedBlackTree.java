@@ -226,7 +226,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				}
 				b.setFalse();
 			}
-			else if(compareValue==-1){ 
+			else if(compareValue<0){ 
 				if(leftChild!=null){leftChild.insert(addition, b, this,p,gp);}
 				else {
 					leftChild = new BinaryNode(addition);
@@ -254,11 +254,11 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			int compareTo = c.compare(removeElement, element);
 			BinaryNode sibling;
 			BinaryNode X;
-			if(compareTo==-1){
+			if(compareTo<0){
 				X = leftChild;
 				sibling = rightChild;
 			}
-			else if(compareTo==1){
+			else if(compareTo>0){
 				X = rightChild;
 				sibling = leftChild;
 			}
@@ -337,7 +337,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 					return;}
@@ -368,7 +368,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 					return;}
@@ -398,7 +398,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 					return;}
@@ -421,7 +421,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 					return;
@@ -452,7 +452,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			if(compareTo==0){
 				removeStep3(removeElement,b,X,sibling,p);
 			}
-			else if(compareTo==-1){
+			else if(compareTo<0){
 				if(X.leftChild==null){
 					b.setFalse();
 				}
@@ -597,7 +597,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				root = temp;
 			}
 			else {
-				if(c.compare(temp.element, p.element)==-1){
+				if(c.compare(temp.element, p.element)<0){
 					p.leftChild = temp;
 				}
 				else {
@@ -616,7 +616,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				root = temp;
 			}
 			else{
-				if(c.compare(temp.element, p.element)==-1){
+				if(c.compare(temp.element, p.element)<0){
 					p.leftChild = temp;
 				}
 				else{
@@ -705,9 +705,8 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 			}
 			BinaryNode temp = s.pop();
 			// Puts the linked list to the stack
-			while (temp.next != null) {
+			if (temp.next != null) {
 				s.push(temp.next);
-				temp = temp.next;
 			}
 			if(temp.rightChild!=null){
 				putLeftMostNodeOnStack(temp.rightChild);
