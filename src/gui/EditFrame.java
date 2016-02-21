@@ -32,10 +32,10 @@ import backend.Place;
  * isCity - boolean that checks if the place is city or POI 
  * currentCity - represents current city
  * currentPOI - represent current POI
- * cityMap - 
- * poiMap - 
- * names - 
- * map -
+ * cityMap - !!!
+ * poiMap - !!!
+ * names - !!!
+ * map - current map for the MapFrame
  */
 public class EditFrame extends JFrame {
 	private final boolean isCity;
@@ -46,7 +46,15 @@ public class EditFrame extends JFrame {
 	private final String[] names;
 	private final Map map;
 	
-	public EditFrame(City c, ArrayList<City> cl, Map m) {
+	/**
+	 * The constructor initialize and display the frame for the panels.
+	 * This constructor is to edit the city.
+	 * 
+	 * @param city current city to be edited 
+	 * @param cityList list of cities
+	 * @param map map that is shown in the MapFrame
+	 */
+	public EditFrame(City city, ArrayList<City> cityList, Map map) {
 		super();
 		// Set size for the display.
 		Dimension d = new Dimension(300, 300);
@@ -56,17 +64,17 @@ public class EditFrame extends JFrame {
 		this.setResizable(false);
 		
 		isCity = true;
-		currentCity = c;
+		currentCity = city;
 		currentPOI = null;
 		cityMap = new HashMap<String, City>();
 		poiMap = null;
-		map = m;
+		this.map = map;
 		
 		// Making another HashMap so it will be easy to retrieve Place objects from the list
-		names = new String[cl.size()];
-		for (int i = 0; i < cl.size(); i++) {
-			cityMap.put(cl.get(i).getName(), cl.get(i));
-			names[i] = cl.get(i).getName();
+		names = new String[cityList.size()];
+		for (int i = 0; i < cityList.size(); i++) {
+			cityMap.put(cityList.get(i).getName(), cityList.get(i));
+			names[i] = cityList.get(i).getName();
 		}
 		
 		EditPanel ep = new EditPanel();
@@ -78,7 +86,15 @@ public class EditFrame extends JFrame {
 		this.setVisible(true);
 	}
 	
-	public EditFrame(POI p, City parent, Map m) {
+	/**
+	 * The constructor initialize and display the frame for the panels.
+	 * This constructor is to edit the POI.
+	 * 
+	 * @param p point of interest to be edited
+	 * @param parent city that contains the point of interest
+	 * @param map map that is displayed in MapFrame
+	 */
+	public EditFrame(POI poi, City parent, Map map) {
 		super();
 		Dimension d = new Dimension(300, 300);
 		this.setMinimumSize(d);
@@ -88,17 +104,17 @@ public class EditFrame extends JFrame {
 		
 		isCity = false;
 		currentCity = parent;
-		currentPOI = p;
+		currentPOI = poi;
 		cityMap = null;
 		poiMap = new HashMap<String, POI>();
-		map = m;
+		this.map = map;
 		
 		// Making another HashMap so it will be easy to retrieve Place objects from the list
-		ArrayList<POI> pl = parent.getAlpPOITree().toArrayList();
-		names = new String[pl.size()];
-		for (int i = 0; i < pl.size(); i++) {
-			poiMap.put(pl.get(i).getName(), pl.get(i));
-			names[i] = pl.get(i).getName();
+		ArrayList<POI> poiList = parent.getAlpPOITree().toArrayList();
+		names = new String[poiList.size()];
+		for (int i = 0; i < poiList.size(); i++) {
+			poiMap.put(poiList.get(i).getName(), poiList.get(i));
+			names[i] = poiList.get(i).getName();
 		}
 		
 		EditPanel ep = new EditPanel();
@@ -109,7 +125,10 @@ public class EditFrame extends JFrame {
 		this.setLocationRelativeTo(null); // Centers it.
 		this.setVisible(true);
 	}
-	
+	/**
+	 * This class represents the panel for editing the place.
+	 * 
+	 */
 	public class EditPanel extends JPanel {	
 
 		// 1st row
@@ -128,12 +147,16 @@ public class EditFrame extends JFrame {
 		// last row
 		private final SubmitPanel submitRow = new SubmitPanel();
 		
+		
+		/**
+		 * The constructor initialize the panel.
+		 */
 		public EditPanel() {
 			super();
 			// BoxLayout.Y_AXIS tells the layout manager that we want to add things vertically.
 			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
-			nameComboRow.cb.addItemListener(new ItemListener() {
+			nameComboRow.comboBox.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent arg0) {
 					if (arg0.getStateChange() == ItemEvent.SELECTED) {
 						if (isCity) {
@@ -150,6 +173,10 @@ public class EditFrame extends JFrame {
 			populateFormBasic();
 		}
 		
+		/**
+		 * This method obtains the data about population when editing.
+		 * If the place to be edited is POI, it would not get population information.
+		 */
 		private void populateInfo() {
 			Place p = isCity ? currentCity : currentPOI;
 			nameComboRow.setValue(p.getName());
@@ -163,7 +190,9 @@ public class EditFrame extends JFrame {
 				costRow.setValue(currentPOI.getCost() + "");
 			}
 		}
-		
+		/**
+		 * !!!
+		 */
 		private void populateFormBasic() {
 			// Add white space
 			this.add(Box.createVerticalGlue());
@@ -186,47 +215,66 @@ public class EditFrame extends JFrame {
 			EditFrame.this.pack();
 			EditFrame.this.repaint();
 		}
-		
+		/**
+		 * This class represents the text field row for the edit panel
+		 * label - !!!
+		 * textField - !!!
+		 */
 		public class TextFieldRow extends JPanel {
-			protected final JLabel l;
-			protected final JTextField t;
+			protected final JLabel label;
+			protected final JTextField textField;
 			
+			/**
+			 * The constructor initialize the panel.
+			 * @param lt !!!
+			 */
 			public TextFieldRow(String lt) {
 				super();
 				this.setPreferredSize(new Dimension(250, 30));
 				this.setMaximumSize(new Dimension(250, 30));
 				this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 				// Initialize layout
-				l = new JLabel(lt);
+				label = new JLabel(lt);
 				Dimension ld = new Dimension(80, 30);
-				l.setMinimumSize(ld);
-				l.setPreferredSize(ld);
-				l.setMaximumSize(ld);
-				t = new JTextField();
+				label.setMinimumSize(ld);
+				label.setPreferredSize(ld);
+				label.setMaximumSize(ld);
+				textField = new JTextField();
 				Dimension td = new Dimension(150, 30);
-				t.setMinimumSize(td);
-				t.setPreferredSize(td);
-				t.setMaximumSize(td);
-				this.add(l);
+				textField.setMinimumSize(td);
+				textField.setPreferredSize(td);
+				textField.setMaximumSize(td);
+				this.add(label);
 				this.add(Box.createHorizontalGlue());
-				this.add(t);
+				this.add(textField);
 			}
 			
+			/**
+			 * set the text for the text field.
+			 * @param s String to be changed in the text field
+			 */
 			public void setValue(String s) {
-				t.setText(s);
+				textField.setText(s);
 			}
-			
+			/**
+			 * return the String that is in the text field.
+			 * @return
+			 */
 			public String getValue() {
-				return t.getText();
+				return textField.getText();
 			}
 		}
 		
+		/**
+		 * This class represents the text field row that is formatted
+		 * ft -!!!
+		 */
 		public class FormattedTextFieldRow extends TextFieldRow{
-			private JFormattedTextField ft;
+			private JFormattedTextField formatTextField;
 			
 			public FormattedTextFieldRow(String lt, boolean isRating) {
 				super(lt);
-				this.remove(t);
+				this.remove(textField);
 				// Setting format for the content based on the item
 				DecimalFormat format = new DecimalFormat();
 				if (isRating) {
@@ -236,106 +284,106 @@ public class EditFrame extends JFrame {
 				} else {
 					format.setMaximumFractionDigits(0);
 				}
-				ft = new JFormattedTextField(format);
+				formatTextField = new JFormattedTextField(format);
 				if (isRating) {
 					// This is the listener to set a maximum rating of 5.0
-					ft.addPropertyChangeListener("value", new PropertyChangeListener() {
+					formatTextField.addPropertyChangeListener("value", new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent arg0) {
-							if (Double.parseDouble(FormattedTextFieldRow.this.ft.getValue().toString()) > 5) {
-								FormattedTextFieldRow.this.ft.setValue(5);
+							if (Double.parseDouble(FormattedTextFieldRow.this.formatTextField.getValue().toString()) > 5) {
+								FormattedTextFieldRow.this.formatTextField.setValue(5);
 							}
 						}
 					});
 				}
 				Dimension ftd = new Dimension(150, 30);
-				ft.setMinimumSize(ftd);
-				ft.setPreferredSize(ftd);
-				ft.setMaximumSize(ftd);
-				this.add(ft);
+				formatTextField.setMinimumSize(ftd);
+				formatTextField.setPreferredSize(ftd);
+				formatTextField.setMaximumSize(ftd);
+				this.add(formatTextField);
 			}
 			
 			public void setValue(String s) {
-				ft.setValue(Double.parseDouble(s));
+				formatTextField.setValue(Double.parseDouble(s));
 			}
 			
 			public String getValue() {
-				return ft.getText();
+				return formatTextField.getText();
 			}
 			
 			public void setEnabled(boolean b) {
-				l.setEnabled(b);
-				ft.setEditable(b);
+				label.setEnabled(b);
+				formatTextField.setEditable(b);
 			}
 		}
 		
 		public class ComboBoxRow extends JPanel {
-			private final JComboBox<String> cb;
-			private final JLabel l;
+			private final JComboBox<String> comboBox;
+			private final JLabel label;
 			private final String[] itemList;
 			
-			public ComboBoxRow(String lt, String[] s) {
+			public ComboBoxRow(String lt, String[] string) {
 				super();
 				this.setPreferredSize(new Dimension(250, 30));
 				this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 				this.setMaximumSize(new Dimension(250, 30));
 				
 				// Initializing layout
-				itemList = s;
-				l = new JLabel(lt);
+				itemList = string;
+				label = new JLabel(lt);
 				Dimension ld = new Dimension(80, 30);
-				l.setMinimumSize(ld);
-				l.setPreferredSize(ld);
-				l.setMaximumSize(ld);
-				cb = new JComboBox<String>(s);
+				label.setMinimumSize(ld);
+				label.setPreferredSize(ld);
+				label.setMaximumSize(ld);
+				comboBox = new JComboBox<String>(string);
 				Dimension cd = new Dimension(150, 30);
-				cb.setMinimumSize(cd);
-				cb.setPreferredSize(cd);
-				cb.setMaximumSize(cd);
-				this.add(l);
+				comboBox.setMinimumSize(cd);
+				comboBox.setPreferredSize(cd);
+				comboBox.setMaximumSize(cd);
+				this.add(label);
 				this.add(Box.createHorizontalGlue());
-				this.add(cb);
+				this.add(comboBox);
 			}
 			
 			public void setValue(String s) {
-				cb.setSelectedItem(s);
+				comboBox.setSelectedItem(s);
 			}
 			
 			public String getValue() {
-				return itemList[cb.getSelectedIndex()];
+				return itemList[comboBox.getSelectedIndex()];
 			}
 			
 			public void setEnable(boolean b) {
-				l.setEnabled(b);
-				cb.setEnabled(b);
+				label.setEnabled(b);
+				comboBox.setEnabled(b);
 			}
 		}
 		
 		public class SubmitPanel extends JPanel {
-			private final JButton s;
-			private final JButton c;
+			private final JButton submit;
+			private final JButton cancel;
 			
 			public SubmitPanel() {
 				super();
 				this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 				this.setPreferredSize(new Dimension(250, 30));
-				s = new JButton("Submit");
-				s.addActionListener(new ActionListener() {
+				submit = new JButton("Submit");
+				submit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e)
 		            {
 		                if (submitForm()) closeWindow();
 		            }
 				});
-				c = new JButton("Cancel");
-				c.addActionListener(new ActionListener() {
+				cancel = new JButton("Cancel");
+				cancel.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e)
 		            {
 		                closeWindow();
 		            }
 				});
 				this.add(Box.createHorizontalGlue());
-				this.add(s);
+				this.add(submit);
 				this.add(Box.createHorizontalGlue());
-				this.add(c);
+				this.add(cancel);
 				this.add(Box.createHorizontalGlue());
 			}
 			
