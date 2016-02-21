@@ -491,6 +491,10 @@ public class MapFrame extends JFrame{
 				orderOptions.setVisible(true);
 				updateUI();
 			}
+			/**
+			 * This method prints out the route in the text area.
+			 * @param r ArrayList of places that needs to be visited for the route
+			 */
 			private void drawRouteList(ArrayList<Place> r) {
 				list.removeAll();
 				txt.setRoute(r);
@@ -525,9 +529,17 @@ public class MapFrame extends JFrame{
 					return c.getRatPOITree().toArrayList();
 				}
 			}
-			
+
+			/**
+			 * InfoArea class represents the text area that displays the
+			 * information about the place or the route that is searched by an
+			 * user.
+			 */
 			public class InfoArea extends JTextArea {
 				
+				/**
+				 * The constructor initialize the text area of the information
+				 */
 				public InfoArea() {
 					super();
 					Dimension d = new Dimension(247, 300);
@@ -537,7 +549,14 @@ public class MapFrame extends JFrame{
 					this.setEditable(false);
 					this.setAlignmentX(CENTER_ALIGNMENT);
 				}
-				
+
+				/**
+				 * This method sets the text area with the information of place
+				 * that is given as parameter.
+				 * 
+				 * @param p
+				 *            place to show the information
+				 */
 				public void setPlace(Place p) {
 					setText(null);
 					append(p.getName() + '\n');
@@ -549,7 +568,13 @@ public class MapFrame extends JFrame{
 						append("Estimated Cost: " + ((POI) p).getCost());
 					}					
 				}
-				
+
+				/**
+				 * This method sets the text area with the route that is
+				 * searched by an user.
+				 * 
+				 * @param r
+				 */
 				public void setRoute(ArrayList<Place> r) {
 					setText(null);
 					int i = 0;
@@ -560,9 +585,22 @@ public class MapFrame extends JFrame{
 					append((i+1) + ". You will then arrive at: " + r.get(i).getName());
 				}
 			}
-			
+			/**
+			 * PlaceButton class represents the buttons for the places.
+			 * 
+			 * p - place that represents that button
+			 */
 			public class PlaceButton extends JButton {
 				private final Place p;
+				
+				/**
+				 * The constructor initialize the button for the place.
+				 * 
+				 * @param s
+				 *            name of the button in String
+				 * @param place
+				 *            place that represents the button
+				 */
 				public PlaceButton(String s, Place place) {
 					super(s);
 					Dimension d = new Dimension(247, 50);
@@ -585,13 +623,22 @@ public class MapFrame extends JFrame{
 						}
 					});
 				}
-							
+
+				/**
+				 * return the place for the button
+				 * @return
+				 */
 				public Place getPlace() {
 					return p;
 				}
 			}
-
+			/**
+			 * BackButton class represents the button that goes back to the list of the cities 
+			 */
 			public class BackButton extends JButton {
+				/**
+				 * The contstructor initialize the back button
+				 */
 				public BackButton() {
 					super("Back");
 					Dimension d = new Dimension(247, 50);
@@ -718,7 +765,6 @@ public class MapFrame extends JFrame{
 						currentMap.getRoute(fromP, toP, (time.isSelected() ? "time" : "distance"));
 						MapPanel.this.ldp.drawRouteList(currentMap.returnRoute());
 						mdp.drawRoute(currentMap.returnRoute());
-					
 					}
 				});
 				JButton reset = new JButton("Reset");
