@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
 
+import javax.sound.sampled.Line;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -60,13 +62,12 @@ public class MapFrame extends JFrame{
 	private Place selectedFromPlace;
 	private Place selectedToPlace;
 	private Map currentMap;
-	private boolean onNavigationMode;
+	private ArrayList<Place> route;
 	
 	
 	public MapFrame(Map map){
 		super();
 		currentMap = map;
-		onNavigationMode = false;
 		Dimension d = new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setTitle(FRAME_TITLE);
 		this.setMinimumSize(d);
@@ -96,7 +97,6 @@ public class MapFrame extends JFrame{
 //		ArrayList<Place> route = currentMap.getRoute(" Kansas City"," Overland Park","distance");
 //		System.out.println(route);
 	}
-
 	private void placeSelected(Place p) {
 		selectedPlaces.push(p);
 		// Set the to and from fields 
@@ -166,9 +166,10 @@ public class MapFrame extends JFrame{
 		}
 		
 		public class MapDisplayPanel extends JPanel {
-			
 			private ArrayList<CircleLabel> cls;
 			private ArrayList<RoadLine> roads;
+			private ArrayList<Line2D.Double> routeLines;
+			private Graphics2D g2;
 			
 			public MapDisplayPanel() {
 				super();
@@ -177,6 +178,7 @@ public class MapFrame extends JFrame{
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
+				this.routeLines=new ArrayList<Line2D.Double>();
 				
 				this.addMouseListener(new MouseListener() {
 
@@ -210,7 +212,7 @@ public class MapFrame extends JFrame{
 			
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
-				Graphics2D g2 = (Graphics2D) g;
+				g2 = (Graphics2D) g;
 				for (RoadLine rd : roads) {
 					if(rd.getRtype().equals(RoadType.INTERSTATE)){
 						g2.setPaint(Color.RED);
@@ -234,6 +236,29 @@ public class MapFrame extends JFrame{
 					g2.setPaint(Color.BLACK);
 					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
 				}
+				for(int i =0 ; i<routeLines.size();i++){
+					g2.setStroke(new BasicStroke(4));
+					g2.draw(routeLines.get(i));
+					System.out.println("Asdf");
+				}
+			}
+			protected void drawRoute(ArrayList<Place> p){
+//				Graphics2D g2=(Graphics2D)mdp.getGraphics();
+				for(int i=1;i<p.size()-1;i++){
+					Line2D.Double l = new Line2D.Double(p.get(i).getLocation().getX(), p.get(i).getLocation().getY(), p.get(i-1).getLocation().getX(), p.get(i-1).getLocation().getY());
+					routeLines.add(l);
+				}
+				for(int i =0 ; i<routeLines.size();i++){
+					g2.setStroke(new BasicStroke(4));
+					g2.draw(routeLines.get(i));
+					g2.fill(routeLines.get(i));
+					g2.setPaint(Color.BLUE);
+				}
+//				System.out.println(routeLines.size());
+//				System.out.println(p.size());
+//				mdp.repaint();
+//				mdp.updateUI();
+				this.updateUI();
 			}
 			
 			private void addCityToMap(){
@@ -253,10 +278,15 @@ public class MapFrame extends JFrame{
 					cls.add(new CircleLabel(temp.getName(), x, y, CITY_SIZE, c));
 					links = temp.getNeighbors();
 					for(int t=0;t<links.size();t++){
-						roads.add(new RoadLine(links.get(t).getRoadType(),location.getX()+(CITY_SIZE/2), location.getY()+(CITY_SIZE/2), links.get(t).getPlace().getMapLoc().getX()+(CITY_SIZE/2), links.get(t).getPlace().getMapLoc().getY()+(CITY_SIZE/2)));
+						roads.add(new RoadLine(links.get(t).getRoadType(),
+								location.getX()+(CITY_SIZE/2),
+								location.getY()+(CITY_SIZE/2), 
+								links.get(t).getPlace().getMapLoc().getX()+(CITY_SIZE/2), 
+								links.get(t).getPlace().getMapLoc().getY()+(CITY_SIZE/2)));
 					}
 				}
 			}
+	
 			
 			public class RoadLine extends Line2D.Double{
 				private RoadType type;
@@ -596,6 +626,8 @@ public class MapFrame extends JFrame{
 						currentMap.getRoute(from.getText(), to.getText(), (time.isSelected() ? "time" : "distance"));
 						MapPanel.this.ldp.drawRouteList(currentMap.returnRoute());
 						System.out.println(currentMap.returnRoute());
+						mdp.drawRoute(currentMap.returnRoute());
+					
 					}
 				});
 				JButton reset = new JButton("Reset");
