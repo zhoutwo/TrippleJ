@@ -313,7 +313,18 @@ public class MapFrame extends JFrame{
 				}
 			}
 		}
-		
+		/**
+		 * ListDisplacePanel is an inner class of MapFrame class
+		 * This class is a panel to show the list of Cities, POIs, information about the Places, and the route searched. 
+		 * txt - Text field of information to be displayed
+		 * back - Button that goes back to the list of cities
+		 * list - 
+		 * orderOptions -
+		 * orders - 
+		 * alp - 
+		 * pop -
+		 * rat -
+		 */
 		public class ListDisplayPanel extends JPanel{
 			private final InfoArea txt;
 			private final BackButton back;
@@ -328,12 +339,7 @@ public class MapFrame extends JFrame{
 				super();
 				 
 				txt = new InfoArea();
-//				Dimension d = new Dimension(250, 650);
-//				this.setMinimumSize(d);
-//				this.setPreferredSize(d);
-//				this.setMaximumSize(d);
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-				
 				back = new BackButton();
 
 				// Initialize List Panel
