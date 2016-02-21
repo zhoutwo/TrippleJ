@@ -733,12 +733,12 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				throw new NoSuchElementException(); 
 			}
 			BinaryNode temp = s.pop();
+			if(temp.rightChild!=null){
+				putLeftMostNodeOnStack(temp.rightChild);
+			}
 			// Puts the linked list to the stack
 			if (temp.next != null) {
 				s.push(temp.next);
-			}
-			if(temp.rightChild!=null){
-				putLeftMostNodeOnStack(temp.rightChild);
 			}
 			lastNode = temp.element;
 			return lastNode; 
