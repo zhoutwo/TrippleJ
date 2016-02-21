@@ -409,7 +409,6 @@ public class MapFrame extends JFrame{
 				orderOptions.setVisible(true);
 				updateUI();
 			}
-			
 			private void drawRouteList(ArrayList<Place> r) {
 				list.removeAll();
 				txt.setRoute(r);
@@ -417,7 +416,10 @@ public class MapFrame extends JFrame{
 				orderOptions.setVisible(false);
 				updateUI();
 			}
-			
+			/**
+			 * return the group of buttons of city list based on the order selected
+			 * @return
+			 */
 			public ArrayList<City> getCityList() {
 				// Gets the list in the selected order
 				if (orders.getSelection().equals(alp.getModel())) {
@@ -428,7 +430,11 @@ public class MapFrame extends JFrame{
 					return currentMap.getPopCityList();
 				}
 			}
-			
+			/**
+			 * return the group of buttons of POI either by alphabetical or by their ratings
+			 * @param c
+			 * @return
+			 */
 			public ArrayList<POI> getPOIList(City c) {
 				// Gets the list in the selected order
 				if (orders.getSelection().equals(alp.getModel())) {
