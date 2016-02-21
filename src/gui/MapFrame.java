@@ -60,8 +60,6 @@ public class MapFrame extends JFrame{
 //	private City selectedCity;
 //	private POI selectedPOI;
 //	private Place selectedPlace;
-	private Place selectedFromPlace;
-	private Place selectedToPlace;
 	private Map currentMap;
 	private ArrayList<Place> route;
 	
@@ -105,13 +103,11 @@ public class MapFrame extends JFrame{
 			if (!mp.sfp.lockTo.isSelected()) {
 				// Updating To city
 				mp.sfp.to.setText(p.getName());
-				selectedToPlace = p;
 //				if (!cl.getCity().getName().equals(cl.getLabel())) throw new RuntimeException("Labels are different!");
 			}
 		} else {
 			// Updating From city
 			mp.sfp.from.setText(p.getName());
-			selectedFromPlace = p;
 		}
 		mp.ldp.drawList();
 	}
@@ -453,12 +449,12 @@ public class MapFrame extends JFrame{
 				public void setPlace(Place p) {
 					setText(null);
 					append(p.getName() + '\n');
-					append("Rating: " + p.getRating() + "/5.0\n");
+					append("Rating: " + p.getRating() + " / 5.0\n");
 					if (p instanceof City) {
 						append("Population: " + ((City) p).getPopulation());
 					} else {
 						append("Type: " + ((POI) p).getType() + '\n');
-						append("Estimated Cost:" + ((POI) p).getCost());
+						append("Estimated Cost: " + ((POI) p).getCost());
 					}					
 				}
 				

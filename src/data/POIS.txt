@@ -7,6 +7,12 @@ OverlandPark FirstFAmilyChurch 0.0 4.4 Church
 KansasCity CountryClubPlazza 0.0 4.5 ShoppingCenter
 KansasCity WorldsOfFun 28.49 4.2 AmusementPark
 KansasCity KansaCityZoo 7.0 4.2 Zoo
+KansasCity Nelson-AtkinsMuseumOfArt 0 4.6 Museum
+KansasCity KauffmanStadium 10 4.7 Stadium
+KansasCity NegroLeaguesBaseballMuseum 10 4.6 Museum
+KansasCity ArrowheadStadium 27 4.5 Stadium
+KansasCity HarryS.TrumanLibrary 8 4.3 Library
+KansasCity KauffmanCenterTheatre 8 4.5 Theatre
 Olathe ErnieMillerNatureCenter 0.0 4.4 NaturePreserve
 Olathe TimberRidgeAdventureCenter 0.0 4.6 Park
 Olathe AdvancedLaserTag 6.0 4.1 LaserTagCenter
@@ -16,6 +22,7 @@ Topeka KansasStateCapital 0.0 4.3 Capital
 Lawrence SpenceMuseumOfArt 0.0 4.4 Museum
 Lawrence NaturalHistoryMuseum(UnivOfKansas) 0.0 4.6 Museum
 Lawrence ClintonStatePark 0.0 4.3 Park
+Lawrence DoleInstituteOfPolitics 0 4.5 Insititute 
 Shawnee JohnsonCountyMuseum 3.0 4.6 Museum
 Shawnee WonderscopeChildren'sMuseum 7.0 3.4 Museum
 Shawnee KCIndoorSkatePark 0.0 4.2 IndoorPark

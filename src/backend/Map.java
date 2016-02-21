@@ -57,7 +57,6 @@ public class Map {
 		try {
 			importFromTxtFileToAlpCityTree(); 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
 		// call fillTrees() to fill other trees with data
@@ -65,13 +64,11 @@ public class Map {
 		try {
 			importFromTxtFileToalpPOIList(); 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
 		try {
 			importFromTxtFileLinks(); 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block 
 			e.printStackTrace();
 		}
 		fillEstimateTables();
@@ -371,8 +368,8 @@ public class Map {
 	 */
 	public boolean updateFromFormData(FormData fd) {
 		if (fd.isCity()) {
-			return remove(fd.getOldCity());
-//			return remove(fd.getOldCity()) ? insert(fd.getNewCity()) : false;
+//			return remove(fd.getOldCity());
+			return remove(fd.getOldCity()) ? insert(fd.getNewCity()) : false;
 		} else {
 			City parent = fd.getParentCity();
 			return remove(fd.getOldPOI(), parent) ? insert(fd.getNewPOI(), parent) : false;
