@@ -55,14 +55,8 @@ public class MapFrame extends JFrame{
 	
 	// fields
 	private MapPanel mp;
-//	private int state;
 	private final Stack<Place> selectedPlaces;
-//	private City selectedCity;
-//	private POI selectedPOI;
-//	private Place selectedPlace;
 	private Map currentMap;
-	private ArrayList<Place> route;
-	
 	
 	public MapFrame(Map map){
 		super();
@@ -84,17 +78,6 @@ public class MapFrame extends JFrame{
 		mp.mdp.addCityToMap();
 
 		this.setVisible(true);
-		// the following code is for testing purposes only 
-//		ArrayList<City> testcitylist = currentMap.getPopCityList();
-//		for(int i=0;i<testcitylist.size();i++){
-//			ArrayList<Link> nbors = testcitylist.get(i).getNeighbors();
-//			for(int k=0;k<nbors.size();k++){
-//				System.out.println("from "+testcitylist.get(i).getName()+nbors.get(k).toString());
-//			}
-//		}
-//		System.out.println("this one "+currentMap.getPlaces().toString());
-//		ArrayList<Place> route = currentMap.getRoute(" Kansas City"," Overland Park","distance");
-//		System.out.println(route);
 	}
 	private void placeSelected(Place p) {
 		selectedPlaces.push(p);
@@ -103,7 +86,6 @@ public class MapFrame extends JFrame{
 			if (!mp.sfp.lockTo.isSelected()) {
 				// Updating To city
 				mp.sfp.to.setText(p.getName());
-//				if (!cl.getCity().getName().equals(cl.getLabel())) throw new RuntimeException("Labels are different!");
 			}
 		} else {
 			// Updating From city
@@ -113,7 +95,6 @@ public class MapFrame extends JFrame{
 	}
 	
 	public class MapPanel extends JPanel {
-//		private Map stateMap;
 		private MapDisplayPanel mdp;
 		private ListDisplayPanel ldp;
 		private SearchFormPanel sfp;
@@ -165,7 +146,6 @@ public class MapFrame extends JFrame{
 		public class MapDisplayPanel extends JPanel {
 			private ArrayList<CircleLabel> cls;
 			private ArrayList<RoadLine> roads;
-//			private ArrayList<Line2D.Double> routeLines;
 			private Graphics2D g2;
 			
 			public MapDisplayPanel() {
@@ -175,14 +155,11 @@ public class MapFrame extends JFrame{
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
-//				this.routeLines=new ArrayList<Line2D.Double>();
 				
 				this.addMouseListener(new MouseListener() {
-
 					public void mouseClicked(MouseEvent e) {
 						for (CircleLabel cl : cls) {
 							if (cl.contains(e.getX(), e.getY())) {
-								
 								placeSelected(cl.getCity());
 								return;
 							}
@@ -228,13 +205,9 @@ public class MapFrame extends JFrame{
 					}
 					g2.draw(rd);
 					g2.fill(rd);
-//					g2.setPaint(Color.BLACK);
-//					g2.drawString(rd.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
 				}
 				for (CircleLabel cl : cls) {
 					g2.setPaint(Color.YELLOW);
-					g2.draw(cl);
-//					g2.setPaint(Color.YELLOW);
 					g2.fill(cl);
 					g2.setPaint(Color.BLACK);
 					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
@@ -346,9 +319,6 @@ public class MapFrame extends JFrame{
 
 				// Initialize List Panel
 				list = new JPanel();
-//				list.setMinimumSize(d);
-//				list.setPreferredSize(d);
-//				list.setMaximumSize(d);
 				list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
 				this.add(list);
 				
@@ -361,6 +331,7 @@ public class MapFrame extends JFrame{
 				orders = new ButtonGroup();
 				ActionListener rbl = new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
+						// This is the listener that tells the panel to redraw the list
 						drawList();
 					}
 				};
@@ -370,9 +341,11 @@ public class MapFrame extends JFrame{
 				pop.addActionListener(rbl);
 				rat = new JRadioButton("Rating");
 				rat.addActionListener(rbl);
+				// Adding to the panel
 				orderOptions.add(alp);
 				orderOptions.add(pop);
 				orderOptions.add(rat);
+				// Adding to the ButtonGroup
 				orders.add(alp);
 				orders.add(pop);
 				orders.add(rat);
@@ -408,6 +381,7 @@ public class MapFrame extends JFrame{
 					}
 					list.add(back);
 				}
+				orderOptions.setVisible(true);
 				updateUI();
 			}
 			
@@ -415,6 +389,7 @@ public class MapFrame extends JFrame{
 				list.removeAll();
 				txt.setRoute(r);
 				list.add(txt);
+				orderOptions.setVisible(false);
 				updateUI();
 			}
 			
