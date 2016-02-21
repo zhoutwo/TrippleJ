@@ -213,12 +213,15 @@ public class MapFrame extends JFrame{
 				for (RoadLine rd : roads) {
 					if(rd.getRtype().equals(RoadType.INTERSTATE)){
 						g2.setPaint(Color.BLUE);
+						g2.setStroke(new BasicStroke(3));
 					}
 					else if(rd.getRtype().equals(RoadType.HIGHWAY)){
 						g2.setPaint(Color.BLACK);
+						g2.setStroke(new BasicStroke(2));
 					}
 					else if(rd.getRtype().equals(RoadType.ROUTE)){
 						g2.setPaint(Color.RED);
+						g2.setStroke(new BasicStroke(5));
 					}
 					else{
 						g2.setPaint(Color.GRAY);
