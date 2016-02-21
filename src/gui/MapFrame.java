@@ -125,11 +125,7 @@ public class MapFrame extends JFrame{
 			c.ipadx = 0;
 			c.ipady = 0;
 			ldp = new ListDisplayPanel();
-			JScrollPane scrollPane = new JScrollPane(ldp);
-	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//	        scrollPane.setAutoscrolls(true);
-	        scrollPane.getVerticalScrollBar().setUnitIncrement(16);//faster scroll
-	        this.add(scrollPane, c);
+			this.add(ldp, c);
 			// Inserting SearchFormPanel
 			c.gridx = 0;
 			c.gridy = 1;
@@ -337,6 +333,10 @@ public class MapFrame extends JFrame{
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
+				Dimension d = new Dimension(250, 650);
+				this.setMinimumSize(d);
+				this.setPreferredSize(d);
+				this.setMaximumSize(d);
 				 
 				txt = new InfoArea();
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -345,7 +345,10 @@ public class MapFrame extends JFrame{
 				// Initialize List Panel
 				list = new JPanel();
 				list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
-				this.add(list);
+				JScrollPane sp = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				sp.setMinimumSize(new Dimension(250, 630));
+				sp.setPreferredSize(d);
+				this.add(sp);
 				
 				// Create gap to place options at the bottom.
 				this.add(Box.createVerticalGlue());
@@ -448,8 +451,8 @@ public class MapFrame extends JFrame{
 				
 				public InfoArea() {
 					super();
-					Dimension d = new Dimension(250, 300);
-					this.setMinimumSize(d);
+					Dimension d = new Dimension(247, 300);
+					this.setMinimumSize(new Dimension(230, 300));
 					this.setPreferredSize(d);
 					this.setMaximumSize(d);
 					this.setEditable(false);
@@ -483,8 +486,8 @@ public class MapFrame extends JFrame{
 				private final Place p;
 				public PlaceButton(String s, Place place) {
 					super(s);
-					Dimension d = new Dimension(250, 50);
-					this.setMinimumSize(d);
+					Dimension d = new Dimension(247, 50);
+					this.setMinimumSize(new Dimension(230, 50));
 					this.setPreferredSize(d);
 					this.setMaximumSize(d);
 					this.setAlignmentX(CENTER_ALIGNMENT);
@@ -512,9 +515,9 @@ public class MapFrame extends JFrame{
 			public class BackButton extends JButton {
 				public BackButton() {
 					super("Back");
-					Dimension d = new Dimension(250, 50);
-					this.setMinimumSize(d);
-					this.setPreferredSize(d);
+					Dimension d = new Dimension(247, 50);
+					this.setMinimumSize(new Dimension(230, 50));
+//					this.setPreferredSize(d);
 					this.setMaximumSize(d);
 					this.setAlignmentX(CENTER_ALIGNMENT);
 					
