@@ -212,6 +212,7 @@ public class MapFrame extends JFrame{
 					roads.remove(index);
 					index--;
 				}
+				updateUI();
 			}
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -241,7 +242,6 @@ public class MapFrame extends JFrame{
 					g2.setPaint(Color.BLACK);
 					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
 				}
-				resetRoute();
 			}
 			
 			/**
@@ -250,7 +250,7 @@ public class MapFrame extends JFrame{
 			 */
 			protected void drawRoute(ArrayList<Place> p){
 				// get the route to be drawn
-				ArrayList<Place> drawRoute = currentMap.returnRoute();
+				ArrayList<Place> drawRoute = p;
 				// get hash map of cities 
 				HashMap<String,City> cities = currentMap.getCities();
 				// if route is longer than one add the road lines to the list of roads to be drawn
@@ -368,7 +368,8 @@ public class MapFrame extends JFrame{
 				// Initialize List Panel
 				list = new JPanel();
 				list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
-				JScrollPane sp = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+				// Create a Scroll Pane for the list and set the scrollbar to enable as needed.
+				JScrollPane sp = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 				sp.setMinimumSize(new Dimension(250, 630));
 				sp.setPreferredSize(d);
 				this.add(sp);
@@ -714,6 +715,7 @@ public class MapFrame extends JFrame{
 			}
 			
 			private void reset() {
+				// Clears the form
 				from.setEnabled(true);
 				from.setText(null);
 				lockFrom.setEnabled(true);
@@ -724,6 +726,9 @@ public class MapFrame extends JFrame{
 				to.setText(null);
 				to.setEnabled(false);
 				time.setSelected(true);
+				
+				// Remove the routes drawn
+				MapPanel.this.mdp.resetRoute();
 				
 				// Reset selected
 				selectedPlaces.clear();
