@@ -2,6 +2,10 @@ package backend;
 
 public class POI extends Place {
 	
+	public static final String[] AVAILABLE_TYPES = {"Museums", "Farm", "Church", "Shopping Center", "Amusement Park", "Zoo",
+													"Stadium", "Library", "Theatre", "Nature Preserve", "Park", "Laser Tag Center",
+													"Capital", "Indoor Park", "University", "Water Park"};
+	
 	private String type;
 	private double cost;
 

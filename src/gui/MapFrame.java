@@ -402,14 +402,13 @@ public class MapFrame extends JFrame{
 					}
 					list.add(back);
 				}
-				this.updateUI();
+				updateUI();
 			}
 			
 			private void drawRouteList(ArrayList<Place> r) {
 				list.removeAll();
 				txt.setRoute(r);
 				list.add(txt);
-				list.add(back);
 				updateUI();
 			}
 			
@@ -467,34 +466,34 @@ public class MapFrame extends JFrame{
 			}
 			
 			public class PlaceButton extends JButton {
-							private final Place p;
-							public PlaceButton(String s, Place place) {
-								super(s);
-								Dimension d = new Dimension(250, 50);
-								this.setMinimumSize(d);
-								this.setPreferredSize(d);
-								this.setMaximumSize(d);
-								this.setAlignmentX(CENTER_ALIGNMENT);
-								
-								p = place;
-								
-								this.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent e) {
-										if (!selectedPlaces.isEmpty() && selectedPlaces.peek() instanceof POI) {
-											selectedPlaces.pop();
-										} else {
-											if (pop.isSelected()) alp.setSelected(true);
-											pop.setEnabled(false);
-										}
-										placeSelected(p);
-									}
-								});
+				private final Place p;
+				public PlaceButton(String s, Place place) {
+					super(s);
+					Dimension d = new Dimension(250, 50);
+					this.setMinimumSize(d);
+					this.setPreferredSize(d);
+					this.setMaximumSize(d);
+					this.setAlignmentX(CENTER_ALIGNMENT);
+					
+					p = place;
+					
+					this.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							if (!selectedPlaces.isEmpty() && selectedPlaces.peek() instanceof POI) {
+								selectedPlaces.pop();
+								} else {
+								if (pop.isSelected()) alp.setSelected(true);
+									pop.setEnabled(false);
 							}
-							
-							public Place getPlace() {
-								return p;
-							}
+							placeSelected(p);
 						}
+					});
+				}
+							
+				public Place getPlace() {
+					return p;
+				}
+			}
 
 			public class BackButton extends JButton {
 				public BackButton() {
@@ -629,24 +628,7 @@ public class MapFrame extends JFrame{
 				JButton reset = new JButton("Reset");
 				reset.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						from.setEnabled(true);
-						from.setText(null);
-						lockFrom.setEnabled(true);
-						lockFrom.setSelected(false);
-						lockTo.setEnabled(false);
-						lockTo.setSelected(false);
-						to.setEnabled(true);
-						to.setText(null);
-						to.setEnabled(false);
-						time.setSelected(true);
-						
-						// Reset selected
-						selectedPlaces.clear();
-						
-						// Reset ListDisplayPanel
-						MapPanel.this.ldp.alp.setSelected(true);
-						MapPanel.this.ldp.pop.setEnabled(true);
-						MapPanel.this.ldp.drawList();
+						reset();
 					}
 				});
 				
@@ -704,6 +686,26 @@ public class MapFrame extends JFrame{
 						);
 			}
 			
+			private void reset() {
+				from.setEnabled(true);
+				from.setText(null);
+				lockFrom.setEnabled(true);
+				lockFrom.setSelected(false);
+				lockTo.setEnabled(false);
+				lockTo.setSelected(false);
+				to.setEnabled(true);
+				to.setText(null);
+				to.setEnabled(false);
+				time.setSelected(true);
+				
+				// Reset selected
+				selectedPlaces.clear();
+				
+				// Reset ListDisplayPanel
+				MapPanel.this.ldp.alp.setSelected(true);
+				MapPanel.this.ldp.pop.setEnabled(true);
+				MapPanel.this.ldp.drawList();
+			}
 		}
 		
 		public class EditButtonPanel extends JPanel {
@@ -725,7 +727,7 @@ public class MapFrame extends JFrame{
 								POI poi = (POI) selectedPlaces.pop();
 								City c = (City) selectedPlaces.peek();
 								selectedPlaces.push(poi);
-								new EditFrame(poi, c.getAlpPOITree().toArrayList(), currentMap);
+								new EditFrame(poi, c, currentMap);
 							}
 						}
 					}

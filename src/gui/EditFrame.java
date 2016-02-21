@@ -32,15 +32,14 @@ public class EditFrame extends JFrame {
 	private final boolean isCity;
 	private City currentCity;
 	private POI currentPOI;
-	private final ArrayList<City> cityList;
 	private final HashMap<String, City> cityMap;
-	private final ArrayList<POI> poiList;
 	private final HashMap<String, POI> poiMap;
 	private final String[] names;
 	private final Map map;
 	
 	public EditFrame(City c, ArrayList<City> cl, Map m) {
 		super();
+		// Set size for the display.
 		Dimension d = new Dimension(300, 300);
 		this.setMinimumSize(d);
 		this.setPreferredSize(d);
@@ -50,12 +49,11 @@ public class EditFrame extends JFrame {
 		isCity = true;
 		currentCity = c;
 		currentPOI = null;
-		cityList = cl;
 		cityMap = new HashMap<String, City>();
-		poiList = null;
 		poiMap = null;
 		map = m;
 		
+		// Making another HashMap so it will be easy to retrieve Place objects from the list
 		names = new String[cl.size()];
 		for (int i = 0; i < cl.size(); i++) {
 			cityMap.put(cl.get(i).getName(), cl.get(i));
@@ -66,12 +64,12 @@ public class EditFrame extends JFrame {
 		this.add(ep);
 		this.setTitle("Editing " + (isCity ? "City" : "Point-Of-Interest"));
 		this.pack();
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // We will only close this window if we press "X"
 		this.setLocationRelativeTo(null); // Centers it.
 		this.setVisible(true);
 	}
 	
-	public EditFrame(POI p, ArrayList<POI> pl, Map m) {
+	public EditFrame(POI p, City parent, Map m) {
 		super();
 		Dimension d = new Dimension(300, 300);
 		this.setMinimumSize(d);
@@ -80,14 +78,14 @@ public class EditFrame extends JFrame {
 		this.setResizable(false);
 		
 		isCity = false;
-		currentCity = null;
+		currentCity = parent;
 		currentPOI = p;
-		cityList = null;
 		cityMap = null;
-		poiList = pl;
 		poiMap = new HashMap<String, POI>();
 		map = m;
 		
+		// Making another HashMap so it will be easy to retrieve Place objects from the list
+		ArrayList<POI> pl = parent.getAlpPOITree().toArrayList();
 		names = new String[pl.size()];
 		for (int i = 0; i < pl.size(); i++) {
 			poiMap.put(pl.get(i).getName(), pl.get(i));
@@ -98,26 +96,25 @@ public class EditFrame extends JFrame {
 		this.add(ep);
 		this.setTitle("Editing " + (isCity ? "City" : "Point-Of-Interest"));
 		this.pack();
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // We will only close this window if we press "X"
 		this.setLocationRelativeTo(null); // Centers it.
 		this.setVisible(true);
 	}
 	
 	public class EditPanel extends JPanel {	
-		// 1th row
-//		private final Box.Filler placeHolder;
-		// 2nd row
+
+		// 1st row
 		private final ComboBoxRow nameComboRow = new ComboBoxRow("Name: ", names);;
-		// 3rd row
+		// 2nd row
 		private final TextFieldRow xRow = new TextFieldRow("X: ");
-		// 4th row
+		// 3th row
 		private final TextFieldRow yRow = new TextFieldRow("Y: ");
-		// 5th row
+		// 4th row
 		private final FormattedTextFieldRow ratingRow = new FormattedTextFieldRow("Rating: ", true);
-		// 6th row
+		// 5th row
 		private final FormattedTextFieldRow populationRow = new FormattedTextFieldRow("Population: ", false);
-		private final ComboBoxRow typeRow = new ComboBoxRow("Type: ", new String[0]);
-		// 7th row
+		private final ComboBoxRow typeRow = new ComboBoxRow("Type: ", POI.AVAILABLE_TYPES);
+		// 6th row
 		private final FormattedTextFieldRow costRow = new FormattedTextFieldRow("Cost: ", false);
 		// last row
 		private final SubmitPanel submitRow = new SubmitPanel();
@@ -159,18 +156,23 @@ public class EditFrame extends JFrame {
 		}
 		
 		private void populateFormBasic() {
-			this.removeAll();
+			// Add white space
 			this.add(Box.createVerticalGlue());
 			this.add(nameComboRow);
 			this.add(xRow);
 			this.add(yRow);
 			this.add(ratingRow);
+			// If it is a city, then put populationRow, otherwise put typeRow
 			this.add(isCity ? populationRow : typeRow);
-			this.add(Box.createVerticalGlue());
+			// If it is a POI, then put costRow.
 			if (!isCity) {
 				this.add(costRow);
 			}
+			// Add white space 
+			this.add(Box.createVerticalGlue());
+			// Add submit button and cancel button
 			this.add(submitRow);
+			// Add white space
 			this.add(Box.createVerticalGlue());
 			EditFrame.this.pack();
 			EditFrame.this.repaint();
@@ -185,6 +187,7 @@ public class EditFrame extends JFrame {
 				this.setPreferredSize(new Dimension(250, 30));
 				this.setMaximumSize(new Dimension(250, 30));
 				this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+				// Initialize layout
 				l = new JLabel(lt);
 				Dimension ld = new Dimension(80, 30);
 				l.setMinimumSize(ld);
@@ -215,7 +218,7 @@ public class EditFrame extends JFrame {
 			public FormattedTextFieldRow(String lt, boolean isRating) {
 				super(lt);
 				this.remove(t);
-				// Why is this not working.
+				// Setting format for the content based on the item
 				DecimalFormat format = new DecimalFormat();
 				if (isRating) {
 					format.setMaximumIntegerDigits(1);
@@ -226,6 +229,7 @@ public class EditFrame extends JFrame {
 				}
 				ft = new JFormattedTextField(format);
 				if (isRating) {
+					// This is the listener to set a maximum rating of 5.0
 					ft.addPropertyChangeListener("value", new PropertyChangeListener() {
 						public void propertyChange(PropertyChangeEvent arg0) {
 							if (Double.parseDouble(FormattedTextFieldRow.this.ft.getValue().toString()) > 5) {
@@ -265,6 +269,8 @@ public class EditFrame extends JFrame {
 				this.setPreferredSize(new Dimension(250, 30));
 				this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 				this.setMaximumSize(new Dimension(250, 30));
+				
+				// Initializing layout
 				itemList = s;
 				l = new JLabel(lt);
 				Dimension ld = new Dimension(80, 30);
@@ -325,12 +331,14 @@ public class EditFrame extends JFrame {
 			}
 			
 			private void closeWindow() {
+				// This is how you close only the current window, not all of them.
 				EditFrame.this.setVisible(false);
 				EditFrame.this.dispose();
 			}
 			
 			private boolean submitForm() {
 				FormData data;
+				// Creates FormData based on whether it is city or not.
 				if (isCity) {
 					data = new FormData(currentCity, nameComboRow.getValue(), Double.parseDouble(xRow.getValue()), Double.parseDouble(yRow.getValue()), Double.parseDouble(ratingRow.getValue()), Integer.parseInt(populationRow.getValue().replace(",","")));
 				} else {
