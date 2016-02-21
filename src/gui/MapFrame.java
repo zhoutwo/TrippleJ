@@ -196,7 +196,13 @@ public class MapFrame extends JFrame{
 					
 				});
 			}
-			
+			public void resetRoute(){//this will help to redlines to be removed when next route is searched.
+				int index= roads.size()-1;
+				while(roads.get(index).getRtype().equals(RoadType.ROUTE)){
+					roads.remove(index);
+					index--;
+				}
+			}
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g2 = (Graphics2D) g;
@@ -225,6 +231,7 @@ public class MapFrame extends JFrame{
 					g2.setPaint(Color.BLACK);
 					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
 				}
+				resetRoute();
 			}
 			
 			/**
