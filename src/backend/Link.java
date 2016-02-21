@@ -1,14 +1,11 @@
 package backend;
 
-import java.awt.Point;
-
 import utils.RoadType;
 /**
  * Link class represents the links between the places. Links will be stored in ArrayList neighbors in Place class.
  * ISPEED - Interstate speed in miles per hour
  * HSPEED - Highway speed in miles per hour
  * RSPEED - Road speed in miles per hour
- * MILPERGPS - Miles per GPS coordinate
  * time - a type of cost to trip in time
  * distance - a type of cost to trip in distance
  * roadType - a type of road in RoadType
@@ -20,7 +17,6 @@ public class Link {
 	private static final double ISPEED = 85.0;
 	private static final double HSPEED = 45.0;
 	private static final double RSPEED = 40.0;
-	private static final double MILPERGPS = 0.0195234613673439;
 	private double time;
 	private double distance;
 	private RoadType roadType;

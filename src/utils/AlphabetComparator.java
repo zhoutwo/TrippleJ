@@ -9,7 +9,7 @@ import backend.Place;
  */
 public class AlphabetComparator<T extends Place> implements Comparator<T> {
 	/**
-	 * return 1 if o1 is higher, 0 if same, -1 if o2 is higher
+	 * return positive number if the name of the first place is lexically greater than the second place
 	 * @param o1
 	 * @param o2
 	 */

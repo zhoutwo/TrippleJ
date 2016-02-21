@@ -9,7 +9,7 @@ import backend.City;
  */
 public class PopulationComparator implements Comparator<City> {
 	/**
-	 * return 1 if o2 is higher, 0 if same, -1 if o1 is higher
+	 * return 1 if o1 has smaller population, 0 if same, -1 if o1 is higher
 	 * @param o1
 	 * @param o2
 	 */

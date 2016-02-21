@@ -2,7 +2,6 @@ package utils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Stack;
@@ -59,7 +58,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 	}
 	
 	/** the toString() method returns a string of all elements in the tree in order 
-	// in brackets and seperated by commas
+	// in brackets and separated by commas
 	*/
 	public String toString(){
 		ArrayList<T> alist = this.toArrayList();
@@ -253,7 +252,7 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 					}
 			}
 		}
-		// TODO I will worry about remove later.
+		
 		private void removeStep1(T removeElement, MyBoolean b){	
 			int compareTo = c.compare(removeElement, element);
 			BinaryNode sibling;

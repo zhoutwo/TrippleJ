@@ -410,7 +410,7 @@ public class Map {
 	/**
 	 * this method removes a city from all places if the city is removed from the edit panel
 	 * @param c
-	 * @return
+	 * @return true if the removal succeeds, false otherwise
 	 */
 	public boolean remove(City c) {
 		boolean success = true;
@@ -425,7 +425,7 @@ public class Map {
 	/**
 	 * this method removes a point of interest from all places if the city is removed from the edit panel
 	 * @param c
-	 * @return
+	 * @return true if the removal succeeds, false otherwise
 	 */
 	public boolean remove(POI p, City parent) {
 		if (parent.removePOI(p)) {
@@ -440,7 +440,7 @@ public class Map {
 	/**
 	 * this method inserts a city from all places if the city is removed from the edit panel
 	 * @param c
-	 * @return
+	 * @return true if the insertion succeeds, false otherwise
 	 */
 	public boolean insert(City c) {
 		boolean success = true;
@@ -455,7 +455,7 @@ public class Map {
 	/**
 	 * this method inserts a point of interest from all places if the city is removed from the edit panel
 	 * @param c
-	 * @return
+	 * @return true if the insertion succeeds, false otherwise
 	 */
 	public boolean insert(POI p, City parent) {
 		if (parent.addPOI(p)) {

@@ -7,8 +7,6 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-
 import javax.swing.JOptionPane;
 
 import gui.*;
