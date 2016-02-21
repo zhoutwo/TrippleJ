@@ -347,10 +347,10 @@ public class Map {
 		PathNode temp2 = pq.poll();
 		Place temp3 = temp2.getCurrentPlace();
 		if(temp3.equals(to)){
-			route= temp2.getWIB();
+			route= temp2.getVisitedPlace();
 		}
 		else{
-			dRoute(temp3,to,temp2.getCostTraveled(),pq,temp2.getWIB());
+			dRoute(temp3,to,temp2.getCostTraveled(),pq,temp2.getVisitedPlace());
 		}
 	}
 	
@@ -379,10 +379,10 @@ public class Map {
 		PathNode temp2 = pq.poll();
 		Place temp3 = temp2.getCurrentPlace();
 		if(temp3.equals(to)){
-			route= temp2.getWIB();
+			route= temp2.getVisitedPlace();
 		}
 		else{
-			dRoute(temp3,to,temp2.getCostTraveled(),pq,temp2.getWIB());
+			dRoute(temp3,to,temp2.getCostTraveled(),pq,temp2.getVisitedPlace());
 		}
 	}
 	
