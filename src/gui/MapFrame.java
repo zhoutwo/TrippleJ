@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Stack;
@@ -58,11 +60,13 @@ public class MapFrame extends JFrame{
 	private Place selectedFromPlace;
 	private Place selectedToPlace;
 	private Map currentMap;
+	private boolean onNavigationMode;
 	
 	
 	public MapFrame(Map map){
 		super();
 		currentMap = map;
+		onNavigationMode = false;
 		Dimension d = new Dimension(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setTitle(FRAME_TITLE);
 		this.setMinimumSize(d);
@@ -323,17 +327,17 @@ public class MapFrame extends JFrame{
 				orderOptions = new JPanel();
 				orderOptions.setLayout(new BoxLayout(orderOptions, BoxLayout.X_AXIS));
 				orders = new ButtonGroup();
-				ChangeListener rbl = new ChangeListener() {
-					public void stateChanged(ChangeEvent arg0) {
+				ActionListener rbl = new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
 						drawList();
 					}
 				};
 				alp = new JRadioButton("Alphabetical");
-				alp.addChangeListener(rbl);
+				alp.addActionListener(rbl);
 				pop = new JRadioButton("Population");
-				pop.addChangeListener(rbl);
+				pop.addActionListener(rbl);
 				rat = new JRadioButton("Rating");
-				rat.addChangeListener(rbl);
+				rat.addActionListener(rbl);
 				orderOptions.add(alp);
 				orderOptions.add(pop);
 				orderOptions.add(rat);
@@ -373,6 +377,14 @@ public class MapFrame extends JFrame{
 					list.add(back);
 				}
 				this.updateUI();
+			}
+			
+			private void drawRouteList(ArrayList<Place> r) {
+				list.removeAll();
+				txt.setRoute(r);
+				list.add(txt);
+				list.add(back);
+				updateUI();
 			}
 			
 			public ArrayList<City> getCityList() {
@@ -416,39 +428,48 @@ public class MapFrame extends JFrame{
 						append("Estimated Cost:" + ((POI) p).getCost());
 					}					
 				}
+				
+				public void setRoute(ArrayList<Place> r) {
+					setText(null);
+					int i = 0;
+					append((i+1) + ". Start from: " + r.get(i).getName() + '\n');
+					for (i++;i<r.size()-1;i++) {
+						append((i+1) + ". Go to: " + r.get(i).getName() + '\n');
+					}
+					append((i+1) + ". You will then arrive at: " + r.get(i).getName());
+				}
 			}
 			
 			public class PlaceButton extends JButton {
-				private final Place p;
-				public PlaceButton(String s, Place place) {
-					super(s);
-					Dimension d = new Dimension(250, 50);
-					this.setMinimumSize(d);
-					this.setPreferredSize(d);
-					this.setMaximumSize(d);
-					this.setAlignmentX(CENTER_ALIGNMENT);
-					
-					p = place;
-					
-					this.addActionListener(new ActionListener() {
-						public void actionPerformed(ActionEvent e) {
-							if (!selectedPlaces.isEmpty() && selectedPlaces.peek() instanceof POI) {
-								selectedPlaces.pop();
-							} else {
-//								alp.setSelected(true);
-								if (pop.isSelected()) alp.setSelected(true);
-								pop.setEnabled(false);
+							private final Place p;
+							public PlaceButton(String s, Place place) {
+								super(s);
+								Dimension d = new Dimension(250, 50);
+								this.setMinimumSize(d);
+								this.setPreferredSize(d);
+								this.setMaximumSize(d);
+								this.setAlignmentX(CENTER_ALIGNMENT);
+								
+								p = place;
+								
+								this.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent e) {
+										if (!selectedPlaces.isEmpty() && selectedPlaces.peek() instanceof POI) {
+											selectedPlaces.pop();
+										} else {
+											if (pop.isSelected()) alp.setSelected(true);
+											pop.setEnabled(false);
+										}
+										placeSelected(p);
+									}
+								});
 							}
-							placeSelected(p);
+							
+							public Place getPlace() {
+								return p;
+							}
 						}
-					});
-				}
-				
-				public Place getPlace() {
-					return p;
-				}
-			}
-			
+
 			public class BackButton extends JButton {
 				public BackButton() {
 					super("Back");
@@ -573,6 +594,7 @@ public class MapFrame extends JFrame{
 				findRoute.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
 						currentMap.getRoute(from.getText(), to.getText(), (time.isSelected() ? "time" : "distance"));
+						MapPanel.this.ldp.drawRouteList(currentMap.returnRoute());
 						System.out.println(currentMap.returnRoute());
 					}
 				});

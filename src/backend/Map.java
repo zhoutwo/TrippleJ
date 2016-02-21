@@ -328,8 +328,8 @@ public class Map {
 		if (!alpCityTree.remove(c)) success = false;
 		if (!ratCityTree.remove(c)) success = false;
 		if (!popCityTree.remove(c)) success = false;
-//		places.remove(c.getName());
-//		cities.remove(c.getName());
+		places.remove(c.getName());
+		cities.remove(c.getName());
 		return success;
 	}
 	
