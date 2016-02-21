@@ -10,6 +10,8 @@ import java.awt.GridBagLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
@@ -34,8 +36,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import backend.City;
@@ -121,8 +126,16 @@ public class MapFrame extends JFrame{
 			c.ipady = 50;
 			ldp = new ListDisplayPanel();
 			
-			this.add(ldp, c);
-
+//			adsfdsaf 5 2.2 183 6
+//			6236sfdsaf 6 0.2 1873 1
+//			sagadsaf 7 9.2 223 16
+//			qewrf 8 2.7 153 15
+//			iqwenk 10 5.5 10.23 1.1
+			JScrollPane scrollPane = new JScrollPane(ldp);
+	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+	        scrollPane.setBounds(50, 30, 300, 50);
+	        scrollPane.setAutoscrolls(true);
+	        this.add(scrollPane, c);
 			// Inserting SearchFormPanel
 			c.gridx = 0;
 			c.gridy = 1;
@@ -312,6 +325,7 @@ public class MapFrame extends JFrame{
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
+				 
 				txt = new InfoArea();
 				Dimension d = new Dimension(250, 650);
 				this.setMinimumSize(d);
