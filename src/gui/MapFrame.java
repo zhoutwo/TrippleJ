@@ -372,6 +372,7 @@ public class MapFrame extends JFrame{
 				JScrollPane sp = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 				sp.setMinimumSize(new Dimension(250, 630));
 				sp.setPreferredSize(d);
+				sp.getVerticalScrollBar().setUnitIncrement(20);
 				this.add(sp);
 				
 				// Create gap to place options at the bottom.
