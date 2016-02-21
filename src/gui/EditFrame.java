@@ -32,9 +32,9 @@ import backend.Place;
  * isCity - boolean that checks if the place is city or POI 
  * currentCity - represents current city
  * currentPOI - represent current POI
- * cityMap - !!!
- * poiMap - !!!
- * names - !!!
+ * cityMap - A HashMap that links city names to cities
+ * poiMap - A HashMap that links POI names to pois
+ * names - names for the list
  * map - current map for the MapFrame
  */
 public class EditFrame extends JFrame {
@@ -190,9 +190,7 @@ public class EditFrame extends JFrame {
 				costRow.setValue(currentPOI.getCost() + "");
 			}
 		}
-		/**
-		 * !!!
-		 */
+		
 		private void populateFormBasic() {
 			// Add white space
 			this.add(Box.createVerticalGlue());
@@ -217,8 +215,8 @@ public class EditFrame extends JFrame {
 		}
 		/**
 		 * This class represents the text field row for the edit panel
-		 * label - !!!
-		 * textField - !!!
+		 * label - The JLabel before the text field
+		 * textField - The text field
 		 */
 		public class TextFieldRow extends JPanel {
 			protected final JLabel label;
@@ -226,7 +224,7 @@ public class EditFrame extends JFrame {
 			
 			/**
 			 * The constructor initialize the panel.
-			 * @param lt !!!
+			 * @param lt String for the label
 			 */
 			public TextFieldRow(String lt) {
 				super();
@@ -267,7 +265,7 @@ public class EditFrame extends JFrame {
 		
 		/**
 		 * This class represents the text field row that is formatted
-		 * ft -!!!
+		 * ft - String for the label
 		 */
 		public class FormattedTextFieldRow extends TextFieldRow{
 			private JFormattedTextField formatTextField;
