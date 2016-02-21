@@ -50,7 +50,17 @@ import backend.POI;
 import backend.Place;
 import utils.RoadType;
 
-
+/**
+ * MapFrame class extends JFrame and displays GUI of navigation system.
+ * 
+ * FRAME_WIDTH - width of the frame
+ * FRAME_HEIGHT - height of the frame
+ * FRAME_TITLE - title of the frame
+ * CITY_SIZE - size of city displayed on the MapPanel
+ * mp - Map panel
+ * selectedPlaces - stack of places that the user has selected
+ * currentMap - variable to represent Map class
+ */
 public class MapFrame extends JFrame{
 	// constants
 	private static final int FRAME_WIDTH = 1100;
@@ -62,7 +72,10 @@ public class MapFrame extends JFrame{
 	private MapPanel mp;
 	private final Stack<Place> selectedPlaces;
 	private Map currentMap;
-	
+	/**
+	 * The constructor initialize the frame and field variables.
+	 * @param map
+	 */
 	public MapFrame(Map map){
 		super();
 		currentMap = map;
@@ -84,6 +97,10 @@ public class MapFrame extends JFrame{
 
 		this.setVisible(true);
 	}
+	/**
+	 * 
+	 * @param p
+	 */
 	private void placeSelected(Place p) {
 		selectedPlaces.push(p);
 		// Set the to and from fields 
@@ -147,7 +164,7 @@ public class MapFrame extends JFrame{
 		}
 		
 		public class MapDisplayPanel extends JPanel {
-			private ArrayList<CircleLabel> cls;
+			private ArrayList<CircleLabel> circleLabels;
 			private ArrayList<RoadLine> roads;
 			private Graphics2D g2;
 			
@@ -161,9 +178,9 @@ public class MapFrame extends JFrame{
 				
 				this.addMouseListener(new MouseListener() {
 					public void mouseClicked(MouseEvent e) {
-						for (CircleLabel cl : cls) {
-							if (cl.contains(e.getX(), e.getY())) {
-								placeSelected(cl.getCity());
+						for (CircleLabel circleLabel : circleLabels) {
+							if (circleLabel.contains(e.getX(), e.getY())) {
+								placeSelected(circleLabel.getCity());
 								return;
 							}
 						}
@@ -186,7 +203,10 @@ public class MapFrame extends JFrame{
 					
 				});
 			}
-			public void resetRoute(){//this will help to redlines to be removed when next route is searched.
+			/**
+			 * remove the previous route that is searched when next route is searched
+			 */
+			public void resetRoute(){
 				int index= roads.size()-1;
 				while(roads.get(index).getRtype().equals(RoadType.ROUTE)){
 					roads.remove(index);
@@ -215,7 +235,7 @@ public class MapFrame extends JFrame{
 					g2.draw(rd);
 					g2.fill(rd);
 				}
-				for (CircleLabel cl : cls) {
+				for (CircleLabel cl : circleLabels) {
 					g2.setPaint(Color.YELLOW);
 					g2.fill(cl);
 					g2.setPaint(Color.BLACK);
@@ -247,7 +267,7 @@ public class MapFrame extends JFrame{
 			}
 			
 			private void addCityToMap(){
-				cls = new ArrayList<CircleLabel>();
+				circleLabels = new ArrayList<CircleLabel>();
 				roads = new ArrayList<RoadLine>();
 				ArrayList<Link> links;
 				Iterator<City> i = currentMap.getPopTree().iterator();
@@ -260,7 +280,7 @@ public class MapFrame extends JFrame{
 					location = temp.getMapLoc();
 					x = (int)location.getX();
 					y = (int)location.getY();
-					cls.add(new CircleLabel(temp.getName(), x, y, CITY_SIZE, c));
+					circleLabels.add(new CircleLabel(temp.getName(), x, y, CITY_SIZE, c));
 					links = temp.getNeighbors();
 					for(int t=0;t<links.size();t++){
 						roads.add(new RoadLine(links.get(t).getRoadType(),
@@ -276,9 +296,9 @@ public class MapFrame extends JFrame{
 			public class RoadLine extends Line2D.Double{
 				private final RoadType type;
 				
-				public RoadLine(RoadType ptype,double w,double x,double y,double z){
+				public RoadLine(RoadType type,double w,double x,double y,double z){
 					super(w,x,y,z);
-					type = ptype;
+					this.type = type;
 				}
 				
 				/**
@@ -289,23 +309,26 @@ public class MapFrame extends JFrame{
 					return type;
 				}
 			}
-			
+			/**
+			 *This class helps to display the location of cities and their names
+			 * 
+			 */
 			public class CircleLabel extends Ellipse2D.Double {
-				private final String t;
-				private final City c;
+				private final String name;
+				private final City city;
 				
-				public CircleLabel (String t, int x, int y, int s, City c) {
+				public CircleLabel (String name, int x, int y, int s, City city) {
 					super(x, y, s, s);
-					this.t = t;
-					this.c = c;
+					this.name = name;
+					this.city = city;
 				}
 				
 				public String getLabel() {
-					return t;
+					return name;
 				}
 				
 				public City getCity() {
-					return c;
+					return city;
 				}
 			}
 		}
@@ -314,7 +337,7 @@ public class MapFrame extends JFrame{
 		 * This class is a panel to show the list of Cities, POIs, information about the Places, and the route searched. 
 		 * txt - Text field of information to be displayed
 		 * back - Button that goes back to the list of cities
-		 * list - 
+		 * list - !!!
 		 * orderOptions -
 		 * orders - 
 		 * alp - 

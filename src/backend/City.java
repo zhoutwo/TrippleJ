@@ -6,10 +6,10 @@ import utils.*;
 /**
  * This class is a specific type of the Place class. in addition to the Place class it has a population.
  * Fields: 
- * population - int representing the number of people that live in the city
- * pois - array list of points of interest
- * alpPOITree - flex red black tree of points of interest sorted alphabetically
- * ratPOITree - flex red black tree of points of interest sorted by rating
+ * population - Integer representing the number of people that live in the city
+ * pois - ArrayList of POI
+ * alpPOITree - FlextRedBlackTree of points of interest sorted alphabetically
+ * ratPOITree - FlextRedBlackTree of points of interest sorted by rating
  */
 public class City extends Place {
 	
@@ -19,11 +19,11 @@ public class City extends Place {
 	private FlexRedBlackTree<POI> ratPOITree;
 	
 	/**
-	 * this is the constructor that initializes an object city and all of its fields with no points of interst
-	 * @param name
-	 * @param population
-	 * @param location
-	 * @param rating
+	 * This is the constructor that initializes an object city and all of its fields with no points of interest
+	 * @param name name of the city in String
+	 * @param population population of the city in integer
+	 * @param location location of the city in Coordinate
+	 * @param rating rating of the city in double out of 5.0
 	 */
 	public City(String name,int population, Coordinate location, double rating) {
 		super(name, location, rating);
@@ -35,12 +35,12 @@ public class City extends Place {
 	}
 	
 	/**
-	 * this constructor initializes a city object with a given array list of points of interest
-	 * @param name
-	 * @param population
-	 * @param location
-	 * @param rating
-	 * @param pois
+	 * This constructor initializes a city object with a given array list of points of interest
+	 * @param name name of the city in String
+	 * @param population number of population of the city in Integer
+	 * @param location location of the city in Coordinate class
+	 * @param rating rating of the city in double out of 5.0
+	 * @param pois ArrayList of POI of the city
 	 */
 	public City(String name,int population, Coordinate location, double rating, ArrayList<POI> pois) {
 		this(name, population, location, rating);
@@ -100,7 +100,7 @@ public class City extends Place {
 	
 	/**
 	 * add a point of interest to the city
-	 * @param poi
+	 * @param poi POI to be added
 	 * @return
 	 */
 	public boolean addPOI(POI poi) {
@@ -114,7 +114,7 @@ public class City extends Place {
 	
 	/**
 	 * remove a point of interest from a city
-	 * @param poi
+	 * @param poi POI to be removed
 	 * @return
 	 */
 	public boolean removePOI(POI poi) {
@@ -128,13 +128,13 @@ public class City extends Place {
 	
 	/**
 	 * load a given array list of points of interest to the cities point of interest array list
-	 * @param pl
+	 * @param pois ArrayList of POIs that is to be loaded
 	 */
-	public void loadPOIList(ArrayList<POI> pl) {
-		this.pois = pl;
+	public void loadPOIList(ArrayList<POI> pois) {
+		this.pois = pois;
 		alpPOITree = new FlexRedBlackTree<POI>(new AlphabetComparator<POI>());
 		ratPOITree = new FlexRedBlackTree<POI>(new RatingComparator<POI>());
-		for (POI p : pl) {
+		for (POI p : pois) {
 			alpPOITree.insert(p);
 			ratPOITree.insert(p);
 		}
