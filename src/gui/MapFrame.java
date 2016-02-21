@@ -19,6 +19,7 @@ import java.awt.geom.Line2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
 
@@ -168,7 +169,7 @@ public class MapFrame extends JFrame{
 		public class MapDisplayPanel extends JPanel {
 			private ArrayList<CircleLabel> cls;
 			private ArrayList<RoadLine> roads;
-			private ArrayList<Line2D.Double> routeLines;
+//			private ArrayList<Line2D.Double> routeLines;
 			private Graphics2D g2;
 			
 			public MapDisplayPanel() {
@@ -178,7 +179,7 @@ public class MapFrame extends JFrame{
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
-				this.routeLines=new ArrayList<Line2D.Double>();
+//				this.routeLines=new ArrayList<Line2D.Double>();
 				
 				this.addMouseListener(new MouseListener() {
 
@@ -215,10 +216,13 @@ public class MapFrame extends JFrame{
 				g2 = (Graphics2D) g;
 				for (RoadLine rd : roads) {
 					if(rd.getRtype().equals(RoadType.INTERSTATE)){
-						g2.setPaint(Color.RED);
+						g2.setPaint(Color.BLUE);
 					}
 					else if(rd.getRtype().equals(RoadType.HIGHWAY)){
 						g2.setPaint(Color.BLACK);
+					}
+					else if(rd.getRtype().equals(RoadType.ROUTE)){
+						g2.setPaint(Color.RED);
 					}
 					else{
 						g2.setPaint(Color.GRAY);
@@ -236,28 +240,27 @@ public class MapFrame extends JFrame{
 					g2.setPaint(Color.BLACK);
 					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
 				}
-				for(int i =0 ; i<routeLines.size();i++){
-					g2.setStroke(new BasicStroke(4));
-					g2.draw(routeLines.get(i));
-					System.out.println("Asdf");
-				}
 			}
+			
+			/**
+			 * this method draws the route on the map with red lines 
+			 * @param p
+			 */
 			protected void drawRoute(ArrayList<Place> p){
-//				Graphics2D g2=(Graphics2D)mdp.getGraphics();
-				for(int i=1;i<p.size()-1;i++){
-					Line2D.Double l = new Line2D.Double(p.get(i).getLocation().getX(), p.get(i).getLocation().getY(), p.get(i-1).getLocation().getX(), p.get(i-1).getLocation().getY());
-					routeLines.add(l);
+				// get the route to be drawn
+				ArrayList<Place> drawRoute = currentMap.returnRoute();
+				// get hash map of cities 
+				HashMap<String,City> cities = currentMap.getCities();
+				// if route is longer than one add the road lines to the list of roads to be drawn
+				if(drawRoute.size()>1){
+					City from = cities.get(drawRoute.get(0).getName());
+					City to = from;
+					for(int i=1;i<drawRoute.size();i++){
+						from = to;
+						to = cities.get(drawRoute.get(i).getName());
+						mp.mdp.roads.add(new RoadLine(RoadType.ROUTE,from.getMapLoc().getX()+(CITY_SIZE/2),from.getMapLoc().getY()+(CITY_SIZE/2),to.getMapLoc().getX()+(CITY_SIZE/2),to.getMapLoc().getY()+(CITY_SIZE/2)));
+					}
 				}
-				for(int i =0 ; i<routeLines.size();i++){
-					g2.setStroke(new BasicStroke(4));
-					g2.draw(routeLines.get(i));
-					g2.fill(routeLines.get(i));
-					g2.setPaint(Color.BLUE);
-				}
-//				System.out.println(routeLines.size());
-//				System.out.println(p.size());
-//				mdp.repaint();
-//				mdp.updateUI();
 				this.updateUI();
 			}
 			

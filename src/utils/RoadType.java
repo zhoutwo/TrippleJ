@@ -1,5 +1,5 @@
 package utils;
 
 public enum RoadType {
-	INTERSTATE, HIGHWAY, TOLLWAY, ROAD
+	INTERSTATE, HIGHWAY, TOLLWAY, ROAD, ROUTE
 }

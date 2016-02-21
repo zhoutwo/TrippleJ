@@ -88,6 +88,13 @@ public class Map {
 		}
 	}
 	
+	/** 
+	 * this method returns a hash map from strings to cities 
+	 */
+	public HashMap<String,City> getCities(){
+		return cities;
+	}
+	
 	/**
 	 * getPlaces() returns a HashMap<String name,Place place> of places 
 	 * @return
