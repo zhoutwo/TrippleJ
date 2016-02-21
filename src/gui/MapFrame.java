@@ -122,19 +122,13 @@ public class MapFrame extends JFrame{
 			c.gridy = 0;
 			c.weightx = 0.50;
 			c.weighty = 0.50;
-			c.ipadx = 50;
-			c.ipady = 50;
+			c.ipadx = 0;
+			c.ipady = 0;
 			ldp = new ListDisplayPanel();
-			
-//			adsfdsaf 5 2.2 183 6
-//			6236sfdsaf 6 0.2 1873 1
-//			sagadsaf 7 9.2 223 16
-//			qewrf 8 2.7 153 15
-//			iqwenk 10 5.5 10.23 1.1
 			JScrollPane scrollPane = new JScrollPane(ldp);
 	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	        scrollPane.setBounds(50, 30, 300, 50);
-	        scrollPane.setAutoscrolls(true);
+//	        scrollPane.setAutoscrolls(true);
+	        scrollPane.getVerticalScrollBar().setUnitIncrement(16);//faster scroll
 	        this.add(scrollPane, c);
 			// Inserting SearchFormPanel
 			c.gridx = 0;
@@ -334,10 +328,10 @@ public class MapFrame extends JFrame{
 				super();
 				 
 				txt = new InfoArea();
-				Dimension d = new Dimension(250, 650);
-				this.setMinimumSize(d);
-				this.setPreferredSize(d);
-				this.setMaximumSize(d);
+//				Dimension d = new Dimension(250, 650);
+//				this.setMinimumSize(d);
+//				this.setPreferredSize(d);
+//				this.setMaximumSize(d);
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 				
 				back = new BackButton();
