@@ -4,11 +4,17 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 /**
- * !!!
- * @author yoons1
+ * Place represents place either by City class or POI class
+ * centerPoint - center point of the place in MapDisplayPanel
+ * location - location of the place
+ * name - name of the place
+ * neighbors - ArrayList of Links that connects to neighboring places
+ * linkMap - !!!
+ * rating - rating of the place out of 5.0
+ * est - !!!
  */
 public abstract class Place {
-	private Point mapLoc;
+	private Point centerPoint;
 	protected Coordinate location;
 	protected String name;
 	protected ArrayList<Link> neighbors;
@@ -17,12 +23,12 @@ public abstract class Place {
 	protected HashMap<Place,Double> est;
 	/**
 	 * !!!
-	 * @param pname
-	 * @param location
-	 * @param rating
+	 * @param name name of the place in String
+	 * @param location location of the place in Coordinate class
+	 * @param rating rating of place in double out of 5.0
 	 */
-	public Place(String pname, Coordinate location, double rating) {
-		name = pname;
+	public Place(String name, Coordinate location, double rating) {
+		this.name = name;
 		this.location = location;
 		this.rating = rating;
 		this.neighbors = new ArrayList<Link>();
@@ -94,17 +100,17 @@ public abstract class Place {
 	 * initialize the center of its location drawn in the MapDisplayPanel
 	 */
 	public void setMapLocal(){
-		mapLoc = new Point();
+		centerPoint = new Point();
 		double y = (location.getY()-40)*(-233);
 		double x = (location.getX()+98)*(150);
-		mapLoc.setLocation(x,y);
+		centerPoint.setLocation(x,y);
 	}
 	/**
 	 * return the center point of its location drawn in the MapDisplayPanel
 	 * @return
 	 */
 	public Point getMapLoc(){
-		return mapLoc;
+		return centerPoint;
 	}
 	/**
 	 * return the GPS coordinate of the place
