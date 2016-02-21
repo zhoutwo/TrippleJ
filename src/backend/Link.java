@@ -11,9 +11,9 @@ import utils.RoadType;
  * MILPERGPS - Miles per GPS coordinate
  * time - a type of cost to trip in time
  * distance - a type of cost to trip in distance
- * type - a type of cost to be chosen
+ * roadType - a type of road in RoadType
  * place - a place where the link is toward to
- * name - !!!
+ * type - name of the road type in String
  */
 public class Link {
 	
@@ -23,21 +23,21 @@ public class Link {
 	private static final double MILPERGPS = 0.0195234613673439;
 	private double time;
 	private double distance;
-	private RoadType type;
+	private RoadType roadType;
 	private Place place;
-	private String name;
+	private String type;
 	
 	/**
 	 * The constructor of Link class initialize the fields by either parameters or using methods.
-	 * @param pName
+	 * @param name
 	 * @param pFromPlace
 	 * @param pToPlace
 	 */
-	public Link(String pName,Place pFromPlace,Place pToPlace){
-		place = pToPlace;
-		name = pName;
+	public Link(String type,Place placeFrom,Place placeTo){
+		place = placeTo;
+		this.type = type;
 		setType();
-		setDistance(pFromPlace.getLocation());
+		setDistance(placeFrom.getLocation());
 		setTime();
 	}
 	/**
@@ -71,15 +71,15 @@ public class Link {
 	 * initialize the type of the road that is in between the places of the links
 	 */
 	private void setType() {
-		char c = name.charAt(1);
+		char c = type.charAt(1);
 		if(c=='I'){
-			type = RoadType.INTERSTATE;
+			roadType = RoadType.INTERSTATE;
 		}
 		else if(c=='H'){
-			type = RoadType.HIGHWAY;
+			roadType = RoadType.HIGHWAY;
 		}
 		else {
-			type = RoadType.ROAD;
+			roadType = RoadType.ROAD;
 		}
 	}
 	/**
@@ -101,7 +101,7 @@ public class Link {
 	 * @return
 	 */
 	public RoadType getRoadType() {
-		return this.type;
+		return this.roadType;
 	}
 	/**
 	 * return the place that is linked to
@@ -129,7 +129,7 @@ public class Link {
 	 * @param type
 	 */
 	public void setRoadType(RoadType type) {
-		this.type = type;
+		this.roadType = type;
 	}
 	/**
 	 * set the place to given parameter place 
@@ -139,9 +139,9 @@ public class Link {
 		this.place=place;
 	}
 	/**
-	 * !!! can i erase this method?
+	 * prints out variable for testing purpose
 	 */
 	public String toString(){
-		return " to "+place.name+" dis = "+distance+", t = "+time+", roadtype = "+type+", roadname = "+name;
+		return " to "+place.name+" dis = "+distance+", t = "+time+", roadtype = "+type+", roadname = "+type;
 	}
 }

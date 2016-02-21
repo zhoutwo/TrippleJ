@@ -93,12 +93,12 @@ public class MapFrame extends JFrame{
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLocationRelativeTo(null); // Centers it
 		
-		mp.mdp.addCityToMap();
+		mp.mdp.drawCityToMap();
 
 		this.setVisible(true);
 	}
 	/**
-	 * 
+	 * This method helps to store the data and prints out the places that user selected
 	 * @param p
 	 */
 	private void placeSelected(Place p) {
@@ -115,13 +115,23 @@ public class MapFrame extends JFrame{
 		}
 		mp.ldp.drawList();
 	}
-	
+	/**
+	 * MapPanel is the main Panel for the Frame.
+	 * This panel contains following four panels. 
+	 *  MapDisplayPanel mdp
+	 *	ListDisplayPanel ldp
+	 *	SearchFormPanel sfp
+	 *	EditButtonPanel ebp
+	 */
 	public class MapPanel extends JPanel {
 		private MapDisplayPanel mdp;
 		private ListDisplayPanel ldp;
 		private SearchFormPanel sfp;
 		private EditButtonPanel ebp;
 		
+		/**
+		 * The constructor initialize all the panels inside the MapPanel
+		 */
 		public MapPanel() {
 			super(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
@@ -163,11 +173,20 @@ public class MapFrame extends JFrame{
 			this.add(ebp, c);
 		}
 		
+		/**
+		 * MapDisplayPanel displays map of cities and their links.
+		 * circleLabels - ArrayList of CircleLabel components
+		 * roads - ArraysList of RoadLine components
+		 * g2 - graphic to display the map 
+		 */
 		public class MapDisplayPanel extends JPanel {
 			private ArrayList<CircleLabel> circleLabels;
 			private ArrayList<RoadLine> roads;
 			private Graphics2D g2;
 			
+			/**
+			 * the constructor initialize the panel and displays the map and the links
+			 */
 			public MapDisplayPanel() {
 				super();
 				this.setBackground(Color.GREEN);
@@ -214,6 +233,7 @@ public class MapFrame extends JFrame{
 				}
 				updateUI();
 			}
+
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				g2 = (Graphics2D) g;
@@ -266,7 +286,10 @@ public class MapFrame extends JFrame{
 				this.updateUI();
 			}
 			
-			private void addCityToMap(){
+			/**
+			 * Draw cities and their roads on the map
+			 */
+			private void drawCityToMap(){
 				circleLabels = new ArrayList<CircleLabel>();
 				roads = new ArrayList<RoadLine>();
 				ArrayList<Link> links;
@@ -292,9 +315,13 @@ public class MapFrame extends JFrame{
 				}
 			}
 	
-			
+			/**
+			 * This class represents the lines of roads to be drawn 
+			 * type - type of the road to be drawn
+			 */
 			public class RoadLine extends Line2D.Double{
 				private final RoadType type;
+				
 				
 				public RoadLine(RoadType type,double w,double x,double y,double z){
 					super(w,x,y,z);
@@ -310,23 +337,43 @@ public class MapFrame extends JFrame{
 				}
 			}
 			/**
-			 *This class helps to display the location of cities and their names
-			 * 
+			 * This class helps to display the location of cities and their names
+			 * name - name of the city
+			 * city - city to be drawn 
 			 */
 			public class CircleLabel extends Ellipse2D.Double {
 				private final String name;
 				private final City city;
 				
-				public CircleLabel (String name, int x, int y, int s, City city) {
-					super(x, y, s, s);
+				/**
+				 * 
+				 * @param name
+				 *            name of the city to be written
+				 * @param x
+				 *            x coordinate of the center point of the city
+				 * @param y
+				 *            y coordinate of the center point of the city
+				 * @param size
+				 *            size of the circle to represent the city
+				 * @param city
+				 *            city to be drawn
+				 */
+				public CircleLabel (String name, int x, int y, int size, City city) {
+					super(x, y, size,size);
 					this.name = name;
 					this.city = city;
 				}
-				
+				/**
+				 * return the name of the string to be labeled
+				 * @return
+				 */
 				public String getLabel() {
 					return name;
 				}
-				
+				/**
+				 * return the city to be drawn
+				 * @return
+				 */
 				public City getCity() {
 					return city;
 				}
@@ -340,9 +387,9 @@ public class MapFrame extends JFrame{
 		 * list - !!!
 		 * orderOptions -
 		 * orders - 
-		 * alp - 
-		 * pop -
-		 * rat -
+		 * alp - Buttons in alphabetical order
+		 * pop - Buttons by order of population
+		 * rat - Buttons by order of ratings
 		 */
 		public class ListDisplayPanel extends JPanel{
 			private final InfoArea txt;
@@ -354,6 +401,10 @@ public class MapFrame extends JFrame{
 			private final JRadioButton pop;
 			private final JRadioButton rat;
 			
+			
+			/**
+			 * The constructor initialize the variables and displays the list panel with the list of cities.
+			 */
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
 				Dimension d = new Dimension(250, 650);
@@ -408,7 +459,9 @@ public class MapFrame extends JFrame{
 				
 				drawList();
 			}
-			
+			/**
+			 * This method empties the list field and changes what needs to be drawn next.
+			 */
 			private void drawList() {
 				list.removeAll();
 				if (selectedPlaces.isEmpty()) {

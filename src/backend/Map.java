@@ -169,7 +169,7 @@ public class Map {
 	
 	/**
 	 * fillTrees() method imports all the city data from population tree to the other 
-	 * remaining trees for easily accesable data 
+	 * remaining trees for easily accessible data 
 	 */
 	private void fillTrees(){
 		Iterator<City> i = popCityTree.iterator();
@@ -186,7 +186,7 @@ public class Map {
 	}
 	
 	/**
-	 * this method imports all of the points of intrest(POI) of the given map from a text file and stores them
+	 * this method imports all of the points of interest (POI) of the given map from a text file and stores them
 	 * in the appropriate cities
 	 * @throws IOException
 	 */
@@ -387,7 +387,7 @@ public class Map {
 	}
 	
 	/**
-	 * this methid updates the map data if something is changed in the edit panel
+	 * this method updates the map data if something is changed in the edit panel
 	 * @param fd
 	 * @return
 	 */

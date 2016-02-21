@@ -12,8 +12,7 @@ import javax.swing.JOptionPane;
 import gui.*;
 
 /**
- * this is the main class that the program will run from
- * @author woodsjl
+ * 
  *
  */
 public class Main {

@@ -80,11 +80,10 @@ public class PathNode implements Comparable<PathNode> {
 		return currentPlace;
 	}
 	/**
-	 * !!! can this be removed?
+	 * return the string to show the variables for testing purpose
 	 */
 	public String toString(){
 		return "currentPlace: "+currentPlace+" linkTo "+linkTo+" total cost "+totalCost+" wib = "+visitedPlace.toString();
-//		return "node tc = "+totalCost+", costTraveled = "+costTraveled+", where ive been = "+whereIveBeen.toString();
 	}
 	/**
 	 * compare the total cost with the given PathNode

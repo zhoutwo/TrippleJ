@@ -27,7 +27,16 @@ import backend.FormData;
 import backend.Map;
 import backend.POI;
 import backend.Place;
-
+/**
+ * Edit Frame class displays edit panel that helps user to edit the information of places
+ * isCity - boolean that checks if the place is city or POI 
+ * currentCity - represents current city
+ * currentPOI - represent current POI
+ * cityMap - 
+ * poiMap - 
+ * names - 
+ * map -
+ */
 public class EditFrame extends JFrame {
 	private final boolean isCity;
 	private City currentCity;
