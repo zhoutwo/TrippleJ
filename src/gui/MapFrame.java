@@ -190,7 +190,7 @@ public class MapFrame extends JFrame{
 			 */
 			public MapDisplayPanel() {
 				super();
-				this.setBackground(Color.GREEN);
+				this.setBackground(new Color(0,128,0));
 				Dimension d = new Dimension(650, 650);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
@@ -252,15 +252,15 @@ public class MapFrame extends JFrame{
 						g2.setStroke(new BasicStroke(5));
 					}
 					else{
-						g2.setPaint(Color.GRAY);
+						g2.setPaint(new Color(192,192,192));
 					}
 					g2.draw(rd);
 					g2.fill(rd);
 				}
 				for (CircleLabel cl : circleLabels) {
-					g2.setPaint(Color.YELLOW);
+					g2.setPaint(new Color(255,215,0));
 					g2.fill(cl);
-					g2.setPaint(Color.BLACK);
+					g2.setPaint(Color.WHITE);
 					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
 				}
 			}
