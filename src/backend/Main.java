@@ -7,6 +7,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
@@ -31,7 +32,12 @@ public class Main {
 		}
 		else {
 			// get last map used
-			map = read("src/data/currentState.xml");
+			try {
+				map = read("src/data/currentState.xml");
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null, "Sorry, previous data couldn't be found. We will load new data for you instead.", "File Not Found", JOptionPane.ERROR_MESSAGE);
+				map=new Map();
+			}
 		}
 		// load gui and set visible 
 		new MapFrame(map);
@@ -58,9 +64,9 @@ public class Main {
 	 * 
 	 * @param filename this is the name of the file to be loaded
 	 * @return this method return a map of the last state the program was left in
-	 * @throws Exception
+	 * @throws FileNotFoundException 
 	 */
-	public static Map read(String filename) throws Exception {
+	public static Map read(String filename) throws FileNotFoundException {
         XMLDecoder decoder = 
         	new XMLDecoder(
         			new BufferedInputStream(
