@@ -3,7 +3,10 @@ package backend;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+/**
+ * !!!
+ * @author yoons1
+ */
 public abstract class Place {
 	private Point mapLoc;
 	protected Coordinate location;
@@ -12,7 +15,12 @@ public abstract class Place {
 	protected HashMap<Place, Link> linkMap;
 	protected double rating;
 	protected HashMap<Place,Double> est;
-	
+	/**
+	 * !!!
+	 * @param pname
+	 * @param location
+	 * @param rating
+	 */
 	public Place(String pname, Coordinate location, double rating) {
 		name = pname;
 		this.location = location;
@@ -22,19 +30,32 @@ public abstract class Place {
 		est = new HashMap<Place,Double>();
 		setMapLocal();
 	}
-	
+	/**
+	 * this methods helps to compare different type of places
+	 */
 	public boolean equals(Object obj) {
 		return (name.compareTo(((Place) obj).name) == 0);
 	}
-	
+	/**
+	 * !!!
+	 * @param p
+	 * @return
+	 */
 	public double getDEst(Place p){
 		return est.get(p);
 	}
-	
+	/**
+	 * !!!
+	 * @param p
+	 * @return
+	 */
 	public double getTEst(Place p){
 		return est.get(p)/85.0;
 	}
-	
+	/**
+	 * !!!
+	 * @param al
+	 */
 	public void fillEstTable(ArrayList<Place> al){
 		Place temp;
 		for(int i=0;i<al.size();i++){
@@ -47,48 +68,76 @@ public abstract class Place {
 			}
 		}
 	}
-	
-	private double convertDistance(Coordinate f) {
-		double xf = Math.abs(f.getX());
-		double yf = Math.abs(f.getY());
-		double xt = Math.abs(location.getX());
-		double yt = Math.abs(location.getY());
-		double xDis = xf-xt;
-		double yDis = yf - yt;
-		return Math.sqrt((xDis*xDis)+(yDis*yDis));
+	/**
+	 * calculate the straight line distance from the place taken as parameter to current place
+	 * @param from
+	 * @return
+	 */
+	private double convertDistance(Coordinate from) {
+		double xFrom = Math.abs(from.getX());
+		double yFrom = Math.abs(from.getY());
+		double xTo = Math.abs(location.getX());
+		double yTo = Math.abs(location.getY());
+		double xDistance = xFrom-xTo;
+		double yDistance = yFrom - yTo;
+		return Math.sqrt((xDistance*xDistance)+(yDistance*yDistance));
 	}
-	
+	/**
+	 * !!!
+	 * @param p
+	 * @return
+	 */
 	public Double getEst(Place p){
 		return est.get(p);
 	}
-	
+	/**
+	 * initialize the center of its location drawn in the MapDisplayPanel
+	 */
 	public void setMapLocal(){
 		mapLoc = new Point();
 		double y = (location.getY()-40)*(-233);
 		double x = (location.getX()+98)*(150);
 		mapLoc.setLocation(x,y);
 	}
-	
+	/**
+	 * return the center point of its location drawn in the MapDisplayPanel
+	 * @return
+	 */
 	public Point getMapLoc(){
 		return mapLoc;
 	}
-
+	/**
+	 * return the GPS coordinate of the place
+	 * @return
+	 */
 	public Coordinate getLocation() {
 		return this.location;
 	}
-	
+	/**
+	 * return the name of the place
+	 * @return
+	 */
 	public String getName() {
 		return this.name;
 	}
-	
+	/**
+	 * return the neighboring links of the place
+	 * @return
+	 */
 	public ArrayList<Link> getNeighbors() {
 		return this.neighbors;
 	}
-	
+	/**
+	 * return the rating of the place
+	 * @return
+	 */
 	public double getRating() {
 		return this.rating;
 	}
-	
+	/**
+	 * adds a neighboring link to the place taken from a parameter 
+	 * @param n
+	 */
 	public void addNeighbor(Link n){
 		neighbors.add(n);
 		linkMap.put(n.getPlace(),n);

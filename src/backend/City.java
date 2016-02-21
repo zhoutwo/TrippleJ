@@ -6,7 +6,7 @@ import utils.*;
 /**
  * This class is a specific type of the Place class. in addition to the Place class it has a population.
  * Fields: 
- * population - int represeting the number of people that live in the city
+ * population - int representing the number of people that live in the city
  * pois - array list of points of interest
  * alpPOITree - flex red black tree of points of interest sorted alphabetically
  * ratPOITree - flex red black tree of points of interest sorted by rating
@@ -19,7 +19,7 @@ public class City extends Place {
 	private FlexRedBlackTree<POI> ratPOITree;
 	
 	/**
-	 * this is the constructo that initializes an object city and all of its fields with no points of interst
+	 * this is the constructor that initializes an object city and all of its fields with no points of interst
 	 * @param name
 	 * @param population
 	 * @param location
@@ -83,7 +83,7 @@ public class City extends Place {
 	}
 	
 	/**
-	 * returns a flex red black tree of points of interest sorted by alphabet
+	 * returns FlexRedBlackTree of points of interest sorted by alphabet
 	 * @return
 	 */
 	public FlexRedBlackTree<POI> getAlpPOITree() {
@@ -91,7 +91,7 @@ public class City extends Place {
 	}
 	
 	/**
-	 * returns a flex red black tree of points of interest sorted by rating
+	 * returns FlexRedBlackTree of points of interest sorted by rating
 	 * @return
 	 */
 	public FlexRedBlackTree<POI> getRatPOITree() {
@@ -99,7 +99,7 @@ public class City extends Place {
 	}
 	
 	/**
-	 * add a point of intrest to the city
+	 * add a point of interest to the city
 	 * @param poi
 	 * @return
 	 */
