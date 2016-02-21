@@ -384,9 +384,9 @@ public class MapFrame extends JFrame{
 		 * This class is a panel to show the list of Cities, POIs, information about the Places, and the route searched. 
 		 * txt - Text field of information to be displayed
 		 * back - Button that goes back to the list of cities
-		 * list - !!!
-		 * orderOptions -
-		 * orders - 
+		 * list - the list that displays items
+		 * orderOptions - a small panel with radio buttons to choose the ordering
+		 * orders - The group of radio buttons
 		 * alp - Buttons in alphabetical order
 		 * pop - Buttons by order of population
 		 * rat - Buttons by order of ratings
@@ -657,6 +657,18 @@ public class MapFrame extends JFrame{
 			}
 		}
 		
+		/**
+		 * SearchFormPanel is an inner class of MapFrame class
+		 * This class is a panel to with options for selecting from, to places, cost 
+		 * functions, finding routes and resetting the form and the UI.
+		 * from - A label + text field for from
+		 * to - A label + text field for to
+		 * lockFrom - A check box to lock from in run time
+		 * lockTo - A check box to lock to in run time
+		 * options - the ButtonGroup for time and distance buttons
+		 * time - RadioButton to select time as the cost function
+		 * distance - RadioButton to select distance as the cost function
+		 */
 		public class SearchFormPanel extends JPanel {
 			
 			private JTextField from;
@@ -773,7 +785,9 @@ public class MapFrame extends JFrame{
 					}
 				});
 				
-				// Start adding elements
+				// Start adding elements, too complicated to actually explain what's going on here
+				// Basically, we describe the relative locations of each item both horizontally and vertically.
+				// For more information, please consult the documentation of GroupLayout.
 				sl.setHorizontalGroup(
 						sl.createSequentialGroup()
 							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -849,6 +863,10 @@ public class MapFrame extends JFrame{
 			}
 		}
 		
+		/**
+		 * This class contains only the edit button which will create an EditFrame.
+		 * 
+		 */
 		public class EditButtonPanel extends JPanel {
 			
 			public EditButtonPanel() {
@@ -867,8 +885,9 @@ public class MapFrame extends JFrame{
 				edit.setMaximumSize(de);
 				edit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						// Creates the Edit dialogue box
+						
 						if (!selectedPlaces.isEmpty()) {
+							// Creates the Edit dialogue box if there is a selected place
 							if (selectedPlaces.peek() instanceof City) {
 								new EditFrame((City) selectedPlaces.peek(), currentMap.getAlpCityList(), currentMap);
 							} else {
@@ -878,6 +897,7 @@ public class MapFrame extends JFrame{
 								new EditFrame(poi, c, currentMap);
 							}
 						} else {
+							// Or prompts the user that no place is selected.
 							JOptionPane.showMessageDialog(MapFrame.this, "Please select a place first to edit its properties", "No Place Selected", JOptionPane.ERROR_MESSAGE);
 						}
 					}
