@@ -264,13 +264,17 @@ public class MapFrame extends JFrame{
 	
 			
 			public class RoadLine extends Line2D.Double{
-				private RoadType type;
+				private final RoadType type;
 				
 				public RoadLine(RoadType ptype,double w,double x,double y,double z){
 					super(w,x,y,z);
 					type = ptype;
 				}
 				
+				/**
+				 * Returns the type of the road
+				 * @return the road type
+				 */
 				public RoadType getRtype(){
 					return type;
 				}
@@ -394,6 +398,7 @@ public class MapFrame extends JFrame{
 			}
 			
 			public ArrayList<City> getCityList() {
+				// Gets the list in the selected order
 				if (orders.getSelection().equals(alp.getModel())) {
 					return currentMap.getAlpCityList();
 				} else if (orders.getSelection().equals(rat.getModel())) {
@@ -404,6 +409,7 @@ public class MapFrame extends JFrame{
 			}
 			
 			public ArrayList<POI> getPOIList(City c) {
+				// Gets the list in the selected order
 				if (orders.getSelection().equals(alp.getModel())) {
 					return c.getAlpPOITree().toArrayList();
 				} else {
@@ -504,8 +510,6 @@ public class MapFrame extends JFrame{
 			private JCheckBox lockTo;
 			private ButtonGroup options;
 			private JRadioButton time;
-//			private JRadioButton noToll;
-//			private JRadioButton rating;
 			private JRadioButton distance;
 			
 			public SearchFormPanel() {
@@ -517,7 +521,6 @@ public class MapFrame extends JFrame{
 				sl.setAutoCreateGaps(true);
 				sl.setAutoCreateContainerGaps(true);
 				
-//				this.setBackground(Color.BLACK);
 				Dimension d = new Dimension(650, 80);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
@@ -546,7 +549,7 @@ public class MapFrame extends JFrame{
 				};
 				to.setEnabled(false);
 				
-				lockFrom = new JCheckBox("lockf");
+				lockFrom = new JCheckBox("lock this selection");
 				lockFrom.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
 						if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -568,7 +571,7 @@ public class MapFrame extends JFrame{
 				});
 				
 				// To is disabled until from is locked.
-				lockTo = new JCheckBox("lockt");
+				lockTo = new JCheckBox("lock this selection");
 				lockTo.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent e) {
 						if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -586,14 +589,8 @@ public class MapFrame extends JFrame{
 				options = new ButtonGroup();
 				time = new JRadioButton("time");
 				time.setSelected(true);
-//				noToll = new JRadioButton("no toll");
-//				noToll.setEnabled(false);
-//				rating = new JRadioButton("rating");
-//				rating.setEnabled(false);
 				distance = new JRadioButton("distance");
 				options.add(time);
-//				options.add(noToll);
-//				options.add(rating);
 				options.add(distance);
 				
 				JButton findRoute = new JButton("Find Route");
@@ -630,8 +627,6 @@ public class MapFrame extends JFrame{
 									)
 							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING)
 									.addComponent(time)
-//									.addComponent(noToll)
-//									.addComponent(rating)
 									.addComponent(distance)
 									)
 							.addGroup(sl.createParallelGroup(GroupLayout.Alignment.LEADING, false)
@@ -648,7 +643,6 @@ public class MapFrame extends JFrame{
 									.addComponent(lockFrom)
 									.addGroup(sl.createSequentialGroup()
 											.addComponent(time)
-//											.addComponent(noToll)
 											)
 									.addComponent(findRoute)
 									)
@@ -657,7 +651,6 @@ public class MapFrame extends JFrame{
 									.addComponent(to)
 									.addComponent(lockTo)
 									.addGroup(sl.createSequentialGroup()
-//											.addComponent(rating)
 											.addComponent(distance)
 											)
 									.addComponent(reset)
@@ -693,14 +686,21 @@ public class MapFrame extends JFrame{
 			
 			public EditButtonPanel() {
 				super();
-				this.setBackground(Color.BLUE);
 				Dimension d = new Dimension(250, 80);
 				this.setMinimumSize(d);
 				this.setPreferredSize(d);
 				this.setMaximumSize(d);
-				JButton edit = new JButton("Edit");
+				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+				
+				// Sets up the button
+				Dimension de = new Dimension(200, 64);
+				JButton edit = new JButton("Edit Selection");
+				edit.setMinimumSize(de);
+				edit.setPreferredSize(de);
+				edit.setMaximumSize(de);
 				edit.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
+						// Creates the Edit dialogue box
 						if (!selectedPlaces.isEmpty()) {
 							if (selectedPlaces.peek() instanceof City) {
 								new EditFrame((City) selectedPlaces.peek(), currentMap.getAlpCityList(), currentMap);
@@ -713,7 +713,13 @@ public class MapFrame extends JFrame{
 						}
 					}
 				});
+				edit.setAlignmentX(CENTER_ALIGNMENT);
+				edit.setAlignmentY(CENTER_ALIGNMENT);
+				
+				// Adding glue to center the button
+				this.add(Box.createVerticalGlue());
 				this.add(edit);
+				this.add(Box.createVerticalGlue());
 			}
 		}
 	}
