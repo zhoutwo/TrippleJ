@@ -295,30 +295,36 @@ public class Map {
 	 * @param to
 	 * @param type
 	 */
-	public void getRoute(String from, String to,String type) {
+	public void getRoute(Place from, Place to,String type) {
 		// clear old route that might be present
 		route.clear();
 		// if from = to then we are looking for ourselves and just add from to route and return
 		if(from.equals(to)){
-			route.add(places.get(from));
+			route.add(from);
 			return;
 		}
 		//get character representation of which route to use time or distance 
 		char c=type.charAt(0);
-		// use string to get the Place from 
-		Place fromPlace = places.get(from);
-		// use string to get the Place to 
-		Place toPlace = places.get(to);
 		// create a PriorityQueue to use in finding least cost path
 		PriorityQueue<PathNode> pq = new PriorityQueue<PathNode>();
 		ArrayList<Place> wib = new ArrayList<Place>();
-		wib.add(fromPlace);
+		wib.add(from);
 		// determine which route determining function to call
 		if(c=='d'||c=='D'){
-			dRoute(fromPlace, toPlace,0.0,pq,wib);
+			dRoute(from, to,0.0,pq,wib);
 		}else if(c=='t'||c=='T'){
-			tRoute(fromPlace, toPlace,0.0,pq,wib);
+			tRoute(from, to,0.0,pq,wib);
 		}
+	}
+	
+	/**
+	 * Testing only.
+	 * @param from
+	 * @param to
+	 * @param type
+	 */
+	public void getRoute(String from, String to,String type) {
+		getRoute(places.get(from), places.get(to), type);
 	}
 	
 	/**

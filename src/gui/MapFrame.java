@@ -34,6 +34,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
@@ -651,7 +652,17 @@ public class MapFrame extends JFrame{
 				JButton findRoute = new JButton("Find Route");
 				findRoute.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent arg0) {
-						currentMap.getRoute(from.getText(), to.getText(), (time.isSelected() ? "time" : "distance"));
+						Place fromP = currentMap.getPlaces().get(from.getText());
+						Place toP = currentMap.getPlaces().get(to.getText());
+						if (fromP == null) {
+							JOptionPane.showMessageDialog(MapFrame.this, "Your input for from isn't valid", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						if (toP == null) {
+							JOptionPane.showMessageDialog(MapFrame.this, "Your input for to isn't valid", "Invalid Input", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						currentMap.getRoute(fromP, toP, (time.isSelected() ? "time" : "distance"));
 						MapPanel.this.ldp.drawRouteList(currentMap.returnRoute());
 						mdp.drawRoute(currentMap.returnRoute());
 					
@@ -768,6 +779,8 @@ public class MapFrame extends JFrame{
 								selectedPlaces.push(poi);
 								new EditFrame(poi, c, currentMap);
 							}
+						} else {
+							JOptionPane.showMessageDialog(MapFrame.this, "Please select a place first to edit its properties", "No Place Selected", JOptionPane.ERROR_MESSAGE);
 						}
 					}
 				});
