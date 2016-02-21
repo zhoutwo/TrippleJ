@@ -652,7 +652,6 @@ public class MapFrame extends JFrame{
 					public void actionPerformed(ActionEvent arg0) {
 						currentMap.getRoute(from.getText(), to.getText(), (time.isSelected() ? "time" : "distance"));
 						MapPanel.this.ldp.drawRouteList(currentMap.returnRoute());
-						System.out.println(currentMap.returnRoute());
 						mdp.drawRoute(currentMap.returnRoute());
 					
 					}
