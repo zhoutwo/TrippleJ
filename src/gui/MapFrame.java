@@ -446,12 +446,12 @@ public class MapFrame extends JFrame{
 				public void setPlace(Place p) {
 					setText(null);
 					append(p.getName() + '\n');
-					append("Rating: " + p.getRating() + "/5.0\n");
+					append("Rating: " + p.getRating() + " / 5.0\n");
 					if (p instanceof City) {
 						append("Population: " + ((City) p).getPopulation());
 					} else {
 						append("Type: " + ((POI) p).getType() + '\n');
-						append("Estimated Cost:" + ((POI) p).getCost());
+						append("Estimated Cost: " + ((POI) p).getCost());
 					}					
 				}
 				

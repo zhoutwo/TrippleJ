@@ -22,6 +22,7 @@ Topeka KansasStateCapital 0.0 4.3 Capital
 Lawrence SpenceMuseumOfArt 0.0 4.4 Museum
 Lawrence NaturalHistoryMuseum(UnivOfKansas) 0.0 4.6 Museum
 Lawrence ClintonStatePark 0.0 4.3 Park
+Lawrence DoleInstituteOfPolitics 0 4.5 Insititute 
 Shawnee JohnsonCountyMuseum 3.0 4.6 Museum
 Shawnee WonderscopeChildren'sMuseum 7.0 3.4 Museum
 Shawnee KCIndoorSkatePark 0.0 4.2 IndoorPark
