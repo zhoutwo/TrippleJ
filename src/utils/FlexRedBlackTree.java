@@ -531,11 +531,9 @@ public class FlexRedBlackTree <T extends Place> implements Iterable<T>{
 				BinaryNode biggestLeftNode = X.leftChild.getBiggestNodeToLeft();
 				if(X.color.equals(Color.RED)){
 					X.element = biggestLeftNode.element;
-					X.removeStep2(X.element, b, X.leftChild, X.rightChild,X);
-//					X.removeStep2(X.element, b, X.leftChild, X.rightChild,this);
+					X.removeStep2(X.element, b, X.leftChild, X.rightChild,p);
 				}
 				else{
-//					removeStep2B(biggestLeftNode.element, b, X, sibling,p);
 					X.removeStep2B(biggestLeftNode.element, b, X, sibling,p);
 					X.element = biggestLeftNode.element;
 				}
