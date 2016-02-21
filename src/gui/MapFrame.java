@@ -142,11 +142,7 @@ public class MapFrame extends JFrame{
 			c.ipadx = 0;
 			c.ipady = 0;
 			ldp = new ListDisplayPanel();
-			JScrollPane scrollPane = new JScrollPane(ldp);
-	        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//	        scrollPane.setAutoscrolls(true);
-	        scrollPane.getVerticalScrollBar().setUnitIncrement(16);//faster scroll
-	        this.add(scrollPane, c);
+			this.add(ldp, c);
 			// Inserting SearchFormPanel
 			c.gridx = 0;
 			c.gridy = 1;
@@ -216,6 +212,7 @@ public class MapFrame extends JFrame{
 					roads.remove(index);
 					index--;
 				}
+				updateUI();
 			}
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
@@ -245,7 +242,6 @@ public class MapFrame extends JFrame{
 					g2.setPaint(Color.BLACK);
 					g2.drawString(cl.getLabel(), (float) cl.getMaxX(), (float) cl.getCenterY());
 				}
-				resetRoute();
 			}
 			
 			/**
@@ -254,7 +250,7 @@ public class MapFrame extends JFrame{
 			 */
 			protected void drawRoute(ArrayList<Place> p){
 				// get the route to be drawn
-				ArrayList<Place> drawRoute = currentMap.returnRoute();
+				ArrayList<Place> drawRoute = p;
 				// get hash map of cities 
 				HashMap<String,City> cities = currentMap.getCities();
 				// if route is longer than one add the road lines to the list of roads to be drawn
@@ -360,6 +356,10 @@ public class MapFrame extends JFrame{
 			
 			public ListDisplayPanel() {//there is going to be parameter of some data structure of cities.
 				super();
+				Dimension d = new Dimension(250, 650);
+				this.setMinimumSize(d);
+				this.setPreferredSize(d);
+				this.setMaximumSize(d);
 				 
 				txt = new InfoArea();
 				this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -368,7 +368,11 @@ public class MapFrame extends JFrame{
 				// Initialize List Panel
 				list = new JPanel();
 				list.setLayout(new BoxLayout(list, BoxLayout.Y_AXIS));
-				this.add(list);
+				// Create a Scroll Pane for the list and set the scrollbar to enable as needed.
+				JScrollPane sp = new JScrollPane(list, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				sp.setMinimumSize(new Dimension(250, 630));
+				sp.setPreferredSize(d);
+				this.add(sp);
 				
 				// Create gap to place options at the bottom.
 				this.add(Box.createVerticalGlue());
@@ -471,8 +475,8 @@ public class MapFrame extends JFrame{
 				
 				public InfoArea() {
 					super();
-					Dimension d = new Dimension(250, 300);
-					this.setMinimumSize(d);
+					Dimension d = new Dimension(247, 300);
+					this.setMinimumSize(new Dimension(230, 300));
 					this.setPreferredSize(d);
 					this.setMaximumSize(d);
 					this.setEditable(false);
@@ -506,8 +510,8 @@ public class MapFrame extends JFrame{
 				private final Place p;
 				public PlaceButton(String s, Place place) {
 					super(s);
-					Dimension d = new Dimension(250, 50);
-					this.setMinimumSize(d);
+					Dimension d = new Dimension(247, 50);
+					this.setMinimumSize(new Dimension(230, 50));
 					this.setPreferredSize(d);
 					this.setMaximumSize(d);
 					this.setAlignmentX(CENTER_ALIGNMENT);
@@ -535,9 +539,9 @@ public class MapFrame extends JFrame{
 			public class BackButton extends JButton {
 				public BackButton() {
 					super("Back");
-					Dimension d = new Dimension(250, 50);
-					this.setMinimumSize(d);
-					this.setPreferredSize(d);
+					Dimension d = new Dimension(247, 50);
+					this.setMinimumSize(new Dimension(230, 50));
+//					this.setPreferredSize(d);
 					this.setMaximumSize(d);
 					this.setAlignmentX(CENTER_ALIGNMENT);
 					
@@ -648,7 +652,6 @@ public class MapFrame extends JFrame{
 					public void actionPerformed(ActionEvent arg0) {
 						currentMap.getRoute(from.getText(), to.getText(), (time.isSelected() ? "time" : "distance"));
 						MapPanel.this.ldp.drawRouteList(currentMap.returnRoute());
-						System.out.println(currentMap.returnRoute());
 						mdp.drawRoute(currentMap.returnRoute());
 					
 					}
@@ -711,6 +714,7 @@ public class MapFrame extends JFrame{
 			}
 			
 			private void reset() {
+				// Clears the form
 				from.setEnabled(true);
 				from.setText(null);
 				lockFrom.setEnabled(true);
@@ -721,6 +725,9 @@ public class MapFrame extends JFrame{
 				to.setText(null);
 				to.setEnabled(false);
 				time.setSelected(true);
+				
+				// Remove the routes drawn
+				MapPanel.this.mdp.resetRoute();
 				
 				// Reset selected
 				selectedPlaces.clear();
