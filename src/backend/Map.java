@@ -198,7 +198,7 @@ public class Map {
 		Scanner inScanner = new Scanner(inputFile);
 		// iterate through scanner and load all data into a tree until scanner is empty 
 		while(inScanner.hasNext()){
-			popCityTree.insert(new City(putSpaceInName(inScanner.next()),inScanner.nextInt(),new Coordinate(inScanner.nextDouble(),inScanner.nextDouble()),0));
+			popCityTree.insert(new City(putSpaceInName(inScanner.next()),inScanner.nextInt(),new Coordinate(inScanner.nextDouble(),inScanner.nextDouble()),inScanner.nextDouble()));
 		}
 		// close scanner
 		inScanner.close();
