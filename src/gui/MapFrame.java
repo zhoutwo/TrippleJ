@@ -75,7 +75,7 @@ public class MapFrame extends JFrame{
 	private Map currentMap;
 	/**
 	 * The constructor initialize the frame and field variables.
-	 * @param map
+	 * @param map Map to display in the frame
 	 */
 	public MapFrame(Map map){
 		super();
@@ -100,7 +100,7 @@ public class MapFrame extends JFrame{
 	}
 	/**
 	 * This method helps to store the data and prints out the places that user selected
-	 * @param p
+	 * @param p place that is selected
 	 */
 	private void placeSelected(Place p) {
 		selectedPlaces.push(p);
@@ -267,7 +267,7 @@ public class MapFrame extends JFrame{
 			
 			/**
 			 * this method draws the route on the map with red lines 
-			 * @param p
+			 * @param p ArrayList of the places for the route
 			 */
 			protected void drawRoute(ArrayList<Place> p){
 				// get the route to be drawn
@@ -322,7 +322,6 @@ public class MapFrame extends JFrame{
 			 */
 			public class RoadLine extends Line2D.Double{
 				private final RoadType type;
-				
 				
 				public RoadLine(RoadType type,double w,double x,double y,double z){
 					super(w,x,y,z);
