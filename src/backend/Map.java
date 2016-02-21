@@ -35,6 +35,7 @@ public class Map {
 	private FlexRedBlackTree<City> ratCityTree;
 	private FlexRedBlackTree<City> popCityTree;
 	private FlexRedBlackTree<Place> alphaPlaceTree;
+	private ArrayList<Place> allPOIList;
 	private ArrayList<Place> route;
 	private ArrayList<City> alpCityList;
 	private ArrayList<City> ratCityList;
@@ -45,12 +46,14 @@ public class Map {
 	 * empty constructor that loads all information from text files into the appropriate variable fields
 	 */
 	public Map() {
+		allPOIList = new ArrayList<Place>();
 		this.places = new HashMap<String, Place>();
 		this.cities = new HashMap<String, City>();
 		this.alpCityTree = new FlexRedBlackTree<City>(new AlphabetComparator<City>());
 		this.ratCityTree = new FlexRedBlackTree<City>(new RatingComparator<City>());
 		this.popCityTree = new FlexRedBlackTree<City>(new PopulationComparator());
 		alphaPlaceTree = new FlexRedBlackTree<Place>(new AlphabetComparator<Place>());
+		
 		route = new ArrayList<Place>();
 		isActive = true;
 		// try catch block surrounds the import process of raw data into system
@@ -71,7 +74,26 @@ public class Map {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		alpCityList = alpCityTree.toArrayList();
+		popCityList = popCityTree.toArrayList();
+		ratCityList = ratCityTree.toArrayList();
+		fillPOIList();
 		fillEstimateTables();
+	}
+	
+	/**
+	 * this method populates the POI tree with all POI's in the system
+	 */
+	public void fillPOIList(){
+		ArrayList<POI> aLPOI = new ArrayList<POI>();
+		City temp;
+		for(int k=0;k<alpCityList.size();k++){
+			temp = alpCityList.get(k);
+			aLPOI = temp.getPois();
+			for(int i=0;i<aLPOI.size();i++){
+				allPOIList.add(aLPOI.get(i));
+			}
+		}
 	}
 	
 	/**
@@ -80,8 +102,11 @@ public class Map {
 	public void fillEstimateTables(){
 		ArrayList<Place> allP = alphaPlaceTree.toArrayList();
 		Iterator<Place> i = alphaPlaceTree.iterator();
+		Place temp;
 		while(i.hasNext()){
-			i.next().fillEstTable(allP);
+			temp = i.next();
+			temp.fillEstTable(allP);
+			temp.fillEstTable(allPOIList);
 		}
 	}
 	
