@@ -524,7 +524,10 @@ public class MapFrame extends JFrame{
 					return c.getRatPOITree().toArrayList();
 				}
 			}
-			
+			/**
+			 * 
+			 *
+			 */
 			public class InfoArea extends JTextArea {
 				
 				public InfoArea() {
@@ -589,7 +592,6 @@ public class MapFrame extends JFrame{
 					return p;
 				}
 			}
-
 			public class BackButton extends JButton {
 				public BackButton() {
 					super("Back");
@@ -707,7 +709,6 @@ public class MapFrame extends JFrame{
 						currentMap.getRoute(from.getText(), to.getText(), (time.isSelected() ? "time" : "distance"));
 						MapPanel.this.ldp.drawRouteList(currentMap.returnRoute());
 						mdp.drawRoute(currentMap.returnRoute());
-					
 					}
 				});
 				JButton reset = new JButton("Reset");
